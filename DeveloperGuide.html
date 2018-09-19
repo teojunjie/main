@@ -1950,12 +1950,19 @@ for <code>RemarkCommandParser</code>.</p>
 <h2 id="product-scope"><a class="link" href="#product-scope">Appendix B: Product Scope</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Target user profile</strong>:</p>
+<p><strong>Target user profile:<strong></strong>
+</strong>There will be two categories of users for the app. The main user will be students using the makerspace. The second user will be the lab manager.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>has a need to manage a significant number of contacts</p>
+<p>has a need to manage a significant number shared devices (lab manager)</p>
+</li>
+<li>
+<p>has a need to prioritize and queue certain print jobs over others (lab manager)</p>
+</li>
+<li>
+<p>has a need to look up when certain devices will be free for use (students)</p>
 </li>
 <li>
 <p>prefer desktop apps over other types</p>
@@ -1972,7 +1979,7 @@ for <code>RemarkCommandParser</code>.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>Value proposition</strong>: manage contacts faster than a typical mouse/GUI driven app</p>
+<p><strong>Value proposition</strong>: see 3D printers are being used, and the estimated time left until the equipment will be free. This will reduce system loss and increase the efficiency of all parties involved.</p>
 </div>
 </div>
 </div>
@@ -1980,124 +1987,564 @@ for <code>RemarkCommandParser</code>.</p>
 <h2 id="user-stories"><a class="link" href="#user-stories">Appendix C: User Stories</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Priorities: High (must have) - <code>* * *</code>, Medium (nice to have) - <code>* *</code>, Low (unlikely to have) - <code>*</code></p>
+<p>Priorities: High (must have) - <strong> * </strong>, Medium (nice to have) - <strong> </strong>, Low (unlikely to have) - <strong>*</strong></p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 59%;">
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 22%;">
-<col style="width: 23%;">
-<col style="width: 25%;">
-<col style="width: 30%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Priority</th>
-<th class="tableblock halign-left valign-top">As a &#8230;&#8203;</th>
-<th class="tableblock halign-left valign-top">I want to &#8230;&#8203;</th>
-<th class="tableblock halign-left valign-top">So that I can&#8230;&#8203;</th>
+<th class="tableblock halign-left valign-top">*Priority *</th>
+<th class="tableblock halign-left valign-top"><strong>As a&#8230;&#8203;</strong></th>
+<th class="tableblock halign-left valign-top"><strong>I want to&#8230;&#8203;</strong></th>
+<th class="tableblock halign-left valign-top"><strong>So that i can&#8230;&#8203;</strong></th>
+<th class="tableblock halign-left valign-top"><strong>v1.4</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>* * *</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">new user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">see usage instructions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">refer to instructions when I forget how to use the App</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>* * *</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">add a new person</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Have notifications informing me when my current printing job is almost complete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plan my schedule accordingly to collect my print.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>* * *</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">delete a person</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">remove entries that I no longer need</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request deletion of my print job</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cancel any printing job that has not been executed yet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>* * *</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">find a person by name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">locate details of persons without having to go through the entire list</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add a print to a particular queue manually</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>* *</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">hide <a href="#private-contact-detail">private contact details</a> by default</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">minimize chance of someone else seeing them by accident</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add a print automatically to any available devices</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contribute towards optimizing the device usage</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user with many persons in the address book</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">sort persons by name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">locate a person easily</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Reset the time of a print if it fails halfway</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Write a special note of print jobs, if any</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Avoid explaining changes in status to students</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cancel a print job</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Have suggestions provided by the system to schedule my print</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Properly plan my timetable accordingly to the suggestion</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Upload the file to be printed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request printing job commencement by third party without being physically there</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to see the status of my current print job online</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can plan on when to pick it up</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to send a print request to use a particular device at a certain time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collect an urgent print job earlier by choosing a fast printer.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to see the status of the devices online from the comfort of my home</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See if any printers are currently available</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to confirm the collection time of my print job</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can ensure that the print job is being executed according to schedule without any delays</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to request a higher priority of printing</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get my emergency handled properly</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to control the queues for each device</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Streamline printing job requests, so that I can prioritize effectively</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to list out all my devices</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See the time remaining till they are free</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Be able to list the devices available at the moment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I can allocate the queue work well</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">View the current queue for using a(set of) particular device</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plan my schedule accordingly</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Student</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change my print request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that I can adjust according to my dynamic schedule.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">View print requests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add/Remove machines in the lab</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">New queues are added/removed for/from use</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start countdown of a print job</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Signal the start of a print</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request student to collect print</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Students are notified when prints are complete</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">View print history</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Keep an official record</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change print status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change the status of a print</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change admin password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change admin password if needed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add administrator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fulfill my job as lab manager by having access to admin-specific commands</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Logout of admin mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prevent students from accessing admin mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Users</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">View sorted and filtered prints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Easily see prints that are relevant to me</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change machine status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicated nonfunctional/disabled machines</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>*</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lab Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Login to Admin Mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access admin functions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y</p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><em>{More to be added}</em></p>
-</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="use-cases"><a class="link" href="#use-cases">Appendix D: Use Cases</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>(For all use cases below, the <strong>System</strong> is the <code>AddressBook</code> and the <strong>Actor</strong> is the <code>user</code>, unless specified otherwise)</p>
+<p>In all cases, System refers to printQ9000.</p>
 </div>
-<h3 id="use-case-delete-person" class="discrete">Use case: Delete person</h3>
 <div class="paragraph">
-<p><strong>MSS</strong></p>
+<p><strong>Actor: lab manager</strong><br>
+<strong>Use case: reset the time remains if the printing job fails halfway</strong><br>
+MSS:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>User requests to list persons</p>
+<p>User resets time after resetting devices</p>
 </li>
 <li>
-<p>AddressBook shows a list of persons</p>
-</li>
-<li>
-<p>User requests to delete a specific person in the list</p>
-</li>
-<li>
-<p>AddressBook deletes the person</p>
-<div class="paragraph">
-<p>Use case ends.</p>
-</div>
+<p>System updates queues</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p><strong>Extensions</strong></p>
+<p><strong>Actor: students</strong><br>
+<strong>Use case: request to remove the printing job</strong><br>
+MSS:</p>
 </div>
-<div class="ulist none">
-<ul class="none">
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>2a. The list is empty.</p>
-<div class="paragraph">
-<p>Use case ends.</p>
-</div>
+<p>User sends the request to remove the printing job</p>
 </li>
 <li>
-<p>3a. The given index is invalid.</p>
-<div class="ulist none">
-<ul class="none">
+<p>System send notification to the admin
+User case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: lab manager</strong><br>
+<strong>Use case: remove the printing job</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>3a1. AddressBook shows an error message.</p>
-<div class="paragraph">
-<p>Use case resumes at step 2.</p>
-</div>
+<p>User sends command to remove a particular print job (by ID)</p>
 </li>
-</ul>
-</div>
+<li>
+<p>System removes the print job
+Extension: <br>
+1a. User enters invalid print job ID<br>
+1b. System shows error and returns to main menu</p>
 </li>
-</ul>
+</ol>
 </div>
 <div class="paragraph">
-<p><em>{More to be added}</em></p>
+<p><strong>Actor: lab manager</strong><br>
+<strong>Use case: add machines to the list</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User chooses to add a new printer</p>
+</li>
+<li>
+<p>System asks for name and details</p>
+</li>
+<li>
+<p>User provides name and details</p>
+</li>
+<li>
+<p>System shows confirmation of addition
+	User case ends.<br>
+Extension:<br>
+3a. User does not provide valid name and details <br>
+3b. System goes back to main menu.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Users</strong><br>
+<strong>Use case: View Printing Queues</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Users execute the command to see the queues</p>
+</li>
+<li>
+<p>System shows all the queues
+User case ends.<br>
+Extension: <br>
+	2a. User can specify sorting and filtering based on attributes<br>
+	2b. System shows list according to demands</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Lab manager</strong><br>
+<strong>Use case: manually change the status of machine</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User executes the command to change machine status</p>
+</li>
+<li>
+<p>System updates the status of the machine.
+User case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Lab manager</strong><br>
+<strong>Use case: logout of admin mode</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User executes the command to exit the admin mode</p>
+</li>
+<li>
+<p>System changes to normal user mode.
+Use case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Lab manager, student</strong><br>
+<strong>Use case: add administrator</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User executes the command to add the new administrator profile, along with details</p>
+</li>
+<li>
+<p>System updates the new admin profile to storage
+User case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Student, Lab Manager</strong><br>
+<strong>Use case: see the printing job queue for a specific facility</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User specifies the facility (s)he wants to view</p>
+</li>
+<li>
+<p>System list down all the running printing jobs in the particular queue
+Use case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Lab manager</strong><br>
+<strong>Use case: change the admin password</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User executes the command for changing the passwords</p>
+</li>
+<li>
+<p>System pops out the window for user to input the new password</p>
+</li>
+<li>
+<p>User enters the new password</p>
+</li>
+<li>
+<p>System updates the user profile
+User case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: students</strong><br>
+<strong>Use case: change the print request</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User executes command to change a certain print job (by ID)</p>
+</li>
+<li>
+<p>System asks for the changes</p>
+</li>
+<li>
+<p>User enters changes</p>
+</li>
+<li>
+<p>System updates storage and queues to reflect changes
+User case ends.<br>
+Extension: <br>
+1a. User enters invalid print job ID<br>
+1b. System shows error and returns to main menu</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: Lab manager</strong><br>
+<strong>Use case: view print requests</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User executes the command line</p>
+</li>
+<li>
+<p>System list down all the current printing job
+User case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: lab manager</strong><br>
+<strong>Use case: admin login</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User types in the username and password</p>
+</li>
+<li>
+<p>System authenticates the user name and password</p>
+</li>
+<li>
+<p>System shows the main menu or returns to the login page
+User case ends.<br>
+Extension:
+	2a. User entered wrong username or password<br>
+	2b. System returns to the login page</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor : Lab Manager</strong><br>
+<strong>User case : Show history</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User types in command to show log</p>
+</li>
+<li>
+<p>System gives the user a view of the log
+Use case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Use case : Show printing progress notifications</strong><br>
+<strong>Actor : Lab manager</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User execute commands to send the notification.</p>
+</li>
+<li>
+<p>System generates the notification and sends to the printer’s phone.
+User case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Actor: students, lab managers</strong><br>
+<strong>Use Case: manually add a job</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>user enters command to show all devices</p>
+</li>
+<li>
+<p>System lists down devices</p>
+</li>
+<li>
+<p>user requests to add a job to a specific machine in the list, specifies the estimated time left</p>
+</li>
+<li>
+<p>system adds a job to the specific machine in the list.
+Use case ends.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>User Case: Show device statuses</strong><br>
+<strong>Actor: Lab Manager</strong><br>
+MSS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>User enters command to show all devices</p>
+</li>
+<li>
+<p>System lists down devices and shows time remaining till device is free next to the devices or the machine is not available for use.
+Use case ends.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2107,18 +2554,15 @@ for <code>RemarkCommandParser</code>.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Should work on any <a href="#mainstream-os">mainstream OS</a> as long as it has Java <code>9</code> or higher installed.</p>
+<p>Should work on any mainstream OS as long as it has Java 9 or higher installed.</p>
 </li>
 <li>
-<p>Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.</p>
+<p>Should be able to hold up to 1000 prints without a noticeable sluggishness in performance for typical usage.</p>
 </li>
 <li>
 <p>A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p><em>{More to be added}</em></p>
 </div>
 </div>
 </div>
@@ -2130,10 +2574,6 @@ for <code>RemarkCommandParser</code>.</p>
 <dt class="hdlist1"><a id="mainstream-os"></a> Mainstream OS</dt>
 <dd>
 <p>Windows, Linux, Unix, OS-X</p>
-</dd>
-<dt class="hdlist1"><a id="private-contact-detail"></a> Private contact detail</dt>
-<dd>
-<p>A contact detail that is not meant to be shared with others</p>
 </dd>
 </dl>
 </div>
@@ -2285,4 +2725,4 @@ Expected: Similar to previous.</p>
 </div>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-09-19 11:52:53 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2018-09-19 11:55:55 UTC</div></div></div></body></html>
