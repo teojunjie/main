@@ -3,7 +3,6 @@ package seedu.address.storage.job;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -69,7 +68,7 @@ public class XmlAdaptedJob {
      */
 
     public XmlAdaptedJob(String name, XmlAdaptedMachine machine, String time, XmlAdaptedPerson owner,
-                         Priority priority, float duration, String note, List<XmlAdaptedTag> tagged){
+                         Priority priority, float duration, String note, List<XmlAdaptedTag> tagged) {
         this.name = name;
         this.machine = machine;
         this.startTime = time;
@@ -87,7 +86,7 @@ public class XmlAdaptedJob {
      *
      * @param source future changes to this will not affect the created XmlAdaptedJob
      */
-    public XmlAdaptedJob(Job source){
+    public XmlAdaptedJob(Job source) {
         name = source.getJobName().fullName;
         machine = new XmlAdaptedMachine(source.getMachine());
         owner = new XmlAdaptedPerson(source.getOwner());
