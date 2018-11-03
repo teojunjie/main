@@ -1,16 +1,46 @@
-= PLACEHOLDER - Project Portfolio
+= Teo Jun Jie - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
+== PROJECT: Maker Manager
 
 ---
 
 == Overview
-PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+This is a desktop application for managing maker spaces.
 
+It has a GUI but most of the user interactions happen through a CLI (Command Line Interface).
+
+It is a Java application intended for managing 3-D prints, but has capabilities to handle other forms of manufacturing machines as well.
+
+It is written in OOP fashion. It provides a reasonably well-written code that is based on Address Book (level 4).
+
+*Features*:
+
+. A GUI for displaying all available machines at a glance.+
+
+. Two different access levels, for two separate target profiles (see below)
+
+. Ability to manipulate prints, queues, and machines, depending on access level
+
+. More test cases, including automated GUI testing.
+
+. Support for Build Automation using Gradle and for Continuous Integration using Travis CI.
+
+*Target user profile*:
+
+There will be two categories of users for the app. The main user will be students using the makerspace. The second user will be the lab manager
+
+. has a need to manage a significant number shared devices (lab manager)
+. has a need to prioritize and queue certain print jobs over others (lab manager)
+. has a need to look up when certain devices will be free for use (students)
+. prefers typing over mouse input
+. is reasonably comfortable using CLI apps
+
+*Value proposition*:
+
+. see which 3D printers are being used, and the estimated time left until the equipment will be free. This will reduce system loss and increase the efficiency of all parties involved.
 == Summary of contributions
 
 * *Major enhancement*: added *the ability to undo/redo previous commands*
