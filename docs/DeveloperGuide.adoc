@@ -197,6 +197,7 @@ Given below is the Sequence Diagram for interactions within the `Logic` componen
 .Interactions Inside the Logic Component for the `delete 1` Command
 image::DeletePersonSdForLogic.png[width="800"]
 
+// tag::modelComponent[]
 [[Design-Model]]
 === Model component
 
@@ -210,7 +211,6 @@ The `Model`,
 * stores the Address Book data.
 * exposes an unmodifiable `ObservableList<Person>` that can be 'observed'
 * exposes an unmodifiable `ObservableList<Admin>` that can be 'observed'
-* exposes an unmodifiable `ObservableList<Job>` that can be 'observed'
 * exposes an unmodifiable `ObservableList<Machine>` that can be 'observed'
 * eg. the UI can be bound to this 4 list so that the UI automatically updates when the data in any of the list changes.
 * does not depend on any of the other three components.
@@ -219,7 +219,9 @@ The `Model`,
 As a more OOP model, we can store a `Tag` list in `Address Book`, which `Person` can reference. This would allow `Address Book` to only require one `Tag` object per unique `Tag`, instead of each `Person` needing their own `Tag` object. An example of how such a model may look like is given below. +
  +
 image:ModelClassBetterOopDiagram.png[width="800"]
+// end::modelComponent[]
 
+// tag::storageComponent[]
 [[Design-Storage]]
 === Storage component
 
@@ -237,7 +239,7 @@ JsonUserPrefsStorage
 ** XmlSerializableAddressBook
 ** XmlSerializableMakerManagerAdmins
 ** XmlSerializableMakerManagerMachines
-** XmlSerializableMakerManagerJobs
+// end::storageComponent[]
 
 
 [[Design-Commons]]
@@ -601,6 +603,7 @@ Do take a look at <<Design-Model>> before attempting to modify the `Model` compo
 ****
 
 [discrete]
+
 ==== `Ui` component
 
 *Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your address book application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last person in the list. Your job is to implement improvements to the UI to solve all these problems.
@@ -694,6 +697,7 @@ Do take a look at <<Design-Storage>> before attempting to modify the `Storage` c
 ****
 
 [[GetStartedProgramming-RemarkCommand]]
+
 === Creating a new command: `remark`
 
 By creating this command, you will get a chance to learn how to implement a feature end-to-end, touching all major components of the app.
