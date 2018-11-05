@@ -57,6 +57,68 @@ Give the user guidance as to what (s)he can do with makerManager +
 
     Format: help
 
+.. *Admin specific commands:*
+The following commands will only work in admin mode. Admin accounts currently not saved across sessions.
+
+... *Login:*
+Enables admin mode. Note that a default account is created when no other admins exist. Username and Password of default are both 'admin' +
+
+	Format: login ADMIN_ID PASSWORD
+
+	Examples:
+	login admin admin
+
+... *Logout:*
+Disable admin mode. +
+
+	Format: logout
+
+... *Add Admin:*
+Add another admin. Note that PASSWORD has to match some specific validation criteria. +
+
+    Format: addAdmin USERNAME PASSWORD VERIFY_PASSWORD
+
+... *Remove Admin:*
+Removing another admin. +
+
+    Format: removeAdmin USERNAME
+
+... *Update Admin Password:*
+Updating your own account's password. Note that NEW_PW has to match some specific validation criteria. +
+
+    Format: updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
+
+... *Add Machine:* Adds a new machine.
+.... All machine names must be unique.
+..... Names should only contain alphanumeric characters and spaces,
+and it should not be blank.
+..... Reserved names are : [ AUTO ]
+.... Status can only be
+..... “ENABLED”
+..... “DISABLED”
+
+    Format:
+    addMachine n/MACHINE_NAME ms/STATUS
+
+    Example:
+    addMachine n/myMachine ms/ENABLED
+
+... *Edit Machine* :
+Edits an existing machine.
+.... All machine names must be unique.
+..... Names should only contain alphanumeric characters and spaces,
+and it should not be blank.
+..... Reserved names are : [ AUTO ]
+.... Status can only be
+..... “ENABLED”
+..... “DISABLED”
+.... At least one optional argument must be present. +
+
+    Format: editMachine MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
+
+    Example:
+    editMachine my_machine n/my_machine2 ms/ENABLED
+
 .. *Adding a print Job:*
 Adds a print job to the machine's queue. Specifying AUTO as MACHINE_NAME will let the software optimize which queue to add the print to. +
 Available priorities: URGENT, HIGH, NORMAL.
@@ -195,67 +257,7 @@ Exits the program +
 .. *Saving Data:*
 Address book data are saved in the hard disk automatically after any command that changes the data.There is no need to save manually.
 
-.. *Admin specific commands:*
-The following commands will only work in admin mode. Admin accounts currently not saved across sessions.
 
-... *Login:*
-Enables admin mode. Note that a default account is created when no other admins exist. Username and Password of default are both 'admin' +
-
-	Format: login ADMIN_ID PASSWORD
-
-	Examples:
-	login admin admin
-
-... *Logout:*
-Disable admin mode. +
-
-	Format: logout
-
-... *Add Admin:*
-Add another admin. Note that PASSWORD has to match some specific validation criteria. +
-
-    Format: addAdmin USERNAME PASSWORD VERIFY_PASSWORD
-
-... *Remove Admin:*
-Removing another admin. +
-
-    Format: removeAdmin USERNAME
-
-... *Update Admin Password:*
-Updating your own account's password. Note that NEW_PW has to match some specific validation criteria. +
-
-    Format: updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
-
-... *Add Machine:* Adds a new machine.
-.... All machine names must be unique.
-..... Names should only contain alphanumeric characters and spaces,
-and it should not be blank.
-..... Reserved names are : [ AUTO ]
-.... Status can only be
-..... “ENABLED”
-..... “DISABLED”
-
-    Format:
-    addMachine n/MACHINE_NAME ms/STATUS
-
-    Example:
-    addMachine n/myMachine ms/ENABLED
-
-... *Edit Machine* :
-Edits an existing machine.
-.... All machine names must be unique.
-..... Names should only contain alphanumeric characters and spaces,
-and it should not be blank.
-..... Reserved names are : [ AUTO ]
-.... Status can only be
-..... “ENABLED”
-..... “DISABLED”
-.... At least one optional argument must be present. +
-
-    Format: editMachine MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
-
-    Example:
-    editMachine my_machine n/my_machine2 ms/ENABLED
 
 
 == FAQ
