@@ -66,7 +66,7 @@ Available priorities: URGENT, HIGH, NORMAL.
     Examples:
     addJob n/iDCP m/TYPrinter on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
 
-.. *Manage a machine*
+.. *Manage jobs*
 ... *Starting a print Job:*
 Starts an existing print job in the queue. +
 
