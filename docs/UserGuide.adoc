@@ -66,7 +66,8 @@ Available priorities: URGENT, HIGH, NORMAL.
     Examples:
     addJob n/iDCP m/TYPrinter on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
 
-.. *Starting a print Job:*
+.. *Manage a machine*
+... *Starting a print Job:*
 Starts an existing print job in the queue. +
 
     Format: manageJob JOBNAME start
@@ -74,7 +75,7 @@ Starts an existing print job in the queue. +
     Examples:
     manageJob myPrint start
 
-.. *Cancelling a Print:*
+... *Cancelling a Print:*
 Cancel an existing print in the queue. +
 
     Format: manageJob JOBNAME cancel
@@ -82,7 +83,7 @@ Cancel an existing print in the queue. +
     Examples:
     manageJob myPrint cancel
 
-.. *Restarting a Print:*
+... *Restarting a Print:*
 Restart an existing print in the queue. +
 
     Format: manageJob JOBNAME restart
@@ -90,7 +91,7 @@ Restart an existing print in the queue. +
     Examples:
     manageJob myPrint restart
 
-.. *Deleting a Print:*
+... *Deleting a Print (Admin only) :*
 deletes an existing print in the queue. +
 
     Format: manageJob JOBNAME delete
@@ -106,6 +107,36 @@ Tags a print job with a "requestDeletion" tag that is to be removed by admin
 
     Examples:
     requestDeletion n/iDCP
+
+.. *Manage machines (Admin only)*
+... Removes a machine from maker manager (Admin only):
+
+    Format : manageMachine MACHINENAME remove
+
+    Examples:
+    manageMachine JJPrinter remove
+
+... Flushes jobs in machine based on this conditions
+.... If no extra parameter AUTO input, system will prompt user for confirmation to flush machine
+
+    Example : manageMachine JJPrinter flush
+
+..... Ok button : Removes all jobs in machines
+..... Cancel button : Command does not execute
+
+.... With extra parameter AUTO
+
+    Example : manageMachine JJPrinter flush AUTO
+
+..... Automatically flushes the machine's job to the next most available machine
+
+... Cleans a machine by removing jobs that have status
+.... CANCELLED
+.... FINISHED
+.... DELETING
+
+    Example : manageMachine JJPrinter clean
+
 
 .. *`[WIP][DISABLED]` Listing Prints:*
 Lists prints with optional filters. Currently lists persons. +
@@ -146,9 +177,12 @@ Lists machines. +
     listMachines
 
 .. *Finding Machines:*
-Finds machines based on given keywords. +
+Finds machines based on given keywords.
+    ... If none of the keywords matches exactly, findMachine
+    employs Levenshtein distance algorithm to find the
+    closest match to the keywords inputted
 
-    Format: findMachines [machine name] [machine name 2]
+    Format: findMachine [machine name] [machine name 2]
 
     Examples:
     findMachine myMachine1
@@ -207,14 +241,6 @@ and it should not be blank.
     Example:
     addMachine n/myMachine ms/ENABLED
 
-... *`[WIP][DISABLED]` Remove Machine:*
-removes a machine.  +
-
-    Format: removeMachine MACHINE_NAME
-
-    Example:
-    removeMachine my_machine
-
 ... *Edit Machine* :
 Edits an existing machine.
 .... All machine names must be unique.
@@ -248,12 +274,15 @@ and it should not be blank.
 . removeAdmin USERNAME
 . updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
 . add_machine n/MACHINE_NAME ms/STATUS
-. `[WIP][DISABLED]` removeMachine n/MACHINE_NAME
 . edit_machine MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
 . listMachines
 . manageJob JOB_NAME start
 . manageJob JOB_NAME cancel
 . manageJob JOB_NAME restart
 . manageJob JOB_NAME delete
-. `[WIP][DISABLED]` manageJob JOB_NAME delete
 . requestDeletion n/iDCP
+. manageMachine MACHINE_NAME remove
+. manageMachine MACHINE_NAME flush
+. manageMachine MACHINE_NAME flush AUTO
+. manageMachine MACHINE_NAME clean
+
