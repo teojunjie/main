@@ -66,6 +66,19 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 This section will help you understand everything you can do with MakerManager, and show you how to do them.
 
 ====
+The Problem MakerManager Solves
+====
+We need to agree on some terms before you can navigate the User Guide properly.
+MakerSpaces have various 'machines'. Each machine can have a queue of 'jobs'. Each queue can have only 1 'ongoing' job that is being processed.
+Each machine has a name, each job has a name, and both have extra information attached to it for ease of use.
+
+The problem makerspaces have today is the uncertainty when multiple people try to use the limited number of expensive machines for different tasks of different duration.
+One job can take hours, and you might come back later only to find that you missed your change by a minute and someone present has the machine busy for a few more hours.
+This can be extremely frustrating for you the user. Lab managers have tried using a time-sheet, but it hasn't been very effective. MakerManager tries to streamline these processes.
+
+Now that you know what we're trying to achieve, you will hopefully understand why we've included some features.
+
+====
 *Using the Examples in this Guide*
 ====
 The examples in this guide are formatted with the following conventions:
