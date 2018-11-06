@@ -26,7 +26,7 @@ If you are a maker, you can use MakerManager to add, remove, update prints manua
 MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
 
 MakerManager is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
-This guide gives you a brief overview about how setup and use MakerManager. MakerManager v1.4 is available for Windows and Linux.
+This guide gives you a brief overview about setting-up and using MakerManager. MakerManager v1.4 is available for Windows and Linux.
 
 Still with us? Great! Jump to the Section 2, “Quick Start” to get started. Enjoy!
 
@@ -35,8 +35,8 @@ This section shows you how to fire up MakerManager and get a feel of how to use 
 
 .  Ensure you have Java version `9` or later installed on your Computer. If you don't have JRE installed, you can use https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB[this link] as a reference.
 .  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
-.  Copy the file to the folder you want to use as the home folder for your MakerManager.
-.  Double-click the file to start the app. The GUI should appear in a few seconds.
+.  Copy the jar file to the folder you want to use as the home folder for your MakerManager.
+.  Double-click on the jar file to start the app. The GUI should appear in a few seconds.
 +
 image::Ui.png[width="790"]
 +
@@ -50,7 +50,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * `1. abc`, `2. cdt` and such columns represent machines
 * The scrollable panel under each machine represents the machine's queue, with Prints divided by alternating shades of grey.
 * The tags are self-explanatory, but you can read the next section for getting a good understanding of what they represent.
-* Note: The UI lets you know when you're logged in as Admin by making the Command Line Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
+* Note: The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 
 .  Some example commands you can warm up with:
 
@@ -79,21 +79,24 @@ The examples in this guide are formatted with the following conventions:
 ====
 *What You Can Do with MakerManager*
 ====
-For the following commands, you can execute them by typing the example in the Command Box and pressing *Enter* on your keyboard.
+For the following commands, you can execute them by typing the example in the Command Box and pressing kbd:[Enter].
 Under each command, we use the following order: what it does, outcome you get, any special notes.
 _If any particular outcome is not listed, it implies that only a message will be shown pertaining to the output._ +
-_Note: The words 'Print', 'Job' and 'Print Job' are used interchangeably. This app now specializes in print, but can be extended to other equipments in the future._
+_Note: The words 'Print', 'Job' and 'Print Job' are used interchangeably. This app now specializes in 3D Prints, but can be extended to other equipments in the future._
 
 . *Viewing Help* +
-Gives you guidance as to what you can do with MakerManager. You will see a window pop up with the user guide in it for quick reference. +
+Gives you guidance as to what you can do with MakerManager. +
+Outcome: You will see a window pop up with the user guide in it for quick reference. +
 
     Format: help
 
 . *Administrator mode* +
-The following commands will only work in admin mode. The list is non-exhaustive, and you will find more admin-specific commands below.
+The administrator mode is present to prevent malicious users from harming other users' workflow easily. Only the administrator is allowed to make drastic changes to the application and its data. +
+The commands listed below will only work in admin mode. The list is non-exhaustive, and you will find more admin-specific commands later on. +
 
 .. *Login* +
-Enables admin mode. You get admin-privilieges and the Command Box will turn blue. +
+Enables admin mode. +
+Outcome: You get admin-privileges and the Command Box will turn blue. +
 _Note that a default account is created when no other admins exist. Username and Password of default are both 'admin'. We strongly recommend adding a secure admin account and removing the default during your first run._ +
 
     Format: login ADMIN_ID PASSWORD
@@ -101,12 +104,13 @@ _Note that a default account is created when no other admins exist. Username and
 	Example: login admin admin
 
 .. *Logout* +
-Disable admin mode. The Command Box will return back to original color afterwards, and you will lose admin-privileges. +
+Disable admin mode. This ensures that MakerManager is usable by both types of user in the same terminal, with the same UI. +
+Outcome: The Command Box will return back to original color afterwards, and you will lose admin-privileges.
 
 	Format: logout
 
 .. *Add Admin* +
-Add another admin. +
+Add another admin. This enables makerspaces with multiple managers in-charge to share work easily. +
 _Note that PASSWORD has to match a specific validation criteria - namely at least: 1 upper-case letter, 1 lower-case letter, 1 number, 1 symbol from [@#$%^&+=] and 8 characters in total_ +
 
     Format: addAdmin USERNAME PASSWORD VERIFY_PASSWORD
@@ -114,14 +118,16 @@ _Note that PASSWORD has to match a specific validation criteria - namely at leas
     Example: addAdmin saif 123Abcd$ 123Abcd$
 
 .. *Remove Admin* +
-Removing any admin. If you remove your own account, you will be logged out automatically. +
+Removing any admin. This will let you remove an admin if (s)he is no longer granted these privileges in the makerspace, for whatever reason. +
+Outcome: The ex-admin will no longer be able to login.
+_If you remove your own account, you will be logged out automatically._ +
 
     Format: removeAdmin USERNAME
 
     Example: removeAdmin saif
 
 .. *Update Admin Password* +
-Updating your own password. +
+Updating your own password. You may want to change to a different password frequently, for good security practices. +
 _Note that NEW_PW has to match the same validation criteria as addAdmin command._ +
 
     Format: updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
@@ -129,7 +135,9 @@ _Note that NEW_PW has to match the same validation criteria as addAdmin command.
     Example: updatePassword saif 123Abcd$ 456Wasd= 456Wasd=
 
 .. *Add Machine* +
-Adds a new machine to MakerManager. You will see a new column added to the UI. +
+Adds a new machine to MakerManager. You might be extending your printer fleet by adding new printers, and this lets the users of the space know. Especially handy if it's a big place! +
+Outcome: You will see a new column added to the UI. +
++
 This command has the following constraints:
 ... All machine names must be unique.
 .... Names should only contain alphanumeric characters and spaces,
@@ -144,7 +152,8 @@ and it should not be blank.
     Example: addMachine n/myMachine ms/DISABLED
 
 .. *Edit Machine* +
-Edits an existing machine. You will see a change in the tags of the specific machine. +
+Edits an existing machine. +
+Outcome: You will see a change in the tags of the specific machine. +
 _This command adhears to the same constraints as addMachine Command. +
 At least one optional argument must be present. The argument(s) present will replace the respective values of the existing machine_ +
 
@@ -153,9 +162,11 @@ At least one optional argument must be present. The argument(s) present will rep
     Example: editMachine myMachine n/UpBox ms/ENABLED
 
 . *Adding a Print Job* +
-Adds a print to a machine's queue. You will see the job in if you scroll to the last item in the machine you specified. +
+Adds a print to a machine's queue. +
+Outcome: You will see the job in if you scroll to the last item in the machine you specified. +
 _Specifying AUTO as MACHINE_NAME will let the software optimize which queue to add the print to. +
-Available priorities: URGENT, HIGH, NORMAL. Please note that PRIORITY is currently just a display feature aimed at helping the lab manager gain more information._ +
+Available priorities: URGENT, HIGH, NORMAL. +
+Please note that PRIORITY is currently just a display feature aimed at helping the lab manager gain more information._ +
 
     Format: addJob n/PRINT_NAME m/MACHINE_NAME on/OWNER NAME pr/PRIORITY d/DURATION(in hours) jn/NOTE [t/TAG]
 
@@ -163,7 +174,8 @@ Available priorities: URGENT, HIGH, NORMAL. Please note that PRIORITY is current
 
 . *Manage Prints*
 .. *Starting a Print* +
-Starts an existing print job, if it is at the top of the queue. The print tag will be set to ONGOING. +
+Starts an existing print job, if it is at the top of the queue. +
+Outcome: The print tag will be set to ONGOING and the machine will start a timer. The print will be automatically flagged as FINISHED after the time specified in the duration has passed. +
 _If you want to get an urgent print done, but it is not at the top of the queue, please request lab manager's assistance._ +
 
     Format: manageJob PRINT_NAME start
@@ -171,28 +183,31 @@ _If you want to get an urgent print done, but it is not at the top of the queue,
     Example: manageJob iDCP start
 
 .. *Cancelling a Print* +
-Cancel an existing print in the queue. The print tag will be changed to CANCELLED. +
+Cancel an existing print in the queue. You might want to use this if the print fails, which is very common for 3D printers, or if you no longer want to print for whatever reason. +
+Outcome: The print tag will be changed to CANCELLED. +
 
     Format: manageJob PRINT_NAME cancel
 
     Example: manageJob iDCP cancel
 
 .. *Restarting a Print:*
-Restart an existing print in the queue. +
+Restart an existing print in the queue. Same as start. This is be used after a failed print. +
 
     Format: manageJob PRINT_NAME restart
 
     Example: manageJob iDCP restart
 
 .. *Deleting a Print (Admin only)* +
-Deletes an existing print in the queue. You will no longer see the specified print in the UI. +
+Deletes an existing print in the queue. +
+Outcome: You will no longer see the specified print in the UI. +
 
     Format: manageJob PRINT_NAME delete
 
     Example: manageJob iDCP delete
 
 . *Requests a print job to be deleted by admin* +
-Marks a print with a "requestDeletion" tag, after which the admin might decide to remove it. +
+This command ensures that a malicious user cannot delete prints from a queue just so that (s)he can get the print done fast. +
+Outcome: Marks a print with a "requestDeletion" tag, after which the admin might decide to remove it. +
 
     Format: requestDeletion n/PRINT_NAME
 
@@ -200,15 +215,17 @@ Marks a print with a "requestDeletion" tag, after which the admin might decide t
 
 . *Manage machines (Admin only)* +
 .. *Clean a Machine* +
-Cleans a machine by removing jobs that have status CANCELLED, FINISHED or DELETING. The machine will no longer have any of these jobs listed afterwards, making it easier for others to view. +
+Cleans a machine by removing jobs that have status CANCELLED, FINISHED or DELETING. This is a convenient and fast way for you to get things done. +
+Outcome: The machine will no longer have any of these jobs listed afterwards, making it easier for others to view. +
 
     Format: manageMachine MACHINE_NAME clean
 
     Example: manageMachine iDCP clean
 
 .. *Flush a Machine* +
-Removes all the jobs from the specified machine. The admin will be warned and asked for confirmation, as it may hinder other users. If you press OK, the machine's queue will be empty. +
-    _If AUTO is specified, the prints in the existing machine (barring CANCELLED and FINISHED) will be transferred to other machines optimally._ +
+Removes all the jobs from the specified machine. You will be warned and asked for confirmation, as it may hinder other users. +
+Outcome: If you press OK, the machine's queue will be empty. If you press CANCEL, nothing happens. +
+    _If you specify AUTO, the prints in the existing machine (barring CANCELLED and FINISHED) will be transferred to other machines optimally._ +
 
     Format: manageMachine MACHINE_NAME flush
 
@@ -217,7 +234,9 @@ Removes all the jobs from the specified machine. The admin will be warned and as
     manageMachine UpBox flush AUTO
 
 .. *Remove a Machine* +
-Removes a machine from MakerManager. You will no longer see the machine as a column in the UI.
+Removes a machine from MakerManager. This helps you decommission a machine and let users know instantly. +
+Outcome: You will no longer see the machine as a column in the UI. +
+_Note: You can't do this unless the machine's queue is empty._ +
 
     Format : manageMachine MACHINE_NAME remove
 
@@ -253,14 +272,16 @@ Edits an existing print in the queue. +
     edit 2 p/1
 
 . *Listing Machines* +
-Lists all the machines present in the makerspace. All the queues will be visible in the UI. +
+Lists all the machines present in the makerspace. +
+Outcome: All the queues will be visible in the UI. +
 
     Format: listMachines
 
     Example: listMachines
 
 . *Finding Machines:*
-Finds machines based on given keywords. At least 1 argument has to be present. You will see only matching machines shown in the UI. +
+Finds machines based on given keywords. You have to give at least 1 argument. +
+Outcome: You will see only matching machines shown in the UI. +
     _If none of the keywords matches exactly, findMachine
     employs Levenshtein distance algorithm to find the
     closest match to the keywords inputted_
@@ -270,7 +291,8 @@ Finds machines based on given keywords. At least 1 argument has to be present. Y
     Example: findMachine UpBox
 
 . *Exit the program* +
-Exits the program. The UI will close, and not be available anymore until the next time you start it. +
+Exits the program. +
+Outcome: The UI will close, and not be available anymore until the next time you start it. +
 
     Format: exit
 
@@ -281,7 +303,21 @@ MakerManager data are saved in the hard disk automatically after any command tha
 *Q:* How do I transfer my data to another Computer? +
 *A:* Install the app in the other computer and overwrite the empty data files it creates with the files that contains the data of your previous MakerManager.
 
+*Q:* How do I hear of the latest releases?
+*A:* You can `watch` or `follow` our repository on github if you want to hear of our latest releases.
+
+*Q:* I found a bug/have a suggestion! What do I do?
+*A:* Feel free to report bugs/suggest enhancements using the `Issue Tracker`, or simply dropping an email to one of the developers.
+
+*Q:* How do I contact the authors?
+*A:* Our contacts are given in the `About Us` and `Contact Us` page; drop by as we'd love to get to know you!
+
+*Q:* Can I use your source code?
+*A:* This work is under the MIT license. So Feel free to fork the repo and develop it on your own while adhearing to the license constraints. Check out the `Developer Guide` for getting started.
+
 == Command Summary
+This is a nifty little list you can print and paste somewhere for quick reference. +
+
 . help
 . addJob n/PRINT_NAME m/MACHINE_NAME d/PRINT_DURATION [s/SPECIAL_NOTES] <p/PRIORITY>
 . login ADMIN_ID PASSWORD
@@ -315,10 +351,3 @@ MakerManager data are saved in the hard disk automatically after any command tha
 . Automatically calculate duration of print from different Printer APIs.
 
 We're excited! Are you?
-
-== Parting Words
-We hope you liked our work with MakerManager. You can `watch` or `follow` our repository on github if you want to hear of our latest releases.
-Feel free to report bugs/suggest enhancements using the `Issue Tracker`, or simply dropping an email to one of the authors. Our contacts are given in the `About Us` and `Contact Us` page; drop by as we'd love to get to know you!
-Also feel free to fork the repo and develop it on your own; we'd love to see your cool ideas!
-
-Thank you.
