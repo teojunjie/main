@@ -17,13 +17,13 @@ endif::[]
 By: `NUSCS2113-T09-1`      Since: `Sep 2018`      Licence: `MIT`
 
 == Introduction
-makerManager is for those who prefer to use a desktop app for managing prints and other machine jobs in a makerspace. More importantly, makerManager is optimized for those who prefer to work with a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, makerManager can get your print and machine management tasks done faster than traditional GUI apps. Interested? Jump to the Section 2, “Quick Start” to get started. Enjoy!
+MakerManager is for people who prefer using a desktop app for managing time-shared equipment in a makerspace. Furthermore, MakerManager is optimized for those who prefer working with a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, MakerManager can get your machine management tasks done faster than traditional GUI apps. Interested? Jump to the Section 2, “Quick Start” to get started. Enjoy!
 
 == Quick Start
 
-.  Ensure you have Java version `9` or later installed in your Computer.
+.  Ensure you have Java version `9` or later installed on your Computer.
 .  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
-.  Copy the file to the folder you want to use as the home folder for your Address Book.
+.  Copy the file to the folder you want to use as the home folder for your MakerManager.
 .  Double-click the file to start the app. The GUI should appear in a few seconds.
 +
 image::Ui.png[width="790"]
@@ -53,20 +53,19 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * Words in upper-case are parameters to be supplied by users
 
 .. *Viewing Help:*
-Give the user guidance as to what (s)he can do with makerManager +
+Give the user guidance as to what (s)he can do with MakerManager +
 
     Format: help
 
-.. *Admin specific commands:*
-The following commands will only work in admin mode. Admin accounts currently not saved across sessions.
+.. *Administrator mode:*
+The following commands will only work in admin mode. The list is non-exhaustive, and you will find more admin-specific commands below.
 
 ... *Login:*
-Enables admin mode. Note that a default account is created when no other admins exist. Username and Password of default are both 'admin' +
+Enables admin mode. Note that a default account is created when no other admins exist. Username and Password of default are both 'admin'. We strongly recommend adding a secure admin account and removing the default during your first run. +
 
 	Format: login ADMIN_ID PASSWORD
 
-	Examples:
-	login admin admin
+	Example: login admin admin
 
 ... *Logout:*
 Disable admin mode. +
@@ -74,21 +73,27 @@ Disable admin mode. +
 	Format: logout
 
 ... *Add Admin:*
-Add another admin. Note that PASSWORD has to match some specific validation criteria. +
+Add another admin. Note that PASSWORD has to match a specific validation criteria - namely at least: 1 upper-case letter, 1 lower-case letter, 1 number, 1 symbol from [@#$%^&+=] and 8 characters in total+
 
     Format: addAdmin USERNAME PASSWORD VERIFY_PASSWORD
 
+    Example: addAdmin saif 123Abcd$ 123Abcd$
+
 ... *Remove Admin:*
-Removing another admin. +
+Removing any admin. If the admin removes him/herself, (s)he will be logged out automatically. +
 
     Format: removeAdmin USERNAME
 
+    Example: removeAdmin saif
+
 ... *Update Admin Password:*
-Updating your own account's password. Note that NEW_PW has to match some specific validation criteria. +
+Updating your own account's password. Note that NEW_PW has to match the same validation criteria as addAdmin command. +
 
     Format: updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
 
-... *Add Machine:* Adds a new machine.
+    Example: updatePassword saif 123Abcd$ 456Wasd= 456Wasd=
+
+... *Add Machine:* Adds a new machine to MakerManager. This command has the following constraints:
 .... All machine names must be unique.
 ..... Names should only contain alphanumeric characters and spaces,
 and it should not be blank.
@@ -97,111 +102,87 @@ and it should not be blank.
 ..... “ENABLED”
 ..... “DISABLED”
 
-    Format:
-    addMachine n/MACHINE_NAME ms/STATUS
+    Format: addMachine n/MACHINE_NAME ms/STATUS
 
-    Example:
-    addMachine n/myMachine ms/ENABLED
+    Example: addMachine n/myMachine ms/DISABLED
 
 ... *Edit Machine* :
-Edits an existing machine.
-.... All machine names must be unique.
-..... Names should only contain alphanumeric characters and spaces,
-and it should not be blank.
-..... Reserved names are : [ AUTO ]
-.... Status can only be
-..... “ENABLED”
-..... “DISABLED”
-.... At least one optional argument must be present. +
+Edits an existing machine. This command adhears to the same constraints as addMachine Command.
+.... At least one optional argument must be present. The argument(s) present will replace the respective values of the existing machine +
 
     Format: editMachine MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
 
-    Example:
-    editMachine my_machine n/my_machine2 ms/ENABLED
+    Example: editMachine myMachine n/UpBox ms/ENABLED
 
 .. *Adding a print Job:*
-Adds a print job to the machine's queue. Specifying AUTO as MACHINE_NAME will let the software optimize which queue to add the print to. +
-Available priorities: URGENT, HIGH, NORMAL.
+Adds a print job to a machine's queue. Specifying AUTO as MACHINE_NAME will let the software optimize which queue to add the print to. +
+Available priorities: URGENT, HIGH, NORMAL. Please note that PRIORITY is currently just a display feature aimed at helping the lab manager gain more information.
 
-    Format: addJob n/JOB NAME m/MACHINE NAME on/JOB OWNER NAME pr/JOB PRIORITY d/JOB DURATION jn/JOB NOTE [t/TAG]
+    Format: addJob n/PRINT_NAME m/MACHINE_NAME on/OWNER NAME pr/PRIORITY d/DURATION(in hours) jn/NOTE [t/TAG]
 
-    Examples:
-    addJob n/iDCP m/TYPrinter on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    Example: addJob n/iDCP m/UpBox on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
 
 .. *Manage jobs*
 ... *Starting a print Job:*
-Starts an existing print job in the queue. +
+Starts an existing print job, if it is at the top of the queue. If you want to get an urgent print done, but it is not at the top of the queue, please request lab manager's assistance. +
 
-    Format: manageJob JOBNAME start
+    Format: manageJob PRINT_NAME start
 
-    Examples:
-    manageJob myPrint start
+    Example: manageJob iDCP start
 
 ... *Cancelling a Print:*
 Cancel an existing print in the queue. +
 
-    Format: manageJob JOBNAME cancel
+    Format: manageJob PRINT_NAME cancel
 
-    Examples:
-    manageJob myPrint cancel
+    Example: manageJob iDCP cancel
 
 ... *Restarting a Print:*
 Restart an existing print in the queue. +
 
-    Format: manageJob JOBNAME restart
+    Format: manageJob PRINT_NAME restart
 
-    Examples:
-    manageJob myPrint restart
+    Example: manageJob iDCP restart
 
 ... *Deleting a Print (Admin only) :*
 deletes an existing print in the queue. +
 
-    Format: manageJob JOBNAME delete
+    Format: manageJob PRINT_NAME delete
 
-    Examples:
-    manageJob myPrint delete
-    manageJob anotherPrint delete
+    Example: manageJob iDCP delete
 
 .. *Requests a print job to be deleted by admin:*
-Tags a print job with a "requestDeletion" tag that is to be removed by admin
+Marks a print with a "requestDeletion" tag, after which the admin might decide to execute `delete`.
 
-    Format: requestDeletion n/JOB NAME
+    Format: requestDeletion n/PRINT_NAME
 
-    Examples:
-    requestDeletion n/iDCP
+    Example: requestDeletion n/iDCP
 
 .. *Manage machines (Admin only)*
-... Removes a machine from maker manager (Admin only):
+... Cleans a machine by removing jobs that have status CANCELLED, FINISHED or DELETING.
 
-    Format : manageMachine MACHINENAME remove
+    Format: manageMachine MACHINE_NAME clean
+
+    Example: manageMachine iDCP clean
+
+... Removes all the jobs from the specified machine. The admin will be warned and asked for confirmation, as it may hinder other users.
+    If AUTO is specified, the prints in the existing machine (barring CANCELLED and FINISHED) will be transferred to other machines optimally.
+
+    Format: manageMachine MACHINE_NAME flush
 
     Examples:
-    manageMachine JJPrinter remove
+    manageMachine UpBox flush
+    manageMachine UpBox flush AUTO
 
-... Flushes jobs in machine based on this conditions
-.... If no extra parameter AUTO input, system will prompt user for confirmation to flush machine
+... Removes a machine from MakerManager (Admin only):
 
-    Example : manageMachine JJPrinter flush
+    Format : manageMachine MACHINE_NAME remove
 
-..... Ok button : Removes all jobs in machines
-..... Cancel button : Command does not execute
-
-.... With extra parameter AUTO
-
-    Example : manageMachine JJPrinter flush AUTO
-
-..... Automatically flushes the machine's job to the next most available machine
-
-... Cleans a machine by removing jobs that have status
-.... CANCELLED
-.... FINISHED
-.... DELETING
-
-    Example : manageMachine JJPrinter clean
+    Example: manageMachine UpBox remove
 
 
-.. *`[WIP][DISABLED]` Listing Prints:*
-Lists prints with optional filters. Currently lists persons. +
+.. *Listing Prints `[Coming in v2.0!]` :*
+Lists prints with optional filters. +
 
     Format: list [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
 
@@ -210,7 +191,7 @@ Lists prints with optional filters. Currently lists persons. +
     list p/1
 
 
-.. *`[WIP][DISABLED]` Listing History of Prints:*
+.. *Listing History of Prints `[Coming in v2.0!]` :*
 Lists all completed prints with optional filters. +
 
     Format: list_history [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
@@ -219,7 +200,7 @@ Lists all completed prints with optional filters. +
     list_history n/myprint m/printer_1 s/red filament only p/1 +
     list_history p/1
 
-.. *`[WIP][DISABLED]` Editing a Print:*
+.. *Editing a Print `[Coming in v2.0!]` :*
 Edits an existing print in the queue. +
 
     Format: edit INDEX [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] <p/PRIORITY>
@@ -228,26 +209,23 @@ Edits an existing print in the queue. +
     edit 1 n/myprint m/printer_1 s/red filament only p/1 +
     edit 2 p/1
 
-
-
 .. *Listing Machines:*
-Lists machines. +
+Lists all the machines present in the makerspace. +
 
     Format: listMachines
 
-    Examples:
-    listMachines
+    Example: listMachines
 
 .. *Finding Machines:*
-Finds machines based on given keywords.
+Finds machines based on given keywords. At least 1 argument has to be present
     ... If none of the keywords matches exactly, findMachine
     employs Levenshtein distance algorithm to find the
     closest match to the keywords inputted
 
-    Format: findMachine [machine name] [machine name 2]
+    Format: findMachine [MACHINE_NAME_1] [MACHINE_NAME_2] ...
 
     Examples:
-    findMachine myMachine1
+    findMachine UpBox
 
 .. *Exit the program:*
 Exits the program +
@@ -255,21 +233,15 @@ Exits the program +
     Format: exit
 
 .. *Saving Data:*
-Address book data are saved in the hard disk automatically after any command that changes the data.There is no need to save manually.
-
-
-
+MakerManager data are saved in the hard disk automatically after any command that changes the data.There is no need to save manually.
 
 == FAQ
 *Q:* How do I transfer my data to another Computer? +
-*A: *Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous makerManagerfolder.
+*A: *Install the app in the other computer and overwrite the empty data files it creates with the files that contains the data of your previous MakerManager.
 
 == Command Summary
 . help
 . addJob n/PRINT_NAME m/MACHINE_NAME d/PRINT_DURATION [s/SPECIAL_NOTES] <p/PRIORITY>
-. `[WIP][DISABLED]` list [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
-. `[WIP][DISABLED]` list_history [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
-. exit
 . login ADMIN_ID PASSWORD
 . logout
 . addAdmin USERNAME PASSWORD VERIFY_PASSWORD
@@ -287,4 +259,23 @@ Address book data are saved in the hard disk automatically after any command tha
 . manageMachine MACHINE_NAME flush
 . manageMachine MACHINE_NAME flush AUTO
 . manageMachine MACHINE_NAME clean
+. exit
+. `[Coming in v2.0!]` list [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
+. `[Coming in v2.0!]` list_history [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
 
+== Upcoming Features!
+. More robust data security and integrity by incorporating a Database system
+. Minimalistic User Accounts for all users, including guest accounts.
+. Point system for frequent members and friendly people helping others print.
+. Team accounts, for coordinating projects easily.
+. Online MakerManager, so you can do all these from the comfort of your home.
+. Integration with Octoprint, so that prints can be started remotely!
+
+We're excited! Are you?
+
+== Parting Words
+We hope you liked our work with MakerManager. You can `watch` or `follow` our repository on github if you want to hear of our latest releases.
+Feel free to report bugs/suggest enhancements using the `Issue Tracker`, or simply dropping an email to one of the authors. Our contacts are given in the `About Us` and `Contact Us` page; drop by as we'd love to get to know you!
+Also feel free to fork the repo and develop it on your own; we'd love to see your cool ideas!
+
+Thank you.
