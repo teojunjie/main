@@ -188,11 +188,11 @@ The sections below give more details of each component.
 === UI component
 
 .Structure of the UI Component
-image::UiClassDiagram.png[width="800"]
+image::UiComponentClassDiagramV1.4.2.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `MachineListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
@@ -226,7 +226,7 @@ image::DeletePersonSdForLogic.png[width="800"]
 === Model component
 
 .Structure of the Model Component
-image::ModelComponentClassDiagram.png[width="800"]
+image::ModelComponentClassDiagramV1.4.2.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
@@ -234,7 +234,7 @@ The `Model`,
 
 * stores the Address Book data.
 * exposes an unmodifiable `ObservableList<Admin>` that can be 'observed'
-* exposes an unmodifiable `ObservableList<Job>` that can be 'observed'
+* exposes an unmodifiable `ObservableList<Job>` that can be 'observed' in machines
 * exposes an unmodifiable `ObservableList<Machine>` that can be 'observed'
 * eg. the UI can be bound to these 3 lists so that the UI automatically updates when the data in any of the list changes.
 * does not depend on any of the other three components.
@@ -252,11 +252,9 @@ The `Storage` component,
 * stores an initialized `UserPref` object that represents the user's preferences derived from
 JsonUserPrefsStorage
 * can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in 4 separate xml format
-** XmlSerializableAddressBook
+* can save the Address Book data in 2 separate xml format
 ** XmlSerializableMakerManagerAdmins
 ** XmlSerializableMakerManagerMachines
-** XmlSerializableMakerManagerJobs
 
 
 [[Design-Commons]]
