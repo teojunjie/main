@@ -14,7 +14,7 @@ ifdef::env-github[]
 endif::[]
 :repoURL: https://github.com/NUSCS2113-T09-1/main
 
-By: `NUSCS2113-T09-1`      Since: `Sep 2018`      Licence: `MIT`
+By: `NUSCS2113-AY1819S1-T09-1`      Since: `Sep 2018`      Licence: `MIT`
 
 Welcome to the _MakerManager_ User Guide! Choose a topic from the Table of Contents below, get step-by-step instructions, and develop makerspace management skills.
 If you are a first time visitor, we suggest you follow this short document top-to-bottom to get the most out of it.
@@ -50,7 +50,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * `1. abc`, `2. cdt` and such columns represent machines
 * The scrollable panel under each machine represents the machine's queue, with Prints divided by alternating shades of grey.
 * The tags are self-explanatory, but you can read the next section for getting a good understanding of what they represent.
-* Note: The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
+[NOTE]
+The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 
 .  Some example commands you can warm up with:
 
@@ -94,9 +95,11 @@ The examples in this guide are formatted with the following conventions:
 ====
 For the following commands, you can execute them by typing the example in the Command Box and pressing kbd:[Enter].
 Under each command, we use the following order: what it does, outcome you get, any special notes.
-_If any particular outcome is not listed, it implies that only a message will be shown pertaining to the output._ +
-_Note: The words 'Print', 'Job' and 'Print Job' are used interchangeably. This app now specializes in 3D Prints, but can be extended to other equipments in the future._
+[NOTE]
+If any particular outcome is not listed, it implies that only a message will be shown pertaining to the output. +
 
+[NOTE]
+The words 'Print', 'Job' and 'Print Job' are used interchangeably. This app now specializes in 3D Prints, but can be extended to other equipments in the future.
 . *Viewing Help* +
 Gives you guidance as to what you can do with MakerManager. +
 Outcome: You will see a window pop up with the user guide in it for quick reference. +
@@ -110,7 +113,10 @@ The commands listed below will only work in admin mode. The list is non-exhausti
 .. *Login* +
 Enables admin mode. +
 Outcome: You get admin-privileges and the Command Box will turn blue. +
-_Note that a default account is created when no other admins exist. Username and Password of default are both 'admin'. We strongly recommend adding a secure admin account and removing the default during your first run._ +
+[NOTE]
+A default account is created when no other admins exist. Username and Password of default are both 'admin'. +
+[WARNING]
+We strongly recommend adding a secure admin account and removing the default during your first run. +
 
     Format: login ADMIN_ID PASSWORD
 
@@ -124,7 +130,8 @@ Outcome: The Command Box will return back to original color afterwards, and you 
 
 .. *Add Admin* +
 Add another admin. This enables makerspaces with multiple managers in-charge to share work easily. +
-_Note that PASSWORD has to match a specific validation criteria - namely at least: 1 upper-case letter, 1 lower-case letter, 1 number, 1 symbol from [@#$%^&+=] and 8 characters in total_ +
+[NOTE]
+PASSWORD has to match a specific validation criteria - namely at least: 1 upper-case letter, 1 lower-case letter, 1 number, 1 symbol from [@#$%^&+=] and 8 characters in total+
 
     Format: addAdmin USERNAME PASSWORD VERIFY_PASSWORD
 
@@ -141,7 +148,8 @@ _If you remove your own account, you will be logged out automatically._ +
 
 .. *Update Admin Password* +
 Updating your own password. You may want to change to a different password frequently, for good security practices. +
-_Note that NEW_PW has to match the same validation criteria as addAdmin command._ +
+[NOTE]
+NEW_PW has to match the same validation criteria as addAdmin command. +
 
     Format: updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
 
@@ -249,7 +257,8 @@ Outcome: If you press OK, the machine's queue will be empty. If you press CANCEL
 .. *Remove a Machine* +
 Removes a machine from MakerManager. This helps you decommission a machine and let users know instantly. +
 Outcome: You will no longer see the machine as a column in the UI. +
-_Note: You can't do this unless the machine's queue is empty._ +
+[NOTE]
+You can't do this unless the machine's queue is empty. +
 
     Format : manageMachine MACHINE_NAME remove
 
