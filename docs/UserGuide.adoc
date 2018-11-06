@@ -66,7 +66,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 This section will help you understand everything you can do with MakerManager, and show you how to do them.
 
 ====
-The Problem MakerManager Solves
+The Problems MakerManager Solves
 ====
 We need to agree on some terms before you can navigate the User Guide properly.
 MakerSpaces have various 'machines'. Each machine can have a queue of 'jobs'. Each queue can have only 1 'ongoing' job that is being processed.
