@@ -100,6 +100,7 @@ If any particular outcome is not listed, it implies that only a message will be 
 
 [NOTE]
 The words 'Print', 'Job' and 'Print Job' are used interchangeably. This app now specializes in 3D Prints, but can be extended to other equipments in the future.
+
 . *Viewing Help* +
 Gives you guidance as to what you can do with MakerManager. +
 Outcome: You will see a window pop up with the user guide in it for quick reference. +
