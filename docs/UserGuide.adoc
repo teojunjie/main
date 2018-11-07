@@ -52,7 +52,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * The tags are self-explanatory, but you can read the next section for getting a good understanding of what they represent.
 [NOTE]
 The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
-
+* Prints are always displayed in order with `ONGOING` prints at the top, followed by `QUEUED`, then `requestDelete` or `CANCELLED` or `FINISHED`.
 .  Some example commands you can warm up with:
 
 * *`listMachines`* : lists all machines
@@ -160,10 +160,11 @@ Adds a new machine to MakerManager. You might be extending your printer fleet by
 Outcome: You will see a new column added to the UI. +
 +
 This command has the following constraints:
++
 ... All machine names must be unique.
 .... Names should only contain alphanumeric characters and spaces,
 and it should not be blank.
-.... Reserved names are : [ AUTO ]
+.... Reserved names are : `AUTO`
 ... Status can only be
 .... “ENABLED”
 .... “DISABLED”
@@ -174,9 +175,11 @@ and it should not be blank.
 
 .. *Edit Machine* +
 Edits an existing machine. +
-Outcome: You will see a change in the tags of the specific machine. +
+Outcome: You will see a change in the fields of the specific machine. +
 _This command adhears to the same constraints as addMachine Command. +
 At least one optional argument must be present. The argument(s) present will replace the respective values of the existing machine_ +
+[NOTE]
+Machines with `ongoing` prints cannot be edited!
 
     Format: editMachine MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
 
@@ -185,9 +188,11 @@ At least one optional argument must be present. The argument(s) present will rep
 . *Adding a Print Job* +
 Adds a print to a machine's queue. +
 Outcome: You will see the job in if you scroll to the last item in the machine you specified. +
-_Specifying AUTO as MACHINE_NAME will let the software optimize which queue to add the print to. +
-Available priorities: URGENT, HIGH, NORMAL. +
-Please note that PRIORITY is currently just a display feature aimed at helping the lab manager gain more information._ +
+_Specifying `AUTO` as MACHINE_NAME will let the software optimize which queue to add the print to. +
+Available priorities: `URGENT`, `HIGH`, `NORMAL`. +
+Please note that `PRIORITY` is currently just a display feature aimed at helping the lab manager gain more information._ +
+[NOTE]
+Prints cannot be added to `disabled` Machines!
 
     Format: addJob n/PRINT_NAME m/MACHINE_NAME on/OWNER NAME pr/PRIORITY d/DURATION(in hours) jn/NOTE [t/TAG]
 
@@ -196,8 +201,10 @@ Please note that PRIORITY is currently just a display feature aimed at helping t
 . *Manage Prints*
 .. *Starting a Print* +
 Starts an existing print job, if it is at the top of the queue. +
-Outcome: The print tag will be set to ONGOING and the machine will start a timer. The print will be automatically flagged as FINISHED after the time specified in the duration has passed. +
+Outcome: The print tag will be set to `ONGOING` and the machine will start a timer. The print will be automatically flagged as `FINISHED` after the time specified in the duration has passed. +
 _If you want to get an urgent print done, but it is not at the top of the queue, please request lab manager's assistance._ +
+[NOTE]
+If `admin` mode is enabled, users are able to start jobs that are not at the top of the queue
 
     Format: manageJob PRINT_NAME start
 
@@ -205,7 +212,7 @@ _If you want to get an urgent print done, but it is not at the top of the queue,
 
 .. *Cancelling a Print* +
 Cancel an existing print in the queue. You might want to use this if the print fails, which is very common for 3D printers, or if you no longer want to print for whatever reason. +
-Outcome: The print tag will be changed to CANCELLED. +
+Outcome: The print tag will be changed to `CANCELLED`. +
 
     Format: manageJob PRINT_NAME cancel
 
@@ -226,9 +233,45 @@ Outcome: You will no longer see the specified print in the UI. +
 
     Example: manageJob iDCP delete
 
+.. *Moving a Print (Admin only)* +
+Moves an existing print that is not `ONGOING` to another machine. This command inserts the print at the bottom of the target Machine's queue +
+Outcome: Print is removed from its current Machine and added to the bottom of the queue of the target Machine. +
+[NOTE]
+Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, then
+`requestDeletion` or `CANCELLED` or `FINISHED`.
+
+    Format: manageJob PRINT_NAME move MACHINE_NAME
+
+    Example: manageJob iDCP move ultimaker
+
+.. *Shifting a Print (Admin only)* +
+Shifts an existing print that is not `ONGOING` up or down in it's queue. +
+Valid shift options are:
+
+... up
+... down
++
+[NOTE]
+Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, then
+`requestDeletion` or `CANCELLED` or `FINISHED`.
+
+    Format: manageJob PRINT_NAME shift SHIFT_OPTION
+
+    Example: manageJob iDCP shift up
+
+.. *Swapping a Print (Admin only)* +
+Swaps an existing print with another existing print. Both Prints must not be `ONGOING`.
+[NOTE]
+Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, then
+`requestDeletion` or `CANCELLED` or `FINISHED`.
+
+    Format: manageJob PRINT_NAME swap TARGET_PRINT_NAME
+
+    Example: manageJob iDCP swap toycar
+
 . *Requests a print job to be deleted by admin* +
 This command ensures that a malicious user cannot delete prints from a queue just so that (s)he can get the print done fast. +
-Outcome: Marks a print with a "requestDeletion" tag, after which the admin might decide to remove it. +
+Outcome: Marks a print with a `requestDeletion` tag, after which the admin might decide to remove it. +
 
     Format: requestDeletion n/PRINT_NAME
 
@@ -236,7 +279,7 @@ Outcome: Marks a print with a "requestDeletion" tag, after which the admin might
 
 . *Manage machines (Admin only)* +
 .. *Clean a Machine* +
-Cleans a machine by removing jobs that have status CANCELLED, FINISHED or DELETING. This is a convenient and fast way for you to get things done. +
+Cleans a machine by removing jobs that have status `CANCELLED`, `FINISHED` or `DELETING`. This is a convenient and fast way for you to get things done. +
 Outcome: The machine will no longer have any of these jobs listed afterwards, making it easier for others to view. +
 
     Format: manageMachine MACHINE_NAME clean
@@ -246,7 +289,7 @@ Outcome: The machine will no longer have any of these jobs listed afterwards, ma
 .. *Flush a Machine* +
 Removes all the jobs from the specified machine. You will be warned and asked for confirmation, as it may hinder other users. +
 Outcome: If you press OK, the machine's queue will be empty. If you press CANCEL, nothing happens. +
-    _If you specify AUTO, the prints in the existing machine (barring CANCELLED and FINISHED) will be transferred to other machines optimally._ +
+    _If you specify AUTO, the prints in the existing machine will be transferred to other machines optimally._ +
 
     Format: manageMachine MACHINE_NAME flush
 
@@ -265,33 +308,15 @@ You can't do this unless the machine's queue is empty. +
     Example: manageMachine UpBox remove
 
 
-. *Listing Prints `[Coming in v2.0!]`* +
-Lists prints with optional filters. +
+. *Listing Prints* +
+Lists all prints. +
+Outcome: All Prints will be visible in the UI. +
 
-    Format: list [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
+    Format: listJobs
 
-    Examples:
-    list n/myprint m/printer_1 s/red filament only p/1 +
-    list p/1
+    Example: listJobs
 
 
-. *Listing History of Prints `[Coming in v2.0!]`* +
-Lists all completed prints with optional filters. +
-
-    Format: list_history [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
-
-    Examples:
-    list_history n/myprint m/printer_1 s/red filament only p/1 +
-    list_history p/1
-
-. *Editing a Print `[Coming in v2.0!]`* +
-Edits an existing print in the queue. +
-
-    Format: edit INDEX [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] <p/PRIORITY>
-
-    Examples:
-    edit 1 n/myprint m/printer_1 s/red filament only p/1 +
-    edit 2 p/1
 
 . *Listing Machines* +
 Lists all the machines present in the makerspace. +
@@ -304,13 +329,44 @@ Outcome: All the queues will be visible in the UI. +
 . *Finding Machines:*
 Finds machines based on given keywords. You have to give at least 1 argument. +
 Outcome: You will see only matching machines shown in the UI. +
-    _If none of the keywords matches exactly, findMachine
-    employs Levenshtein distance algorithm to find the
-    closest match to the keywords inputted_
+
 
     Format: findMachine [MACHINE_NAME_1] [MACHINE_NAME_2] ...
 
-    Example: findMachine UpBox
+    Example: findMachine UpBox DownBox LeftBox RightBox
+
+. *Finding Prints:*
+Finds Jobs based on given keywords. You have to give at least 1 argument. +
+Outcome: You will see only matching Jobs shown in the UI. +
+
+
+    Format: findJob [JOB_NAME_1] [JOB_NAME_2] ...
+
+    Example: findJob toycar toyboat toydinosaur
+
+. *Undoing and Redoing Commands* +
+The Maker Manager is remembers the  sequence of commands entered, and provides the option for users to
+undo or redo actions should the need arises.
+.. *Undo:*
+This command reverts the state of Maker Manager to a state before the most recent successful command.
+ +
+[WARNING]
+`Logout` commands cannot be undone!
+
+
+    Format: undo
+
+    Example: undo
+
+.. *Redo:*
+This command reverts the state of Maker Manager to a state before the most recent successful undo command.
+ +
+[WARNING]
+`Login` commands cannot be redone!
+
+    Format: redo
+
+    Example: redo
 
 . *Exit the program* +
 Exits the program. +
@@ -341,27 +397,32 @@ MakerManager data are saved in the hard disk automatically after any command tha
 This is a nifty little list you can print and paste somewhere for quick reference. +
 
 . help
-. addJob n/PRINT_NAME m/MACHINE_NAME d/PRINT_DURATION [s/SPECIAL_NOTES] <p/PRIORITY>
+. undo
+. redo
 . login ADMIN_ID PASSWORD
 . logout
 . addAdmin USERNAME PASSWORD VERIFY_PASSWORD
 . removeAdmin USERNAME
 . updatePassword USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
+. listJobs
+. listMachines
 . add_machine n/MACHINE_NAME ms/STATUS
 . edit_machine MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
-. listMachines
+. addJob n/PRINT_NAME m/MACHINE_NAME on/OWNER NAME pr/PRIORITY d/DURATION(in hours) jn/NOTE [t/TAG]
 . manageJob JOB_NAME start
 . manageJob JOB_NAME cancel
 . manageJob JOB_NAME restart
-. manageJob JOB_NAME delete
-. requestDeletion n/iDCP
+. manageJob JOB_NAME swap TARGET_JOB_NAME
+. manageJob JOB_NAME move TARGET_MACHINE_NAME
+. manageJob JOB_NAME shift up
+. manageJob JOB_NAME shift down
+. requestDeletion n/JOB_NAME
 . manageMachine MACHINE_NAME remove
 . manageMachine MACHINE_NAME flush
 . manageMachine MACHINE_NAME flush AUTO
 . manageMachine MACHINE_NAME clean
 . exit
-. `[Coming in v2.0!]` list [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
-. `[Coming in v2.0!]` list_history [n/PRINT_NAME] [m/MACHINE_NAME] [s/SPECIAL_NOTES] [p/PRIORITY]
+
 
 == Upcoming Features
 . More robust data security and integrity by incorporating a Database system
