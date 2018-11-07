@@ -166,18 +166,18 @@ image::LogicClassDiagram.png[width="800"]
 [discrete]
 ==== Events-Driven nature of the design
 
-The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `addMachine n/ultimaker ms/ENABLED`.
 
-.Component interactions for `delete 1` command (part 1)
-image::SDforDeletePerson.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 1)
+image::AddMachineExecution.png[width="800"]
 
 [NOTE]
-Note how the `Model` simply raises a `AddressBookChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
+Note how the `Model` simply raises a `MachineListChangedEvent` when the maker manager data is changed, instead of asking the `Storage` to save the updates to the hard disk.
 
 The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
-.Component interactions for `delete 1` command (part 2)
-image::SDforDeletePersonEventHandling.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 2)
+image::SaveMachineListChangedEventStorage.png[width="800"]
 
 [NOTE]
 Note how the event is propagated through the `EventsCenter` to the `Storage` and `UI` without `Model` having to be coupled to either of them. This is an example of how this Event Driven approach helps us reduce direct coupling between components.
@@ -214,13 +214,13 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
 .  `Logic` uses the `AddressBookParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
-.  The command execution can affect the `Model` (e.g. adding a person) and/or raise events.
+.  The command execution can affect the `Model` (e.g. adding a machine) and/or raise events.
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
 
-Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
+Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("addMachine ms/ultimaker n/ENABLED")` API call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
-image::DeletePersonSdForLogic.png[width="800"]
+.Interactions Inside the Logic Component for the `addMachine n/ultimaker ms/ENABLED` Command
+image::AddMachineParserLogicModel.png[width="800"]
 
 [[Design-Model]]
 === Model component
