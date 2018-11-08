@@ -47,17 +47,30 @@ See which 3D printers are being used, and the estimated time left until the equi
 ---
 
 * *Major enhancements*:
-   . Added the ability to *add a machine* to makerManager systems
+   . Added the feature to *add a machine* to makerManager systems
 ** What it does: Allows an *admin* to add maker manager 3d printer to the system to allow maker manager uses to start using this printer to execute their print jobs.
 ** Justification: This feature is significant because without this feature, no print jobs can be executed since no printers will be available for users to execute their print jobs.
 ** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
 
-   . Added the ability to *add a job to a machine* to makerManager systems
+   . Added the feature to *add a job to a machine* to makerManager systems
 ** What it does: Allows a *user* to add a print job to a maker manager 3d printer.
 ** Justification: This feature is significant because without this feature, a user will not be able to add a print job to the system without this command
 ** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
 ** Credits: Fu Tian Yuan wrote the code for version 1.0 of addJob, I integrated addJob into the makerManager system along with the storage and ui.
-* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
+
+    . Added the feature to *manage a machine* to makerManager systems
+** What it does: Allows a *user* to manage a machine
+*** Flush - Remove all jobs from a machine with AUTO feature (flush jobs to all available machines)
+*** Clean - Remove all jobs that are of status CANCELLED, FINISHED, DELETING
+*** Remove - Remove the machine from makerManager systems (only if the machine does not have any more jobs)
+** Justification: This feature is significant because without this feature, machines cannot be effectively managed. When makerManager becomes
+more intensively used in the future, there will be a lot of jobs in each machine in which some of this jobs may have already been completed , finished or deleting.
+This makes the UI clunky and unusable as users will not be able to find their jobs that they added to the system as it would be too messy. This feature
+enhances the user experience and improves the efficieny of the system.
+** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
+
+* *Minor enhancement*:
+Improved editMachine command and resolved the bugs that we had in V1.3
 
 * *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]] _{give links to collated code files}_
 
@@ -66,20 +79,13 @@ See which 3D printers are being used, and the estimated time left until the equi
 ** Project management:
 *** Managed releases `v1.3` - `v1.4` (2 releases) on GitHub
 ** Enhancements to existing features:
-*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
-** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
-** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
-*** Contributed to forum discussions (examples:  https://github.com[1], https://github.com[2], https://github.com[3], https://github.com[4])
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
-*** Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
-** Tools:
-*** Integrated a third party library (Natty) to the project (https://github.com[#42])
-*** Integrated a new Github plugin (CircleCI) to the team repo
 
-_{you can add/remove categories in the list above}_
+** Documentation:
+
+** Community:
+
+** Tools:
+
 
 == Contributions to the User Guide
 
