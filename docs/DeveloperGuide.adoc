@@ -269,7 +269,7 @@ This section describes some noteworthy details on how certain features are imple
 // tag::undoredo[]
 === Undo/Redo feature
 ==== Current Implementation
-
+[[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
 It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
 Additionally, it implements the following operations:
@@ -345,6 +345,35 @@ image::UndoRedoActivityDiagram.png[width="650"]
 ** Pros: We do not need to maintain a separate list, and just reuse what is already in the codebase.
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
+
+
+=== File Storage System for Maker Manager
+
+This section will describe how Maker Manager reads and stores information in our local database
+in https://whatis.techtarget.com/fileformat/XML-eXtensible-markup-language[XML] format.
+
+
+image::StorageComponentClassDiagram.png[width:800]
+
+[yellow]#The diagram above gives an overview on how Maker Manager stores its data.#
+
+The diagram below shows how Maker Manager reads its data upon start up.
+
+image::StorageComponentLogicFlowDiagram.png[width:800]
+. When Maker Manager is booted, storageManager will execute readAddressBook(UserPrefs)
+where UserPrefs contains the file paths for each separate xml data file :
+.. makerManagerMachines.xml
+.. makerManagerAdmins.xml
+. XmlAddressBookStorage will then attempt to read each file path sequentially through XmlFileStorage
+. XmlFileStorage will then call a utility function from a class called XmlUtil which will load
+the appropriate data and its corresponding file format. It will then marshall the data into a java object
+of the format in which it was called with
+. It will then send this java object back to address book storage which will call the toModelType() function
+from each XmlSerializableClass back to storage manager as a new address book containing the respective data from the xml files
+in their correct maker manager java objects.
+. Storage manager will then use this address book upon start up as the first instance in versionedAddressBook as stated above
+(See <<versionedaddressbook>>)
+
 
 // tag::dataencryption[]
 === [Proposed] Data Encryption
