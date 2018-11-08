@@ -165,18 +165,18 @@ image::LogicClassDiagram.png[width="800"]
 [discrete]
 ==== Events-Driven nature of the design
 
-The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `addMachine n/ultimaker ms/ENABLED`.
 
-.Component interactions for `delete 1` command (part 1)
-image::SDforDeletePerson.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 1)
+image::AddMachineExecution.png[width="800"]
 
 [NOTE]
-Note how the `Model` simply raises a `AddressBookChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
+Note how the `Model` simply raises a `MachineListChangedEvent` when the maker manager data is changed, instead of asking the `Storage` to save the updates to the hard disk.
 
 The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
-.Component interactions for `delete 1` command (part 2)
-image::SDforDeletePersonEventHandling.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 2)
+image::SaveMachineListChangedEventStorage.png[width="800"]
 
 [NOTE]
 Note how the event is propagated through the `EventsCenter` to the `Storage` and `UI` without `Model` having to be coupled to either of them. This is an example of how this Event Driven approach helps us reduce direct coupling between components.
@@ -187,11 +187,11 @@ The sections below give more details of each component.
 === UI component
 
 .Structure of the UI Component
-image::UiClassDiagram.png[width="800"]
+image::UiComponentClassDiagramV1.4.2.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `MachineListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
@@ -213,19 +213,20 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
 .  `Logic` uses the `AddressBookParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
-.  The command execution can affect the `Model` (e.g. adding a person) and/or raise events.
+.  The command execution can affect the `Model` (e.g. adding a machine) and/or raise events.
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
 
-Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
+Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("addMachine ms/ultimaker n/ENABLED")` API call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
-image::DeletePersonSdForLogic.png[width="800"]
+.Interactions Inside the Logic Component for the `addMachine n/ultimaker ms/ENABLED` Command
+image::AddMachineParserLogicModel.png[width="800"]
 
+// tag::modelComponent[]
 [[Design-Model]]
 === Model component
 
 .Structure of the Model Component
-image::ModelComponentClassDiagram.png[width="800"]
+image::ModelComponentClassDiagramV1.4.3.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
@@ -233,16 +234,19 @@ The `Model`,
 
 * stores the Address Book data.
 * exposes an unmodifiable `ObservableList<Admin>` that can be 'observed'
-* exposes an unmodifiable `ObservableList<Job>` that can be 'observed'
+* exposes an unmodifiable `ObservableList<Job>` that can be 'observed' in machines
 * exposes an unmodifiable `ObservableList<Machine>` that can be 'observed'
 * eg. the UI can be bound to these 3 lists so that the UI automatically updates when the data in any of the list changes.
 * does not depend on any of the other three components.
 
+// end::modelComponent[]
+
+// tag::storageComponent[]
 [[Design-Storage]]
 === Storage component
 
 .Structure of the Storage Component
-image::StorageComponentClassDiagram.png[width="800"]
+image::StorageComponentClassDiagramCompleted.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
 
@@ -251,11 +255,11 @@ The `Storage` component,
 * stores an initialized `UserPref` object that represents the user's preferences derived from
 JsonUserPrefsStorage
 * can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in 4 separate xml format
-** XmlSerializableAddressBook
+* can save the Address Book data in 2 separate xml format
 ** XmlSerializableMakerManagerAdmins
 ** XmlSerializableMakerManagerMachines
-** XmlSerializableMakerManagerJobs
+// end::storageComponent[]
+
 
 
 [[Design-Commons]]
@@ -270,7 +274,7 @@ This section describes some noteworthy details on how certain features are imple
 // tag::undoredo[]
 === Undo/Redo feature
 ==== Current Implementation
-
+[[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
 It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
 Additionally, it implements the following operations:
@@ -346,6 +350,34 @@ image::UndoRedoActivityDiagram.png[width="650"]
 ** Pros: We do not need to maintain a separate list, and just reuse what is already in the codebase.
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
+
+// tag::fileStorageSystem[]
+=== File Storage System for Maker Manager
+
+This section will describe how Maker Manager reads and stores information in our local database
+in https://whatis.techtarget.com/fileformat/XML-eXtensible-markup-language[XML] format.
+
+[red]#The diagram below gives an overview on how Maker Manager stores its data.#
+
+image::StorageComponentClassDiagramCompleted.png[width:800]
+
+[red]#The diagram below shows how Maker Manager reads its data upon start up.#
+
+image::StorageComponentLogicFlowDiagram.png[width:800]
+. When Maker Manager is booted, storageManager will execute readAddressBook(UserPrefs)
+where UserPrefs contains the file paths for each separate xml data file :
+.. makerManagerMachines.xml
+.. makerManagerAdmins.xml
+. XmlAddressBookStorage will then attempt to read each file path sequentially through XmlFileStorage
+. XmlFileStorage will then call a utility function from a class called XmlUtil which will load
+the appropriate data and its corresponding file format. It will then marshall the data into a java object
+of the format in which it was called with
+. It will then send this java object back to address book storage which will call the toModelType() function
+from each XmlSerializableClass back to storage manager as a new address book containing the respective data from the xml files
+in their correct maker manager java objects.
+. Storage manager will then use this address book upon start up as the first instance in versionedAddressBook as stated above
+(See <<versionedaddressbook>>)
+// end::fileStorageSystem[]
 
 // tag::dataencryption[]
 === Password Encryption
@@ -641,6 +673,7 @@ Do take a look at <<Design-Model>> before attempting to modify the `Model` compo
 ****
 
 [discrete]
+
 ==== `Ui` component
 
 *Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your address book application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last person in the list. Your job is to implement improvements to the UI to solve all these problems.
@@ -734,6 +767,7 @@ Do take a look at <<Design-Storage>> before attempting to modify the `Storage` c
 ****
 
 [[GetStartedProgramming-RemarkCommand]]
+
 === Creating a new command: `remark`
 
 By creating this command, you will get a chance to learn how to implement a feature end-to-end, touching all major components of the app.

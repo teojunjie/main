@@ -1,32 +1,70 @@
-= PLACEHOLDER - Project Portfolio
+= Teo Jun Jie - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
+== PROJECT: Maker Manager
 
 ---
 
 == Overview
-PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+This is a desktop application for managing maker spaces.
+
+It has a GUI but most of the user interactions happen through a CLI (Command Line Interface).
+
+It is a Java application intended for managing 3-D prints, but has capabilities to handle other forms of manufacturing machines as well.
+
+It is written in OOP fashion. It provides a reasonably well-written code that is based on Address Book (level 4).
+
+*Features*:
+
+. A GUI for displaying all available machines at a glance.+
+
+. Two different access levels, for two separate target profiles (see below)
+
+. Ability to manipulate prints, queues, and machines, depending on access level
+
+. More test cases, including automated GUI testing.
+
+. Support for Build Automation using Gradle and for Continuous Integration using Travis CI.
+
+*Target user profile*:
+
+There will be two categories of users for the app. The main user will be students using the makerspace. The second user will be the lab manager
+
+. has a need to manage a significant number shared devices (lab manager)
+. has a need to prioritize and queue certain print jobs over others (lab manager)
+. has a need to look up when certain devices will be free for use (students)
+. prefers typing over mouse input
+. is reasonably comfortable using CLI apps
+
+*Value proposition*:
+
+See which 3D printers are being used, and the estimated time left until the equipment will be free. This will reduce system loss and increase the efficiency of all parties involved.
 
 == Summary of contributions
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+---
 
+* *Major enhancements*:
+   . Added the ability to *add a machine* to makerManager systems
+** What it does: Allows an *admin* to add maker manager 3d printer to the system to allow maker manager uses to start using this printer to execute their print jobs.
+** Justification: This feature is significant because without this feature, no print jobs can be executed since no printers will be available for users to execute their print jobs.
+** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
+
+   . Added the ability to *add a job to a machine* to makerManager systems
+** What it does: Allows a *user* to add a print job to a maker manager 3d printer.
+** Justification: This feature is significant because without this feature, a user will not be able to add a print job to the system without this command
+** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
+** Credits: Fu Tian Yuan wrote the code for version 1.0 of addJob, I integrated addJob into the makerManager system along with the storage and ui.
 * *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
 
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]] _{give links to collated code files}_
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+*** Managed releases `v1.3` - `v1.4` (2 releases) on GitHub
 ** Enhancements to existing features:
 *** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
 *** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
@@ -50,9 +88,28 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=undoredo]
 
-include::../UserGuide.adoc[tag=dataencryption]
+include::../UserGuide.adoc[tag=addMachine]
+
+:leveloffset: +1
+
+#_AddJob Version 1.2 and 1.3 (Integrated code with storage and UI)_#
+
+include::../UserGuide.adoc[tag=addJob]
+
+include::../UserGuide.adoc[tag=requestDeletion]
+
+include::../UserGuide.adoc[tag=manageMachine]
+
+#_SwapJobs Version 1.2_#
+
+include::../UserGuide.adoc[tag=swapJobs]
+
+#_ManageJob Version 1.3 (Integrated code with storage and UI)_#
+
+include::../UserGuide.adoc[tag=manageJob]
+
+:leveloffset: -1
 
 == Contributions to the Developer Guide
 
@@ -60,13 +117,9 @@ include::../UserGuide.adoc[tag=dataencryption]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=undoredo]
+include::../DeveloperGuide.adoc[tag=modelComponent]
 
-include::../DeveloperGuide.adoc[tag=dataencryption]
+include::../DeveloperGuide.adoc[tag=storageComponent]
 
+include::../DeveloperGuide.adoc[tag=fileStorageSystem]
 
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_
