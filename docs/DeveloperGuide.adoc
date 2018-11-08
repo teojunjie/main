@@ -352,18 +352,17 @@ image::UndoRedoActivityDiagram.png[width="650"]
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
 
-
+// tag::fileStorageSystem[]
 === File Storage System for Maker Manager
 
 This section will describe how Maker Manager reads and stores information in our local database
 in https://whatis.techtarget.com/fileformat/XML-eXtensible-markup-language[XML] format.
 
+[red]#The diagram below gives an overview on how Maker Manager stores its data.#
 
-image::StorageComponentClassDiagram.png[width:800]
+image::StorageComponentClassDiagramCompleted.png[width:800]
 
-[yellow]#The diagram above gives an overview on how Maker Manager stores its data.#
-
-The diagram below shows how Maker Manager reads its data upon start up.
+[red]#The diagram below shows how Maker Manager reads its data upon start up.#
 
 image::StorageComponentLogicFlowDiagram.png[width:800]
 . When Maker Manager is booted, storageManager will execute readAddressBook(UserPrefs)
@@ -379,7 +378,7 @@ from each XmlSerializableClass back to storage manager as a new address book con
 in their correct maker manager java objects.
 . Storage manager will then use this address book upon start up as the first instance in versionedAddressBook as stated above
 (See <<versionedaddressbook>>)
-
+// end::fileStorageSystem[]
 
 // tag::dataencryption[]
 === [Proposed] Data Encryption

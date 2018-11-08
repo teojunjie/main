@@ -159,6 +159,7 @@ NEW_PW has to match the same validation criteria as the one specified in addAdmi
 
     Example: updatePassword saif 123Abcd$ 456Wasd= 456Wasd=
 
+// tag::addMachine[]
 . *Add Machine (Admin Only)* +
 Adds a new machine to MakerManager. You might be extending your printer fleet by adding new printers, and this lets the users of the space know. Especially handy if it's a big place! +
 Outcome: You will see a new column added to the UI. +
@@ -176,7 +177,9 @@ and it should not be blank.
     Format: <addMachine> n/MACHINE_NAME ms/STATUS
 
     Example: addMachine n/myMachine ms/DISABLED
+// end::addMachine[]
 
+// tag::editMachine[]
 . *Edit Machine* +
 Edits an existing machine in MakerManager. +
 Outcome: You will see a change in the fields of the specific machine. +
@@ -191,6 +194,9 @@ Machines with `ongoing` prints cannot be edited!
 
     Example: editMachine myMachine n/UpBox ms/ENABLED
 
+// end::editMachine[]
+
+// tag::manageMachine[]
 . *Manage machine (Admin only)* +
 .. *Clean a Machine* +
 Cleans a machine by removing jobs that have status `CANCELLED`, `FINISHED` or `DELETING`. This is a convenient and fast way for you to get things done. +
@@ -231,6 +237,7 @@ After the filtered machine list is displayed, use the `listMachines` command to 
 
     Example: findMachine UpBox DownBox LeftBox RightBox
 
+// end::manageMachine[]
 . *Listing Machines* +
 Lists all the machines present in the makerspace. +
 Outcome: All the queues will be visible in the UI. +
@@ -239,6 +246,7 @@ Outcome: All the queues will be visible in the UI. +
 
     Example: listMachines
 
+// tag::addJob[]
 . *Add a Print Job* +
 Adds a print job to a machine's queue in MakerManager. +
 Outcome: You will see the job in if you scroll down the queue of the machine you specified. +
@@ -253,6 +261,9 @@ Multiple tags can be added to one print job.
 
     Example: addJob n/iDCP m/UpBox on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
 
+// end::addJob[]
+
+// tag::manageJob[]
 . *Manage Print*
 .. *Start a Print* +
 Starts an existing print job, if it is at the top of the queue. +
@@ -316,6 +327,9 @@ Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, 
 
     Example: manageJob iDCP shift up
 
+// end::manageJob[]
+
+// tag::swapJobs[]
 .. *Swap a Print (Admin only)* +
 Swaps an existing print with another existing print. Both Prints must not be `ONGOING`.
 [NOTE]
@@ -326,6 +340,9 @@ Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, 
 
     Example: manageJob iDCP swap toycar
 
+// end::swapJobs[]
+
+// tag::requestDeletion[]
 . *Requests a print job to be deleted by admin* +
 This command ensures that a malicious user cannot delete prints from a queue just so that (s)he can get the print done fast. +
 Outcome: Marks a print with a `requestDeletion` tag, after which the admin might decide to remove it. +
@@ -333,6 +350,8 @@ Outcome: Marks a print with a `requestDeletion` tag, after which the admin might
     Format: requestDeletion n/PRINT_NAME
 
     Example: requestDeletion n/iDCP
+
+// end::requestDeletion[]
 
 . *Finding Prints:*
 Finds Jobs based on given keywords. You have to give at least 1 argument. +
