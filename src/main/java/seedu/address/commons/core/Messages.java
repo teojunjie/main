@@ -13,6 +13,8 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_MACHINE_LISTED_OVERVIEW = "%1$d machines listed!";
     public static final String MESSAGE_JOBS_LISTED_OVERVIEW = "%1$d jobs listed!";
-
+    public static final String MESSAGE_ILLEGAL_JOB_NAME = "Job names only contain alphanumerics.";
+    public static final String MESSAGE_ILLEGAL_MACHINE_NAME = "Names should only contain alphanumeric characters "
+        + "and spaces, and it should not be blank";
 
 }

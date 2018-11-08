@@ -1,5 +1,6 @@
 package seedu.address.logic.parser.job;
 
+import static seedu.address.commons.core.Messages.MESSAGE_ILLEGAL_JOB_NAME;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.logic.commands.job.ManageJobCommand;
@@ -29,9 +30,12 @@ public class ManageJobCommandParser implements Parser<ManageJobCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ManageJobCommand.MESSAGE_USAGE));
         }
 
-        JobName name = new JobName(temp[0]);
-        String option = temp[1];
-
-        return new ManageJobCommand(name, option);
+        try {
+            JobName name = new JobName(temp[0]);
+            String option = temp[1];
+            return new ManageJobCommand(name, option);
+        } catch (Exception IllegalArgumentException) {
+            throw new ParseException(String.format(MESSAGE_ILLEGAL_JOB_NAME, ManageJobCommand.MESSAGE_USAGE));
+        }
     }
 }

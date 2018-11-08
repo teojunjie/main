@@ -15,6 +15,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.job.Job;
+import seedu.address.model.machine.MachineName;
 import seedu.address.model.machine.exceptions.MachineNotFoundException;
 
 /**
@@ -57,6 +58,9 @@ public class AddJobCommand extends Command {
         }
 
         try {
+            if (jobToAdd.getMachineName().equals(new MachineName("AUTO"))) {
+                jobToAdd.setMachine(model.getMostFreeMachine().getName());
+            }
             model.addJob(jobToAdd);
         } catch (MachineNotFoundException mfe) {
             throw new CommandException(MESSAGE_NO_MACHINE);

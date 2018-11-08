@@ -53,7 +53,6 @@ public class JobCard extends UiPart<Region> {
         this.job = job;
         jobName.setText(job.getJobName().fullName);
 
-        Label machineNameLabel = new Label("Machine: " + job.getMachineName().fullName);
         Label informationLabel =
             new Label("Added by " + job.getOwner().getName().fullName + " at " + job.getAddedTime().showTime());
         Label startTimeLabel;
@@ -65,7 +64,6 @@ public class JobCard extends UiPart<Region> {
         Label priorityLabel = new Label("Priority: " + job.getPriority().toString());
         Label statusLabel = new Label("Status: " + job.getStatus().toString());
 
-        details.getChildren().add(machineNameLabel);
         details.setHgap(2);
 
         jobInformation.getChildren().add(informationLabel);

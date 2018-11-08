@@ -42,6 +42,9 @@ public class EditMachineCommand extends Command {
     public static final String MESSAGE_MACHINE_NOT_FOUND = "Machine does not exist";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_MACHINE = "This Machine already exists in the address book.";
+    public static final String MESSAGE_DUPLCIATE_MACHINE_NAME =
+        "This machine name is already being used in the address book.";
+    public static final String MESSAGE_NO_CHANGES_DETECTED = "No changes detected";
     private static final String MESSAGE_ACCESS_DENIED =
         "Non-admin user is not allowed to edit a machine in maker manager";
     private final MachineName machineName;
@@ -49,8 +52,8 @@ public class EditMachineCommand extends Command {
 
 
     /**
-     * @param machineName           of the person in the filtered person list to edit
-     * @param editMachineDescriptor details to edit the person with
+     * @param machineName           of the machine in the filtered machine list to edit
+     * @param editMachineDescriptor details to edit the machine with
      */
     public EditMachineCommand(MachineName machineName, EditMachineDescriptor editMachineDescriptor) {
         requireNonNull(machineName);
@@ -74,8 +77,15 @@ public class EditMachineCommand extends Command {
         }
 
         Machine editedMachine = createEditedMachine(machineToEdit, editMachineDescriptor);
-        if (!machineToEdit.isSameMachine(editedMachine) && model.hasMachine(editedMachine)) {
-            throw new CommandException(MESSAGE_DUPLICATE_MACHINE);
+
+        if (model.hasSameMachineName(editedMachine)) {
+            if (editedMachine.isSameNamedMachine(machineToEdit)) {
+                if (editedMachine.hasSameMachineParameters(machineToEdit)) {
+                    throw new CommandException(MESSAGE_NO_CHANGES_DETECTED);
+                }
+            } else {
+                throw new CommandException(MESSAGE_DUPLCIATE_MACHINE_NAME);
+            }
         }
 
         model.updateMachine(machineToEdit, editedMachine);

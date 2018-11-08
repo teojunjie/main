@@ -214,6 +214,16 @@ public class UpdatePasswordCommandTest {
         }
 
         @Override
+        public void moveJobToMachine(Job job, Machine targetMachine) {
+
+        }
+
+        @Override
+        public void autoMoveJobs(Machine currentMachine, Machine targetMachine) {
+
+        }
+
+        @Override
         public void updateJob(Job oldJob, Job updatedJob) {
             throw new AssertionError("This method should not be called.");
         }
@@ -236,6 +246,21 @@ public class UpdatePasswordCommandTest {
         @Override
         public boolean hasMachine(Machine machine) {
             return false;
+        }
+
+        @Override
+        public boolean hasSameMachineName(Machine machine) {
+            return false;
+        }
+
+        @Override
+        public void flushMachine(Machine toFlushMachine) {
+
+        }
+
+        @Override
+        public void cleanMachine(Machine toCleanMachine) {
+
         }
 
         @Override

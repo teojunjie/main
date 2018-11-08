@@ -56,7 +56,9 @@ public interface Model {
     // ============================== Job methods ======================================= //
 
     void addJob(Job job);
+
     void deleteJob(JobName job);
+
     void updateJob(Job oldJob, Job updatedJob);
 
     Job findJob(JobName name);
@@ -90,6 +92,10 @@ public interface Model {
 
     int getTotalNumberOfJobsDisplayed();
 
+    void moveJobToMachine(Job job, Machine targetMachine);
+
+    void autoMoveJobs(Machine currentMachine, Machine targetMachine);
+
     // ============================== Machine methods ======================================= //
     /**
      * Adds the given machine
@@ -105,6 +111,25 @@ public interface Model {
      * Returns true if a Machine with the same identity as {@code machine} exists in the address book.
      */
     boolean hasMachine(Machine machine);
+
+    /**
+     * Returns true if the same Machine name exists in the address book.
+     */
+
+    boolean hasSameMachineName(Machine machine);
+
+    /**
+     * Flushes all the jobs in the machine
+     */
+
+    void flushMachine(Machine toFlushMachine);
+
+    /**
+     * Cleans all the jobs in the machine that fufills the predicate in uniqueJobList
+     * for cleanJobPredicate
+     */
+
+    void cleanMachine(Machine toCleanMachine);
     /**
      * Replaces the given machine {@code target} with {@code editedMachine}.
      * {@code target} must exist in the Model.

@@ -14,26 +14,44 @@ ifdef::env-github[]
 endif::[]
 :repoURL: https://github.com/se-edu/addressbook-level4/tree/master
 
-By: CS2113-AY1819S1-T09-1      Since: `Aug 2018`      Licence: `MIT`
+By: `CS2113-AY1819S1-T09-1`      Since: `Sep 2018`      Licence: `MIT`
+
+Welcome to _MakerManager_ Developer Guide!
+MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
+MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
+MakerManager is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
+Check out the User Guide to quickly see what MakerManager is capable of.
+
+
+MakerManager is written in Java, under the Object-Oriented paradigm. There are lots of ways in which you can contribute to MakerManager: coding, testing, improving tools, or contributing to the documentation.
+This guide provides information that will help you get started in your intended direction, and we hope you'll find it useful regardless of whether you're a new software developer, or an experienced hand. Some preveious experience in software engineering in Java is assumed.
+
+Choose a topic from the Table of Contents below, to get an in-depth description of the inner workings of the application.
 
 == Setting up
+Follow the simple steps below to get up and running with the MakerManager application development process.
 
 === Prerequisites
+You need to have the following software installed in your system before you can start the development process. Both the software might require sign-up procedures before you can download their installation file.
 
-. *JDK `9`* or later
+. *JDK `9`* or later +
+You can use https://docs.oracle.com/javase/9/install/toc.htm[this link] to help you install JDK.
 +
 [WARNING]
 JDK `10` on Windows will fail to run tests in <<UsingGradle#Running-Tests, headless mode>> due to a https://github.com/javafxports/openjdk-jfx/issues/66[JavaFX bug].
 Windows developers are highly recommended to use JDK `9`.
 
-. *IntelliJ* IDE
+. *IntelliJ* IDE +
+You can use https://www.jetbrains.com/help/idea/install-and-set-up-product.html[this link] to help you install IntelliJ IDEA.
 +
 [NOTE]
 IntelliJ by default has Gradle and JavaFx plugins installed. +
 Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plugins` to re-enable them.
 
+You now have the tools to dive into MakerManager's source code.
 
 === Setting up the project in your computer
+To help you get the project into the development environment properly.
 
 . Fork this repo, and clone the fork to your computer
 . Open IntelliJ (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project dialog first)
@@ -47,12 +65,16 @@ Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plu
 . Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
 This will generate all resources required by the application and tests.
 
+The build should end with a `BUILD PASSED` message.
+
 === Verifying the setup
+If all is well, the following two steps should be trivial.
 
 . Run the `seedu.address.MainApp` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Configurations to do before writing code
+Before you start messing around with the source code, here are some tools you might want to set up in order to tactfully handle a medium-sized project such as this.
 
 ==== Configuring the coding style
 
@@ -69,9 +91,9 @@ Optionally, you can follow the <<UsingCheckstyle#, UsingCheckstyle.adoc>> docume
 
 ==== Updating documentation to match your fork
 
-After forking the repo, the documentation will still have the SE-EDU branding and refer to the `se-edu/addressbook-level4` repo.
+After forking the repo, the documentation will still have the `MakerManager` branding and refer to our upstream repo.
 
-If you plan to develop this fork as a separate product (i.e. instead of contributing to `se-edu/addressbook-level4`), you should do the following:
+If you plan to develop this fork as a separate product (i.e. instead of contributing to `MakerManager`), you should do the following:
 
 . Configure the <<Docs-SiteWideDocSettings, site-wide documentation settings>> in link:{repoURL}/build.gradle[`build.gradle`], such as the `site-name`, to suit your own project.
 
@@ -99,9 +121,12 @@ When you are ready to start coding,
 2. Take a look at <<GetStartedProgramming>>.
 
 == Design
+This section gives you a brief overview of the design of the app, including a look at the architecture and various other components. After reading this section, you should be able to
+understand some of the design trade-offs made during the development of the application.
 
 [[Design-Architecture]]
 === Architecture
+Let us look at the abstracted view of the application in order to get a feel of how everything is connected together.
 
 .Architecture Diagram
 image::Architecture.png[width="600"]
@@ -141,18 +166,18 @@ image::LogicClassDiagram.png[width="800"]
 [discrete]
 ==== Events-Driven nature of the design
 
-The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `addMachine n/ultimaker ms/ENABLED`.
 
-.Component interactions for `delete 1` command (part 1)
-image::SDforDeletePerson.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 1)
+image::AddMachineExecution.png[width="800"]
 
 [NOTE]
-Note how the `Model` simply raises a `AddressBookChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
+Note how the `Model` simply raises a `MachineListChangedEvent` when the maker manager data is changed, instead of asking the `Storage` to save the updates to the hard disk.
 
 The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
-.Component interactions for `delete 1` command (part 2)
-image::SDforDeletePersonEventHandling.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 2)
+image::SaveMachineListChangedEventStorage.png[width="800"]
 
 [NOTE]
 Note how the event is propagated through the `EventsCenter` to the `Storage` and `UI` without `Model` having to be coupled to either of them. This is an example of how this Event Driven approach helps us reduce direct coupling between components.
@@ -163,11 +188,11 @@ The sections below give more details of each component.
 === UI component
 
 .Structure of the UI Component
-image::UiClassDiagram.png[width="800"]
+image::UiComponentClassDiagramV1.4.2.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `MachineListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
@@ -189,36 +214,32 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
 .  `Logic` uses the `AddressBookParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
-.  The command execution can affect the `Model` (e.g. adding a person) and/or raise events.
+.  The command execution can affect the `Model` (e.g. adding a machine) and/or raise events.
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
 
-Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
+Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("addMachine ms/ultimaker n/ENABLED")` API call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
-image::DeletePersonSdForLogic.png[width="800"]
+.Interactions Inside the Logic Component for the `addMachine n/ultimaker ms/ENABLED` Command
+image::AddMachineParserLogicModel.png[width="800"]
 
 // tag::modelComponent[]
 [[Design-Model]]
 === Model component
 
 .Structure of the Model Component
-image::ModelComponentClassDiagram.png[width="800"]
+image::ModelComponentClassDiagramV1.4.3.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
 The `Model`,
 
 * stores the Address Book data.
-* exposes an unmodifiable `ObservableList<Person>` that can be 'observed'
 * exposes an unmodifiable `ObservableList<Admin>` that can be 'observed'
+* exposes an unmodifiable `ObservableList<Job>` that can be 'observed' in machines
 * exposes an unmodifiable `ObservableList<Machine>` that can be 'observed'
-* eg. the UI can be bound to this 4 list so that the UI automatically updates when the data in any of the list changes.
+* eg. the UI can be bound to these 3 lists so that the UI automatically updates when the data in any of the list changes.
 * does not depend on any of the other three components.
 
-[NOTE]
-As a more OOP model, we can store a `Tag` list in `Address Book`, which `Person` can reference. This would allow `Address Book` to only require one `Tag` object per unique `Tag`, instead of each `Person` needing their own `Tag` object. An example of how such a model may look like is given below. +
- +
-image:ModelClassBetterOopDiagram.png[width="800"]
 // end::modelComponent[]
 
 // tag::storageComponent[]
@@ -235,11 +256,11 @@ The `Storage` component,
 * stores an initialized `UserPref` object that represents the user's preferences derived from
 JsonUserPrefsStorage
 * can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in 4 separate xml format
-** XmlSerializableAddressBook
+* can save the Address Book data in 2 separate xml format
 ** XmlSerializableMakerManagerAdmins
 ** XmlSerializableMakerManagerMachines
 // end::storageComponent[]
+
 
 
 [[Design-Commons]]
@@ -254,7 +275,7 @@ This section describes some noteworthy details on how certain features are imple
 // tag::undoredo[]
 === Undo/Redo feature
 ==== Current Implementation
-
+[[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
 It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
 Additionally, it implements the following operations:
@@ -330,6 +351,35 @@ image::UndoRedoActivityDiagram.png[width="650"]
 ** Pros: We do not need to maintain a separate list, and just reuse what is already in the codebase.
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
+
+
+=== File Storage System for Maker Manager
+
+This section will describe how Maker Manager reads and stores information in our local database
+in https://whatis.techtarget.com/fileformat/XML-eXtensible-markup-language[XML] format.
+
+
+image::StorageComponentClassDiagram.png[width:800]
+
+[yellow]#The diagram above gives an overview on how Maker Manager stores its data.#
+
+The diagram below shows how Maker Manager reads its data upon start up.
+
+image::StorageComponentLogicFlowDiagram.png[width:800]
+. When Maker Manager is booted, storageManager will execute readAddressBook(UserPrefs)
+where UserPrefs contains the file paths for each separate xml data file :
+.. makerManagerMachines.xml
+.. makerManagerAdmins.xml
+. XmlAddressBookStorage will then attempt to read each file path sequentially through XmlFileStorage
+. XmlFileStorage will then call a utility function from a class called XmlUtil which will load
+the appropriate data and its corresponding file format. It will then marshall the data into a java object
+of the format in which it was called with
+. It will then send this java object back to address book storage which will call the toModelType() function
+from each XmlSerializableClass back to storage manager as a new address book containing the respective data from the xml files
+in their correct maker manager java objects.
+. Storage manager will then use this address book upon start up as the first instance in versionedAddressBook as stated above
+(See <<versionedaddressbook>>)
+
 
 // tag::dataencryption[]
 === [Proposed] Data Encryption
@@ -1072,24 +1122,6 @@ Use case ends.
 [[mainstream-os]] Mainstream OS::
 Windows, Linux, Unix, OS-X
 
-[appendix]
-== Product Survey
-
-*Product Name*
-
-Author: ...
-
-Pros:
-
-* ...
-* ...
-
-Cons:
-
-* ...
-* ...
-
-[appendix]
 == Instructions for Manual Testing
 
 Given below are instructions to test the app manually.

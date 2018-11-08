@@ -91,7 +91,18 @@ public class Machine {
      * This defines a weakest notion of equality between two machines.
      */
     public boolean isSameNamedMachine(Machine otherMachine) {
-        return otherMachine.getName() == getName();
+        return otherMachine.getName().equals(getName());
+    }
+
+    /**
+     * Returns true if the other machine has the same parameters
+     * 1) name
+     * 2) status
+     */
+
+    public boolean hasSameMachineParameters(Machine otherMachine) {
+        return otherMachine.getName().equals(getName())
+            && otherMachine.getStatus().equals(getStatus());
     }
 
     /**
@@ -184,6 +195,21 @@ public class Machine {
     }
 
     /**
+     * Returns true if the machine still have jobs
+     */
+
+    public boolean hasJobs() {
+        return jobs.size() != 0;
+    }
+
+    /**
+     * Returns true if the machine still have cleanable jobs
+     */
+
+    public boolean hasCleanableJobs() {
+        return jobs.hasCleanableJobs();
+    }
+    /**
      * Returns true if the machine contains
      * {@code job} in its list;
      */
@@ -196,6 +222,13 @@ public class Machine {
      */
     public void addJob(Job job) {
         jobs.add(job);
+    }
+
+    /**
+     * Removes a job from the machine job list
+     */
+    public void removeJob(Job job) {
+        jobs.remove(job);
     }
 
     /**
@@ -215,6 +248,21 @@ public class Machine {
 
     public void replaceJob(Job jobToBeReplaced, Job replaceWith) {
         jobs.replaceJob(jobToBeReplaced, replaceWith);
+    }
+
+    /**
+     * Flushes all jobs from machine
+     */
+    public void flushMachine() {
+        jobs.clearJobs();
+    }
+
+    /**
+     * Cleans all jobs in machine that satisfy the cleanJobPredicate in uniqueJobList
+     */
+
+    public void cleanMachine() {
+        jobs.cleanJobs();
     }
 
 }

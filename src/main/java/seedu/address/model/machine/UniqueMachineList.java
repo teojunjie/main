@@ -10,6 +10,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.job.Job;
+import seedu.address.model.job.JobName;
+import seedu.address.model.job.exceptions.JobNotFoundException;
 import seedu.address.model.machine.exceptions.DuplicateMachineException;
 import seedu.address.model.machine.exceptions.MachineNotFoundException;
 
@@ -27,6 +29,15 @@ public class UniqueMachineList {
     public boolean contains(Machine toCheck) {
         requireNonNull(toCheck);
         return internalList.stream().anyMatch(toCheck::isSameMachine);
+    }
+
+    /**
+     * Returns true if the list cotains an equivalent machine name
+     */
+
+    public boolean containsSameNameMachine(Machine toCheck) {
+        requireNonNull(toCheck);
+        return internalList.stream().anyMatch(toCheck::isSameNamedMachine);
     }
 
     /**
@@ -93,6 +104,24 @@ public class UniqueMachineList {
     }
 
     /**
+     * Remove a job from the machine {@code target} jobs list
+     */
+    public void removeJobFromMachineList(JobName job) throws JobNotFoundException {
+        requireAllNonNull(job);
+
+        for (Machine m : internalList) {
+            Job query = m.findJob(job);
+            if (query != null) {
+                m.removeJob(query);
+                return;
+            }
+        }
+
+        throw new JobNotFoundException();
+    }
+
+
+    /**
      * Adds the Machine to the list
      * The Machine must not exist in the list
      *
@@ -118,21 +147,6 @@ public class UniqueMachineList {
         }
     }
 
-    public Machine get(String machineName) {
-        requireNonNull(machineName);
-
-        logger.info("Doing for loop");
-        for (Machine m : internalList) {
-            logger.info(m.getName().fullName);
-            if (m.getName().fullName.equals(machineName)) {
-                logger.info("Machine name matches!!");
-                Machine changedMachine = new Machine(m.getName(), m.getJobs(), m.getTags(), m.getStatus());
-                return changedMachine;
-            }
-        }
-        return null;
-    }
-
 
     /**
      * Returns the backing list as an unmodifiable {@code ObservableList}
@@ -155,9 +169,8 @@ public class UniqueMachineList {
         return true;
     }
 
-
     public Machine getMostFreeMachine() {
-        float minimumTime = 999999;
+        long minimumTime = Long.MAX_VALUE;
         Machine mostFreeMachine = null;
 
         for (Machine machine : internalList) {

@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
@@ -20,7 +21,7 @@ public class UniqueJobList {
 
     private static final Logger logger = LogsCenter.getLogger(UniqueJobList.class);
     private final ObservableList<Job> internalList = FXCollections.observableArrayList();
-
+    private Predicate<Job> cleanJobPredicate = job -> job.isCompleted() || job.isCancelled() || job.isDeleting();
 
     /**
      * Returns true if the list contains an equivalent job as the given argument.
@@ -47,12 +48,9 @@ public class UniqueJobList {
      * Removes the equivalent job from the list.
      * The job must exist in the list.
      */
-    public void remove(JobName toRemoveName) {
-        requireNonNull(toRemoveName);
-        Job toRemove = findJob(toRemoveName);
-        if (!internalList.remove(toRemove)) {
-            throw new JobNotFoundException();
-        }
+    public void remove(Job toRemove) {
+        requireNonNull(toRemove);
+        internalList.remove(toRemove);
     }
 
     public void setJobs(UniqueJobList replacement) {
@@ -76,7 +74,6 @@ public class UniqueJobList {
     /**
      * Returns a job by name
      */
-
     public Job get(String jobName) {
         requireNonNull(jobName);
         logger.info("Jobs size : " + Integer.toString(internalList.size()));
@@ -197,6 +194,33 @@ public class UniqueJobList {
         findJob(name).restartJob();
     }
 
+    /**
+     * Clears the entire jobs list
+     */
+    public void clearJobs() {
+        internalList.clear();
+    }
+
+    /**
+     * Clears jobs that are of status
+     * 1) FINISHED
+     * 2) CANCELLED
+     * 3) DELETING
+     */
+
+    public void cleanJobs() {
+        internalList.removeIf(cleanJobPredicate);
+    }
+
+    /**
+     * Returns true if internal list still have cleanable jobs
+     */
+
+    public boolean hasCleanableJobs() {
+        return internalList.filtered(cleanJobPredicate).size() != 0;
+    }
+
+
     public void requestDeletion(JobName name) {
         findJob(name).setStatus(Status.DELETING);
     }
@@ -221,6 +245,7 @@ public class UniqueJobList {
     public void finishJob(Job job) {
         job.finishJob();
     }
+
 
     //============================= queue operations =======================================//
 

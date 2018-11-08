@@ -1,5 +1,7 @@
 package seedu.address.ui.job;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -30,6 +32,19 @@ public class JobListPanel extends UiPart<Region> {
         super(FXML);
         setConnections(jobList);
         registerAsAnEventHandler(this);
+
+        // Timer for auto UI refresh
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                jobListView.refresh();
+            }
+        };
+
+        Timer timer = new Timer();
+        long delay = 2000;
+        long intervalPeriod = 2000;
+        timer.scheduleAtFixedRate(task, delay, intervalPeriod);
     }
 
     private void setConnections(ObservableList<Job> jobList) {

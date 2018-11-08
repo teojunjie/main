@@ -11,14 +11,19 @@ import seedu.address.commons.util.StringUtil;
 public class MachineNameContainsKeywordsPredicate implements Predicate<Machine> {
     private final List<String> keywords;
 
+
     public MachineNameContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
+    }
+
+    public Integer getNumberOfKeywords () {
+        return keywords.size();
     }
 
     @Override
     public boolean test(Machine machine) {
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(machine.getName().fullName, keyword));
+            .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(machine.getName().fullName, keyword));
     }
 
     @Override

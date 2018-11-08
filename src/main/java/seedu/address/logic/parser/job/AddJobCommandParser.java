@@ -43,7 +43,7 @@ public class AddJobCommandParser implements Parser<AddJobCommand> {
                 PREFIX_JOB_NOTE, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_MACHINE, PREFIX_JOB_OWNER, PREFIX_JOB_PRIORITY,
-            PREFIX_JOB_DURATION, PREFIX_JOB_NOTE, PREFIX_TAG) || !argMultimap.getPreamble().isEmpty()) {
+            PREFIX_JOB_DURATION, PREFIX_JOB_NOTE) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE));
         }
 

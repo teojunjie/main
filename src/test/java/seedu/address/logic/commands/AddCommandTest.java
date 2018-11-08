@@ -174,6 +174,16 @@ public class AddCommandTest {
         }
 
         @Override
+        public void moveJobToMachine(Job job, Machine targetMachine) {
+
+        }
+
+        @Override
+        public void autoMoveJobs(Machine currentMachine, Machine targetMachine) {
+
+        }
+
+        @Override
         public Machine findMachine(MachineName machinename) {
             return null;
         }
@@ -211,6 +221,21 @@ public class AddCommandTest {
         @Override
         public boolean hasMachine(Machine machine) {
             throw new AssertionError("This method should not be called");
+        }
+
+        @Override
+        public boolean hasSameMachineName(Machine machine) {
+            return false;
+        }
+
+        @Override
+        public void flushMachine(Machine toFlushMachine) {
+
+        }
+
+        @Override
+        public void cleanMachine(Machine toCleanMachine) {
+
         }
 
         @Override

@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.ComponentManager;
+import seedu.address.commons.core.JobMachineTuple;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.AdminListChangedEvent;
@@ -54,7 +55,6 @@ public class ModelManager extends ComponentManager implements Model {
         filteredPersons = new FilteredList<>(versionedAddressBook.getPersonList());
         filteredMachines = new FilteredList<>(versionedAddressBook.getMachineList());
         filteredAdmins = new FilteredList<>(versionedAddressBook.getAdminList());
-        //TODO find a better way to change the data according to sorted jobs based on comparator
 
         // Timer for auto print cleanup
         // credit: https://dzone.com/articles/how-schedule-task-run-interval
@@ -187,10 +187,18 @@ public class ModelManager extends ComponentManager implements Model {
         indicateMachineListChanged();
     }
 
+
+
     @Override
     public Job findJob(JobName name) {
         requireAllNonNull(name);
-        return versionedAddressBook.findJob(name).job;
+        JobMachineTuple query = versionedAddressBook.findJob(name);
+
+        if (query != null) {
+            return query.job;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -244,6 +252,21 @@ public class ModelManager extends ComponentManager implements Model {
         return getFilteredMachineList().stream().mapToInt(m -> m.getJobsAsFilteredObservableList().size()).sum();
     }
 
+    @Override
+    public void moveJobToMachine(Job job, Machine targetMachine) {
+        job.setMachine(targetMachine.getName());
+        targetMachine.addJob(job);
+    }
+
+    @Override
+    public void autoMoveJobs(Machine currentMachine, Machine targetMachine) {
+        for (Job j : currentMachine.getJobs()) {
+            moveJobToMachine(j, targetMachine);
+        }
+        flushMachine(currentMachine);
+        indicateMachineListChanged();
+    }
+
 
     // ============================== Machine methods ======================================= //
 
@@ -264,6 +287,25 @@ public class ModelManager extends ComponentManager implements Model {
     public boolean hasMachine(Machine machine) {
         requireNonNull(machine);
         return versionedAddressBook.hasMachine(machine);
+    }
+
+    @Override
+    public boolean hasSameMachineName(Machine machine) {
+        return versionedAddressBook.hasSameMachineName(machine);
+    }
+
+    @Override
+    public void flushMachine(Machine toFlushMachine) {
+        requireNonNull(toFlushMachine);
+        versionedAddressBook.flushMachine(toFlushMachine);
+        indicateMachineListChanged();
+    }
+
+    @Override
+    public void cleanMachine(Machine toCleanMachine) {
+        requireNonNull(toCleanMachine);
+        versionedAddressBook.cleanMachine(toCleanMachine);
+        indicateMachineListChanged();
     }
 
 

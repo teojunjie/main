@@ -66,9 +66,6 @@ public class ManageJobCommand extends Command {
             model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
             return new CommandResult(MESSAGE_CANCELLED_JOB);
         } else if (option.equals(OPTION_DELETE)) {
-            //TODO:Disbled until v1.4!
-            throw new CommandException("Coming in 1.4!");
-            /*
             if (!model.isLoggedIn()) {
                 throw new CommandException(MESSAGE_ACCESS_DENIED);
             }
@@ -76,7 +73,7 @@ public class ManageJobCommand extends Command {
             model.commitAddressBook();
             model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
             return new CommandResult(MESSAGE_DELETED_JOB);
-            */
+
         } else {
             return new CommandResult(MESSAGE_NO_SUCH_OPTION);
         }

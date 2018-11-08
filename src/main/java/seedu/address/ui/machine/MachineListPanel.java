@@ -31,6 +31,7 @@ public class MachineListPanel extends UiPart<Region> {
         super(FXML);
         setConnections(machineList);
         registerAsAnEventHandler(this);
+
     }
 
     private void setConnections(ObservableList<Machine> machineList) {

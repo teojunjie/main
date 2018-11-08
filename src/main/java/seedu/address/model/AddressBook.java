@@ -231,6 +231,14 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Returns true if a machine name matches any of that in the list
+     */
+
+    public boolean hasSameMachineName(Machine machine) {
+        requireNonNull(machine);
+        return machines.containsSameNameMachine(machine);
+    }
+    /**
      * Adds a machine if {@code machine} does not exist in the list
      */
     public void addMachine(Machine machine) {
@@ -244,6 +252,27 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void removeMachine(Machine toRemove) {
         requireNonNull(toRemove);
         machines.remove(toRemove);
+    }
+
+    /**
+     * Flushes all jobs from a machine
+     */
+
+    public void flushMachine(Machine toFlushMachine) {
+        requireNonNull(toFlushMachine);
+        toFlushMachine.flushMachine();
+    }
+
+    /**
+     * Cleans all jobs from a machine that fufills the predicate below
+     * 1) DELETING
+     * 2) FINISHED
+     * 3) CANCELLED
+     */
+
+    public void cleanMachine(Machine toCleanMachine) {
+        requireNonNull(toCleanMachine);
+        toCleanMachine.cleanMachine();
     }
 
     /**
@@ -310,7 +339,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeJob(JobName job) {
         requireNonNull(job);
-        //jobs.remove(job);
+        machines.removeJobFromMachineList(job);
     }
 
     /**
