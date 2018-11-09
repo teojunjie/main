@@ -70,7 +70,8 @@ enhances the user experience and improves the efficieny of the system.
 ** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
 
 * *Minor enhancement*:
-Improved editMachine command and resolved the bugs that we had in V1.3
+*** Improved editMachine command and resolved the bugs that we had in V1.3
+*** File-to-Memory transfer of data modifications for separate files
 
 * *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]] _{give links to collated code files}_
 
@@ -79,12 +80,19 @@ Improved editMachine command and resolved the bugs that we had in V1.3
 ** Project management:
 *** Managed releases `v1.3` - `v1.4` (2 releases) on GitHub
 ** Enhancements to existing features:
+*** Enhanced manageJobs command by integrating code with UI
 
 ** Documentation:
+*** Maintained User Guide and Developer Guide for features I worked on.
+*** Started User guide and Developer guide development (Pull request https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153])
+*** Regularly updated User Guide and Developer Guide to keep up with the releases.
+*** Improved the User Guide and Developer Guide formats (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153])
 
 ** Community:
-
+*** Reviewed second most PRs (with non-trivial review comments). (https://github.com/CS2113-AY1819S1-T09-1/main/pulls?utf8=%E2%9C%93&q=is%3Apr+reviewed-by%3Ateojunjie+is%3Aclosed+[examples])
+*** Contributed to forum discussions (Example: https://github.com/nusCS2113-AY1819S1/forum/issues/94[#94])
 ** Tools:
+*** Configured travis version 1.0 at the start of the project
 
 
 == Contributions to the User Guide
