@@ -19,8 +19,6 @@ import seedu.address.commons.events.ui.ExitAppRequestEvent;
 import seedu.address.commons.events.ui.ShowHelpRequestEvent;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
-//import seedu.address.model.machine.Machine;
-import seedu.address.ui.job.JobListPanel;
 import seedu.address.ui.machine.MachineListPanel;
 
 /**

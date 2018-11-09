@@ -4,19 +4,19 @@
 :stylesDir: ../stylesheets
 
 == PROJECT: MakerManager
-
----
-
 == Overview
 This project protfolio is written to document the author's contribution to MakerManager.
-MakerManager is a desktop application for resource management, specialized for 3D printers and makerspaces.
+
+MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
+MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
+MakerManager is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
+
 The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS. The user interacts with MakerManager using a Command Line Interface (CLI), but can also choose to use the Graphical User Interface (GUI) built in JavaFX. The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
 
 In short, MakerManager can be used to:
-
 * effectively time-share 3D printers
 * see status and time-left for printers
-* add prints to a particular printer (or let the software automaitcally optimize it for you)
+* add prints to a particular printer (or let the software automatically optimize it for you)
 * login to the system to gain administrative rights, if you are signed up by an existing administrator
 * add, remove and maintain printer queues and machines - if you have administrative rights
 
@@ -43,6 +43,7 @@ In short, MakerManager can be used to:
 ** Enhancements to features:
 *** Wrote some tests for features added in makerManager (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/43[#43])
 ** Documentation:
+*** Maintained User Guide and Developer Guide for features I worked on.
 *** Regularly updated User Guide and Developer Guide to keep up with the releases.
 *** Standardized the User Guide and Developer Guide formats (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153])
 ** Community:
@@ -56,14 +57,9 @@ In short, MakerManager can be used to:
 
 == Contributions to the User Guide
 
-//TODO better separator for sections
-//TODO disclaimer that some of manageJob is done by trufflePirate for both sections
-
 |===
 |_Given below are some sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
-
-include::../UserGuide.adoc[tag=intro]
 
 include::../UserGuide.adoc[tag=adminMode]
 
@@ -80,8 +76,7 @@ include::../UserGuide.adoc[tag=upcoming]
 |===
 
 include::../DeveloperGuide.adoc[tag=administratormode]
-
+---
 include::../DeveloperGuide.adoc[tag=dataencryption]
 
-include::../DeveloperGuide.adoc[tag=managejob]
 

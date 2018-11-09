@@ -387,15 +387,45 @@ This section describes how MakerManager builds a layer of security around critic
 information to respective administrators/managers of individual makerspaces.
 
 ==== Current Implementation
-The two different access types are implemented with the help of an AdminSession object inside
+The following commands are directly related to admins:
+login, logout, addAdmin, removeAdmin and updatePassword
 
-*> insert admin class diagram*
+Our admin mode accommodates multiple admins, and ensures that there is at least one admin present.
+The admins are stored in a `UniqueAdminList()` in `versionedAddressBook`, with their usernames and passwords being
+securely stored in-Memory and in-file (for persistence).
 
-*> insert sequence diagram*
+[NOTE]
+See `File Storage` section for relevant storage part, `Model Component` for `Admin` class model and the `Password Encryption`
+section for the discussion pertaining to the encryption.
 
-*> insert activity diagram*
+The two different access types are implemented with the help of an AdminSession object inside versionedAddressBook.
+This Object keeps track of whether someone is logged in, and if so, who is. The AdminSession object has the following methods for us to use:
 
-*> is there a design consideration?*
+* setLogin() - gives admin privileges to the current user
+* clearLogin() - strips admin privileges of the current user
+* isAdminLoggedIn() - returns a boolean saying whether we are in admin mode
+* getLoggedInAdmin() - returns reference to the admin currently logged in
+
+[red]#The diagram below shows the admin-related section of the Model.#
+
+image::AdminModelClassDiagram.png[width:800]
+
+The following sequence diagram for login also applies to logout. We include this because it demonstrates how AdminSessions is used as well.
+
+[red]#The diagram below shows the sequence diagram for login.#
+
+image::SDforLogin.png[width:800]
+
+We can then use AdminSession to know whether an admin is logged in, before authorizing use of a command.
+
+[red]#The simple activity diagram below shows this.#
+
+image::ActivityDiagramForAdminCommand.png[width:800]
+
+==== Design Consideration
+The team debated on whether we should use a Singleton or not. We later decided not to use a Singleton since:
+. Singletons increase coupling
+. The system and the tests were already implemented without a singleton, and changing did not give any major pros.
 
 // end::administratormode[]
 
@@ -407,7 +437,12 @@ This section describes how MakerManager makes sure the administrator passwords a
 ==== Current Implementation
 The password is encrypted using salting and hashing. The low-level implementation of this is handled by the popular open
 source library jBcrypt. The library was chosen for having a fairly simple API for generating hashes and comparing
-passwords to stored hashes.
+passwords to stored hashes. The only two static methods used from the API were:
+
+. Bcrypt.hashPW() - generates an encrypted string from the raw text password
+. Bcrypt.checkPW() - verifies given password with stored hash
+
+Other than this, we also enforce password validation to make sure a moderately strong password is chosen by the admin when signing up.
 
 ==== Design Considerations
 ===== Aspect: Where to encrypt
@@ -423,10 +458,6 @@ passwords to stored hashes.
 // tag::managejob[]
 === Managing Prints
 *> Explain syntax choice*
-
-*> insert sequence diagram*
-
-*> insert activity diagram*
 
 *> is there a design consideration? -> syntax
 
