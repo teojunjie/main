@@ -69,12 +69,17 @@ This makes the UI clunky and unusable as users will not be able to find their jo
 enhances the user experience and improves the efficieny of the system.
 ** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
 
+___
+
 * *Minor enhancement*:
 *** Improved editMachine command and resolved the bugs that we had in V1.3
 *** File-to-Memory transfer of data modifications for separate files
 
-* *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]] _{give links to collated code files}_
+___
 
+* *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]]
+
+___
 * *Other contributions*:
 
 ** Project management:
