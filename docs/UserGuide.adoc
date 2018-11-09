@@ -230,7 +230,7 @@ Removes all the jobs from the specified machine. You will be warned and asked fo
 Outcome: If you press OK, the machine's queue will be empty. If you press CANCEL, nothing happens. +
     _If you specify AUTO, the prints in the existing machine will be transferred to other machines optimally._ +
 
-    Format: manageMachine MACHINE_NAME flush
+    Format: <manageMachine> MACHINE_NAME flush
 
     Examples:
     manageMachine UpBox flush
@@ -242,7 +242,7 @@ Outcome: You will no longer see the machine as a column in the UI. +
 [NOTE]
 You can't do this unless the machine's queue is empty. +
 
-    Format : manageMachine MACHINE_NAME remove
+    Format : <manageMachine> MACHINE_NAME remove
 
     Example: manageMachine UpBox remove
 
@@ -314,7 +314,7 @@ Restarts an existing print in the queue. Same as start. This is be used after a 
 Deletes an existing print in the queue. +
 Outcome: You will no longer see the specified print in the UI. +
 
-    Format: manageJob PRINT_NAME delete
+    Format: <manageJob> PRINT_NAME delete
 
     Example: manageJob iDCP delete
 
@@ -393,6 +393,12 @@ Outcome: All Prints will be visible in the UI. +
 . *Undoing and Redoing Commands* +
 The Maker Manager is remembers the  sequence of commands entered, and provides the option for users to
 undo or redo actions should the need arises.
+[NOTE]
+The Commands `findJob` `findMachine` `listJobs` and `listMachines` do not count as
+commands for the purposes of `undo` and `redo`, and therefore trying to undo or
+redo these commands will instead undo or redo the most recent
+command that does not belong to the above list!
+
 .. *Undo:*
 This command reverts the state of Maker Manager to a state before the most recent successful command.
  +
@@ -467,6 +473,7 @@ This is a nifty little list you can print and paste somewhere for quick referenc
 . manageJob JOB_NAME move TARGET_MACHINE_NAME
 . manageJob JOB_NAME shift up
 . manageJob JOB_NAME shift down
+. manageJob JOB_NAME remove
 . requestDeletion n/JOB_NAME
 . findJob [JOB_NAME_1] [JOB_NAME_2]
 . listJobs
