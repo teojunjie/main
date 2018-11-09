@@ -1224,6 +1224,8 @@ Windows, Linux, Unix, OS-X
 
 Given below are instructions to test the app manually.
 
+Testers are encouraged to follow the testing codes sequentially.
+
 [NOTE]
 These instructions only provide a starting point for testers to work on; testers are expected to do more _exploratory_ testing.
 
@@ -1231,56 +1233,401 @@ These instructions only provide a starting point for testers to work on; testers
 
 . Initial launch
 
-.. Download the jar file and copy into an empty folder
-.. Download the data files by downloading the DemoDataV1.4.zip from the root.
-Unzip and save the data files in a folder called 'data' in the same directory
-in which you saved the jar file on your computer.
+    .. Download the jar file and copy into an empty folder
+    .. Download the data files by downloading the DemoDataV1.4.zip from the root.
+    .. Unzip and save the data files in a folder called 'data' in the same directoryin which you saved the jar file on your computer.
 
-The 'data' file should contain the 3 files below. So it should be,
-... data/addressBook.xml
-... data/makerManagerAdmins.xml
-... data/makerManagerMachines.xml
+ The 'data' file should contain the 3 files below.
+ data/addressBook.xml
+ data/makerManagerAdmins.xml
+ data/makerManagerMachines.xml
 
-.. Double-click the jar file +
-   Expected view:
-   ... Shows the GUI with a list of printers displayed horizontally where each column represents a printer
-   with print jobs assigned to it.
-   ... These printers are already pre-added to the maker manager local database.
-   ... The window size may not be optimum.
+    .. Double-click the jar file
+
+    Expected view:
+    Shows the GUI with a list of printers displayed horizontally where each column represents a printer with print jobs assigned to it.
+    These printers are already pre-added to the maker manager local database.
+    The window size may not be optimum.
 
 . Saving window preferences
 
-.. Resize the window to an optimum size. Move the window to a different location. Close the window.
-.. Re-launch the app by double-clicking the jar file. +
-   Expected: The most recent window size and location is retained.
+    .. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    .. Re-launch the app by double-clicking the jar file. +
+    Expected: The most recent window size and location is retained.
 
-_{ more test cases ... }_
+. Leaving the app:
 
-=== Adding a print Job to an _available_ machine
+    .. Enter the command:
 
-. Adding a print job when all machines are listed
-.. Prerequistes: List all machines using the 'listMachines' command to view all the machines that are
-currently _available_ and _enabled_ in the system
-...  Test case 1:
+    exit
+
+    .. The window shall close automatically.
+
+=== Ease of use
+. Test case: help window activation
+
+    help
+
+    Expected:
+    A pop-up window containing the user guide will be displayed.
+
+=== Managing the admin access
+. Test case: login to a default admin account
+
+    login admin admin
+
+    Expected:
+    The command box will turn to be blue. Message "login success!" will be shown. Label "[ADMIN_MODE]" will be displayed at the bottom of the app.
+
+. Test case: add a admin to the system (admin only)
+
+    addAdmin saif aaaAAA123$ aaaAAA123$
+
+    Expected:
+    Message "New admin added successfully!" will be shown.
+
+. Test case: add a admin which is already in the system (admin only)
+
+    addAdmin saif aaaAAA123 aaaAAA123
+
+    Expected:
+    The command will not work because there is existing a user call "saif". Message "This username already exists. Try a new one or login." will be shown.
+
+. Test case: password authentication fails when adding a admin (admin only)
+
+    addAdmin new aaaAAA123$ aaaAAA123
+
+    Expected:
+    The command will not work because the password entered the second time is not the same with the first time. Message "The two password fields don't match! Please try again." will be shown.
+
+. Test case: remove the currently logged in admin (logged in as "admin" only)
+
+    removeAdmin admin
+
+    Expected:
+    Message "Admin removed successfully!" will be shown, indicating the "admin" is already moved from the system.
+    The command box will turn back to black and the "[ADMIN_MODE]" label will disappear because "admin" is the currently logged in administrator. Removing the currently logged in administrator will log out that one automatically.
+
+. Test case: login to a admin account which is recently added
+
+    login saif aaaAAA123$
+
+    Expected:
+    The command box will turn to be blue. Message "login success!" will be shown. Label "[ADMIN_MODE]" will be displayed at the bottom of the app.
+
+. Test case: exit from the admin mode (admin only)
+
+    logout
+
+    Expected:
+    Message "Admin removed successfully!" will be shown, indicating the "saif" is already moved from the system.
+    The command box will turn back to black and the "[ADMIN_MODE]" label will disappear.
+
+=== Adding a print Job to a machine
+
+. Test case: add a job called "spectacleframe" to machine "ultimaker"
 
     addJob n/spectacleframe m/ultimaker on/Jimmy pr/NORMAL d/0.03 jn/For a Friend t/personal
 
-    Expected :
+    Expected:
     A print job named spectacleframe will be added to the column under ultimaker at the bottom of the queue.
 
-... Test case 2 :
+. Test case: add a job to the most free machine
 
     addJob n/phonecase m/AUTO on/George pr/NORMAL d/0.1 jn/New phonecase for new phone t/personal
 
-    Expected :
+    Expected:
     A print job named phonecase will be added to the 'Most Free Machine' in the maker manager system
     ** Most free machine represents the machine with the least time until released.
 
-... Test case 3 :
+. Test case: add a job to a machine which does not exist in the machine list
 
     addJob n/buildingmodel m/nosuchmachine on/Jerry pr/URGENT d/1 jn/for Final year project t/SchoolProject
 
-    Expected :
+    Expected:
     No job will be added to any machine. Error will be shown in result box as "Machine specified does not exist"
 
+. Test case: add a job to a disabled machine
 
+    addJob n/model m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Failed to add Job. Machine specified is Disabled"
+
+=== Managing jobs which have been added to machines
+
+. Test case: find job(s) by its naming keywords
+
+    findJob cup
+
+    Expected:
+    Only the job "cup" will be displayed in the UI.
+
+    findJob c up
+
+    Expected:
+    No jobs will be shown.
+
+    findJob stool cup gears
+
+    Expected:
+    3 jobs: "stool", "cup", "gears" will be displayed in the UI.
+
+. Test case: list all the jobs
+
+    listJobs
+
+    Expected:
+    All the jobs will be displayed in the UI.
+
+. Test case: make a job which has been added into a machine start printing
+
+    manageJob laptopstand start
+
+    Expected:
+    The status label of the laptopstand job will be changed to ONGOING. The timer will start as well.
+
+. Test case: make a job which has been added into a machine cancel printing
+
+    manageJob laptopstand cancel
+
+    Expected:
+    The status label of the laptopstand job will be changed to CANCELLED. The job card will be moved to the end of the machine's job queue.
+
+. Test case: request a job to be deleted
+
+    requestDeletion n/laptopstand
+
+    Expected:
+    The status label of the laptopstand job will be changed to DELETING.
+
+. Test case: swap 2 jobs from 2 different machines (admin only)
+
+    logout
+    manageJob stool swap batterycontainer
+
+    Expected:
+    No swapping operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+. Test case: move a specified job to a specified machine (admin only)
+
+    logout
+    manageJob stool move ultimaker
+
+    Expected:
+    No moving operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to move Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool move ultimaker
+
+    Expected:
+    The "stool" job will be added to the machine "ultimaker".
+
+. Test case: move up the place of a job card in the GUI (admin only)
+
+    logout
+    manageJob stool shift up
+
+    Expected:
+    No shifting operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool shift up
+
+    Expected:
+    The "stool" job will interchange the place in the queue with the job card displayed above it.
+
+. Test case: delete a job from a machine's printing queue (admin only)
+
+    logout
+    manageJob laptopstand delete
+
+    Expected;
+    No deleting operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to delete Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob laptopstand delete
+
+    Expected:
+    The "laptopstand" job will be removed from the job queue and no longer be visible.
+
+=== Managing the configurations of machines
+
+. Test case: find machines by multiple name keywords
+
+    findMachine mbot ender
+
+    Expected:
+    Only the machine: "mbot" and "ender", along with their printing queue will be displayed in the UI.
+
+    findMachine m bot
+
+    Expected:
+    No machines will be displayed.
+
+. Test case: list all machines in the MakerManager system
+
+    listMachines
+
+    Expected:
+    All the machines with their printing queue will be displayed in the UI.
+
+. Test case: add a new machine to the MakerManager system (admin only)
+
+    logout
+    addMachine n/creality ms/ENABLED
+
+    Expected:
+    No cleaning operation is done. Error thrown in the result box, saying "Non admin user is not allowed to add a machine to maker manager".
+
+    login saif aaaAAA123$
+    addMachine n/creativity ms/ENABLED
+
+    Expected:
+    A new machine will be added to the MakerManager system. A new printing queue with no job added will be displayed in the UI.
+
+. Test case: change the status of a machine (admin only)
+
+    logout
+    editMachine ender ms/ENABLED
+
+    Expected:
+    The command will be rejected because machine cannot be added without logging in by admin. Message "Non-admin user is not allowed to edit a machine in maker manager" will be shown.
+
+    login saif aaaAAA123$ (if not in ADMIN MODE)
+    editMachine ender ms/ENABLED
+
+    Expected:
+    The status of machine "ender" will be changed to "ENABLED" and "Available".
+
+. Test case: remove finished and failed jobs in a machine (admin only)
+
+    logout
+    manageMachine oldupbox clean
+
+    Expected:
+    No cleaning operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox clean
+
+    Expected:
+    All the jobs will the "FINISHED" or "CANCELLED" status will be removed from the printing queue of the machine "oldupbox"
+
+. Test case: remove a machine with jobs in its printing queue (admin only)
+
+    logout
+    manageMachine oldupbox remove
+
+    Expected:
+    No removing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox remove
+
+    Expected:
+    Nothing will change in the UI and a message "Machine still have jobs" will be displayed in the result box. Machines with jobs not finished cannot be simply removed.
+
+. Test case: delete all the jobs in a machine, regardless of their status (admin only)
+
+    logout
+    manageMachine oldupbox flush
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox flush
+
+    Expected:
+    A pop-up window will be displayed, saying "Are you sure you want to flush oldupbox?"
+    If clicking ok, all jobs in the machine "oldupbox" will be removed.
+    If clicking cancel, nothing will happen and app will return to the main menu.
+
+. Test case: moving all the unprocessed jobs in a machine to other jobs (admin only)
+
+    logout
+    manageMachine oldupbox flush AUTO
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+
+    Expected:
+    Jobs will be shifted to other machines dependent on the total duration of the machine.
+    The first job will find the most free machine at that time and move to that machine.
+    The second job will find the most free machine after the first machine is moved and move itself to the most free machine.
+    ...
+
+. Test case: removed a machine with an empty printing queue (admin only)
+
+    logout
+    manageMachine oldupbox remove
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox remove
+
+    Expected:
+    The machine "oldupbox" is removed from the machine list and the printing queue is no longer visible.
+
+=== Operation traceability
+
+. Test case: undo the previous command (cannot undo the logout command)
+
+    addJob n/iDCP m/ultimaker on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    undo
+
+    Expected:
+    After the first command is executed, the "iDCP"job will be added to the print queue of "ultimaker".
+    After the "undo" command is executed, the job "iDCP" will be removed from the print queue.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+    undo
+
+    Expected:
+    The "batterycontainer" job in the ultimaker and the "stool" job in the mbot will be swapped after the "managaJob swap" is done and will be swapped back after "undo" is done.
+
+    login saif aaaAAA123$
+    logout
+    undo
+
+    Expected:
+    The admin "saif" will be logged in and logged out.
+    While "undoing", error will be thrown in the result box, saying "Access Denied. Unable to undo Logout."
+
+. Test case: redo the previous undone command (cannot redo the login command)
+
+    addJob n/iDCP m/ultimaker on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    undo
+
+    Expected:
+    After the first command is executed, the "iDCP"job will be added to the print queue of "ultimaker".
+    After the "undo" command is executed, the job "iDCP" will be removed from the print queue.
+    After the "redo" command is executed, the job "iDCP" will be added back to the print queue.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+    undo
+    redo
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+    login saif aaaAAA123$
+    undo
+    redo
+
+    Expected:
+    After the "undo" command, the MakerManger will be logged out from the admin mode.
+    While "redoing" the login command, errors will be thrown in the result box, saying "Access denied. Please Re-Login manually."
