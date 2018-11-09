@@ -273,6 +273,8 @@ This section describes some noteworthy details on how certain features are imple
 
 // tag::undoredo[]
 === Undo/Redo feature
+This section describes how undo/redo is implemented in MakerManager.
+
 ==== Current Implementation
 [[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
@@ -379,8 +381,30 @@ in their correct maker manager java objects.
 (See <<versionedaddressbook>>)
 // end::fileStorageSystem[]
 
+// tag::administratormode[]
+=== Administrator Mode
+This section describes how MakerManager builds a layer of security around critical data and restricts manipulation of such sensitive
+information to respective administrators/managers of individual makerspaces.
+
+==== Current Implementation
+
+*> Explain isLogged() and how we check login status*
+
+*> insert admin class diagram*
+
+*> insert sequence diagram*
+
+*> insert activity diagram*
+
+*> is there a design consideration?*
+
+// end::administratormode[]
+
 // tag::dataencryption[]
+
 === Password Encryption
+This section describes how MakerManager makes sure the administrator passwords are kept secure.
+
 ==== Current Implementation
 The password is encrypted using salting and hashing. The low-level implementation of this is handled by the popular open
 source library jBcrypt. The library was chosen for having a fairly simple API for generating hashes and comparing
@@ -394,10 +418,20 @@ passwords to stored hashes.
 * **Alternative 2:** Encrypt it in UI
 ** Pros: More secure transfer of passwords through the pipeline.
 ** Cons: UI is heavy, and may become slower if hashing is too taxing on the system.
-// end::dataencryption[]
-_{Explain here how the data encryption feature will be implemented}_
 
 // end::dataencryption[]
+
+// tag::managejob[]
+=== Managing Prints
+*> Explain syntax choice*
+
+*> insert sequence diagram*
+
+*> insert activity diagram*
+
+*> is there a design consideration? -> syntax
+
+// end::managejob[]
 
 === Logging
 
