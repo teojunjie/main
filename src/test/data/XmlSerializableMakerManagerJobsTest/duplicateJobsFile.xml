@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <MakerManagerJobs>
     <jobs>
-        <name>bumblebee</name>
-        <machine>
-            <machineName>BumberbeePrinter</machineName>
-            <status>ENABLED</status>
-        </machine>
-        <startTime>30/10 00:37:23</startTime>
+        <name>IntertestingStuff</name>
+        <machine>MakerSpace1</machine>
         <owner>
-            <name>Bumble bee</name>
-            <phone>85355255</phone>
-            <email>alice@gmail.com</email>
-            <address>123, Jurong West Ave 6, #08-111</address>
+            <name>Jun Jie</name>
+            <phone>000</phone>
+            <email>0@u.nus.edu</email>
+            <address>000</address>
         </owner>
+        <addedTime>
+            <timeStamp>1541613643024</timeStamp>
+        </addedTime>
+        <startTime>
+            <timeStamp>1541613643024</timeStamp>
+        </startTime>
         <priority>NORMAL</priority>
-        <duration>1.0</duration>
-        <note>This is bumberbee jobnote</note>
+        <duration>10800000</duration>
         <status>QUEUED</status>
-        <requestDeletion>false</requestDeletion>
+        <note>Let us do some interesting stuff</note>
     </jobs>
     <jobs>
-        <name>bumblebee</name>
-        <machine>
-            <machineName>BumberbeePrinter</machineName>
-            <status>ENABLED</status>
-        </machine>
-        <startTime>30/10 00:37:23</startTime>
+        <name>IntertestingStuff</name>
+        <machine>MakerSpace1</machine>
         <owner>
-            <name>Bumble bee</name>
-            <phone>85355255</phone>
-            <email>alice@gmail.com</email>
-            <address>123, Jurong West Ave 6, #08-111</address>
+            <name>Jun Jie</name>
+            <phone>000</phone>
+            <email>0@u.nus.edu</email>
+            <address>000</address>
         </owner>
+        <addedTime>
+            <timeStamp>1541613643024</timeStamp>
+        </addedTime>
+        <startTime>
+            <timeStamp>1541613643024</timeStamp>
+        </startTime>
         <priority>NORMAL</priority>
-        <duration>1.0</duration>
-        <note>This is bumberbee jobnote</note>
+        <duration>10800000</duration>
         <status>QUEUED</status>
-        <requestDeletion>false</requestDeletion>
+        <note>Let us do some interesting stuff</note>
     </jobs>
 </MakerManagerJobs>

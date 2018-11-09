@@ -8,10 +8,12 @@ import org.junit.Test;
 import seedu.address.testutil.Assert;
 
 public class MachineNameTest {
+
     @Test
     public void constructor_null_throwsNullPointerException() {
         Assert.assertThrows(NullPointerException.class, () -> new MachineName(null));
     }
+
     @Test
     public void constructor_invalidName_throwsIllegalArgumentException() {
         String invalidName = "";

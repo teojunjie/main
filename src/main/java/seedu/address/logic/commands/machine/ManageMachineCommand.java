@@ -14,8 +14,10 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.job.exceptions.JobOngoingException;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineName;
+import seedu.address.model.machine.exceptions.MachineDisabledException;
 
 /**
  * Removes a machine from MakerManager address book
@@ -43,9 +45,11 @@ public class ManageMachineCommand extends Command {
     public static final String MESSAGE_NO_SUCH_MANAGE_MACHINE_COMMAND = "No such option to manage machine %1$s";
     public static final String MESSAGE_MACHINE_NOT_FLUSHED = "Machine is not flushed";
     public static final String MESSAGE_FLUSH_AUTO_OPTION_INVALID = "Invalid flush auto option";
-    public static final String MESSAGE_NO_MORE_MACHINES = "No more machines to flush jobs to. Please add a new machine";
+    public static final String MESSAGE_NO_MORE_MACHINES =
+        "No more Available/Operational machines to flush jobs to. Please add a new machine";
     private static final String MESSAGE_ACCESS_DENIED =
         "Non admin user is not allowed to manage a machine from maker manager";
+    private static final String MESSAGE_ONGOING_JOB = "Cannot flush Machine with ongoing Job.";
 
     private MachineName machineName;
     private String option;
@@ -87,9 +91,8 @@ public class ManageMachineCommand extends Command {
                     alert.setTitle("Require confirmation");
                     alert.setHeaderText("Are you sure you want to flush " + machineToManage.getName().fullName + "?");
                     alert.setContentText("Alternatively, you can click cancel and proceed to move "
-                        + "all the jobs in the machine to another machine"
-                        + "\n\nOr you can use"
-                        + "\n\nmanageMachine " + machineToManage.getName().fullName + " flush AUTO"
+                        + "all the jobs in the machine to another machine" + "\n\nOr you can use" + "\n\nmanageMachine "
+                        + machineToManage.getName().fullName + " flush AUTO"
                         + "\n\nto automatically flush the jobs in the machine to another machine"
                         + "\n\nOtherwise, all jobs in the machine will be removed");
 
@@ -101,19 +104,22 @@ public class ManageMachineCommand extends Command {
                         model.updateFilteredJobListInAllMachines(PREDICATE_SHOW_ALL_JOBS);
                         return new CommandResult(String.format(MESSAGE_FLUSH_MACHINE_SUCCESS, machineToManage));
                     } else {
-                        return new CommandResult(String.format(MESSAGE_MACHINE_NOT_FLUSHED, machineToManage));
+                        throw new CommandException(String.format(MESSAGE_MACHINE_NOT_FLUSHED, machineToManage));
                     }
                 } else if (flushAutoOption.equals(OPTION_FLUSH_AUTO)) {
-                    Machine mostFreeMachine = model.getMostFreeMachine();
-                    if (mostFreeMachine.equals(machineToManage)) {
+                    try {
+                        model.autoMoveJobsDuringFlush(machineToManage);
+                        model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
+                        model.updateFilteredJobListInAllMachines(PREDICATE_SHOW_ALL_JOBS);
+                        model.commitAddressBook();
+                        return new CommandResult(String.format(MESSAGE_AUTO_FLUSHING_MACHINE, machineToManage));
+                    } catch (MachineDisabledException mde) {
                         throw new CommandException(MESSAGE_NO_MORE_MACHINES);
+                    } catch (JobOngoingException joe) {
+                        throw new CommandException(MESSAGE_ONGOING_JOB);
                     }
-                    model.autoMoveJobs(machineToManage, mostFreeMachine);
-                    model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
-                    model.updateFilteredJobListInAllMachines(PREDICATE_SHOW_ALL_JOBS);
-                    return new CommandResult(String.format(MESSAGE_AUTO_FLUSHING_MACHINE, machineToManage));
                 } else {
-                    return new CommandResult(String.format(MESSAGE_FLUSH_AUTO_OPTION_INVALID));
+                    throw new CommandException(String.format(MESSAGE_FLUSH_AUTO_OPTION_INVALID));
                 }
             case OPTION_CLEAN:
                 if (machineToManage.hasCleanableJobs()) {

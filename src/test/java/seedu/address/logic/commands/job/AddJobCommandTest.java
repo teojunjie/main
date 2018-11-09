@@ -1,4 +1,4 @@
-package seedu.address.logic.commands.machine;
+package seedu.address.logic.commands.job;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.Assert.assertEquals;
@@ -28,9 +28,10 @@ import seedu.address.model.job.JobName;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineName;
 import seedu.address.model.person.Person;
-import seedu.address.testutil.MachineBuilder;
+import seedu.address.testutil.builders.JobBuilder;
 
-public class AddMachineCommandTest {
+
+public class AddJobCommandTest {
 
     private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
 
@@ -40,46 +41,46 @@ public class AddMachineCommandTest {
     private CommandHistory commandHistory = new CommandHistory();
 
     @Test
-    public void constructor_nullMachine_throwsNullPointerException() {
+    public void constructor_nullJob_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        new AddMachineCommand(null);
+        new AddJobCommand(null);
     }
 
     @Test
-    public void execute_machineAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingMachineAdded modelStub = new ModelStubAcceptingMachineAdded();
-        Machine validMachine = new MachineBuilder().build();
+    public void execute_jobAcceptedByModel_addSuccessful() throws Exception {
+        AddJobCommandTest.ModelStubAcceptingJobAdded modelStub = new AddJobCommandTest.ModelStubAcceptingJobAdded();
+        Job validJob = new JobBuilder().build();
 
-        CommandResult commandResult = new AddMachineCommand(validMachine).execute(modelStub, commandHistory);
+        CommandResult commandResult = new AddJobCommand(validJob).execute(modelStub, commandHistory);
 
-        assertEquals(String.format(AddMachineCommand.MESSAGE_SUCCESS, validMachine), commandResult.feedbackToUser);
-        assertEquals(Arrays.asList(validMachine), modelStub.machinesAdded);
+        assertEquals(String.format(AddJobCommand.MESSAGE_SUCCESS, validJob.getJobName()), commandResult.feedbackToUser);
+        assertEquals(Arrays.asList(validJob), modelStub.jobsAdded);
         assertEquals(EMPTY_COMMAND_HISTORY, commandHistory);
     }
 
     @Test
-    public void execute_duplicateMachine_throwsCommandException() throws Exception {
-        Machine validMachine = new MachineBuilder().build();
-        AddMachineCommand addMachineCommand = new AddMachineCommand(validMachine);
-        ModelStub modelStub = new AddMachineCommandTest.ModelStubWithMachine(validMachine);
+    public void execute_duplicateJob_throwsCommandException() throws Exception {
+        Job validJob = new JobBuilder().build();
+        AddJobCommand addJobCommand = new AddJobCommand(validJob);
+        AddJobCommandTest.ModelStub modelStub = new AddJobCommandTest.ModelStubWithJob(validJob);
 
         thrown.expect(CommandException.class);
-        thrown.expectMessage(AddMachineCommand.MESSAGE_DUPLICATE_MACHINE);
-        addMachineCommand.execute(modelStub, commandHistory);
+        thrown.expectMessage(AddJobCommand.MESSAGE_DUPLICATE_JOB);
+        addJobCommand.execute(modelStub, commandHistory);
     }
 
     @Test
     public void equals() {
-        Machine m1 = new MachineBuilder().withName("Machine1").build();
-        Machine m2 = new MachineBuilder().withName("Machine2").build();
-        AddMachineCommand addm1Command = new AddMachineCommand(m1);
-        AddMachineCommand addm2Command = new AddMachineCommand(m2);
+        Job m1 = new JobBuilder().withName("Job1").build();
+        Job m2 = new JobBuilder().withName("Job2").build();
+        AddJobCommand addm1Command = new AddJobCommand(m1);
+        AddJobCommand addm2Command = new AddJobCommand(m2);
 
         // same object -> returns true
         assertTrue(addm1Command.equals(addm1Command));
 
         // same values -> returns true
-        AddMachineCommand addm1CommandCopy = new AddMachineCommand(m1);
+        AddJobCommand addm1CommandCopy = new AddJobCommand(m1);
         assertTrue(addm1Command.equals(addm1CommandCopy));
 
         // different types -> returns false
@@ -91,6 +92,97 @@ public class AddMachineCommandTest {
         // different person -> returns false
         assertFalse(addm1Command.equals(addm2Command));
     }
+
+    /**
+     * A Model stub that contains a single Job.
+     */
+    private class ModelStubWithJob extends ModelStub {
+        private final Job job;
+
+        ModelStubWithJob(Job job) {
+            requireNonNull(job);
+            this.job = job;
+        }
+
+        @Override
+        public boolean hasJob(Job job) {
+            requireNonNull(job);
+            return this.job.isSameJob(job);
+        }
+
+        @Override
+        public JobMachineTuple findJob(JobName jobName) {
+            requireNonNull(jobName);
+            if (this.job.getJobName().equals(jobName)) {
+                return new JobMachineTuple(job, findMachine(job.getMachineName()));
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isLoggedIn() {
+            return true;
+        }
+    }
+
+    /**
+     * A Model stub that is logged in.
+     */
+    private class ModelStubNonAdmin extends ModelStub {
+        ModelStubNonAdmin() {
+        }
+
+        @Override
+        public boolean isLoggedIn() {
+            return true;
+        }
+    }
+
+    /**
+     * A Model stub that always accept the person being added.
+     */
+    private class ModelStubAcceptingJobAdded extends ModelStub {
+        final ArrayList<Job> jobsAdded = new ArrayList<>();
+
+        @Override
+        public boolean hasJob(Job job) {
+            requireNonNull(job);
+            return jobsAdded.stream().anyMatch(job::isSameJob);
+        }
+
+        @Override
+        public JobMachineTuple findJob(JobName jobName) {
+            requireNonNull(jobName);
+            for (Job job : jobsAdded) {
+                if (job.getJobName().equals(jobName)) {
+                    return new JobMachineTuple(job, findMachine(job.getMachineName()));
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void addJob(Job job) {
+            requireNonNull(job);
+            jobsAdded.add(job);
+        }
+
+        @Override
+        public void commitAddressBook() {
+            // called by {@code AddCommand#execute()}
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            return new AddressBook();
+        }
+
+        @Override
+        public boolean isLoggedIn() {
+            return true;
+        }
+    }
+
 
     /**
      * A default model stub that have all of the methods failing.
@@ -157,7 +249,6 @@ public class AddMachineCommandTest {
 
         @Override
         public void swapJobs(JobName jobname1, JobName jobName2) {
-            return;
         }
 
         @Override
@@ -389,95 +480,4 @@ public class AddMachineCommandTest {
             throw new AssertionError("This method should not be called.");
         }
     }
-
-    /**
-     * A Model stub that contains a single Machine.
-     */
-    private class ModelStubWithMachine extends ModelStub {
-        private final Machine machine;
-
-        ModelStubWithMachine(Machine machine) {
-            requireNonNull(machine);
-            this.machine = machine;
-        }
-
-        @Override
-        public boolean hasMachine(Machine machine) {
-            requireNonNull(machine);
-            return this.machine.isSameMachine(machine);
-        }
-
-        @Override
-        public Machine findMachine(MachineName machineName) {
-            requireNonNull(machineName);
-            if (this.machine.getName().equals(machineName)) {
-                return machine;
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return true;
-        }
-    }
-
-    /**
-     * A Model stub that is logged in.
-     */
-    private class ModelStubNonAdmin extends ModelStub {
-        ModelStubNonAdmin() {
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return true;
-        }
-    }
-
-    /**
-     * A Model stub that always accept the person being added.
-     */
-    private class ModelStubAcceptingMachineAdded extends ModelStub {
-        final ArrayList<Machine> machinesAdded = new ArrayList<>();
-
-        @Override
-        public boolean hasMachine(Machine machine) {
-            requireNonNull(machine);
-            return machinesAdded.stream().anyMatch(machine::isSameMachine);
-        }
-
-        @Override
-        public Machine findMachine(MachineName machineName) {
-            requireNonNull(machineName);
-            for (Machine machine : machinesAdded) {
-                if (machine.getName().equals(machineName)) {
-                    return machine;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public void addMachine(Machine machine) {
-            requireNonNull(machine);
-            machinesAdded.add(machine);
-        }
-
-        @Override
-        public void commitAddressBook() {
-            // called by {@code AddCommand#execute()}
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            return new AddressBook();
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return true;
-        }
-    }
-
 }

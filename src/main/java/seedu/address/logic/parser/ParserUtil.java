@@ -264,7 +264,7 @@ public class ParserUtil {
     public static JobNote parseJobNote(String jobNote) throws ParseException {
         requireNonNull(jobNote);
         String trimJobNote = jobNote.trim();
-        if (!JobNote.isValidNote(jobNote)) {
+        if (!JobNote.isValidJobNote(jobNote)) {
             throw new ParseException(Job.MESSAGE_NOTE_CONSTRAINTS);
         }
 

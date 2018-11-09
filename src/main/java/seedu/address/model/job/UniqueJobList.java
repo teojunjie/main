@@ -33,6 +33,13 @@ public class UniqueJobList {
     }
 
     /**
+     * sorts the internal list
+     */
+    public void reSortList() {
+        FXCollections.sort(internalList, new JobComparator());
+    }
+
+    /**
      * Adds a job to the list.
      * The jpb must not already exist in the list.
      */
@@ -45,17 +52,41 @@ public class UniqueJobList {
     }
 
     /**
+     * Shifts Jobs according to index offset
+     */
+    public void shift(Job toShift, int shiftBy) {
+        requireNonNull(toShift);
+        int currentIndex = internalList.indexOf(toShift);
+        //removing job
+        internalList.remove(currentIndex);
+
+        //re-addition
+        if (currentIndex - shiftBy > size()) {
+            internalList.add(toShift);
+        } else if (currentIndex - shiftBy < 0) {
+            internalList.add(0, toShift);
+        } else {
+            internalList.add(currentIndex - shiftBy, toShift);
+        }
+        FXCollections.sort(internalList, new JobComparator());
+    }
+
+    /**
      * Removes the equivalent job from the list.
      * The job must exist in the list.
      */
     public void remove(Job toRemove) {
         requireNonNull(toRemove);
+        if (!internalList.remove(toRemove)) {
+            throw new JobNotFoundException();
+        }
         internalList.remove(toRemove);
     }
 
     public void setJobs(UniqueJobList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
+        FXCollections.sort(internalList, new JobComparator());
     }
 
     /**
@@ -69,6 +100,27 @@ public class UniqueJobList {
         }
 
         internalList.setAll(jobs);
+        FXCollections.sort(internalList, new JobComparator());
+    }
+
+    /**
+     * Replaces the job {@code target} in the list with {@code editedJob}.
+     * {@code target} must exist in the list.
+     * The job identity of {@code editedJob} must not be the same as another existing job in the list.
+     */
+    public void setJob(Job target, Job editedJob) {
+        requireAllNonNull(target, editedJob);
+
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new JobNotFoundException();
+        }
+
+        if (!target.isSameJob(editedJob) && contains(editedJob)) {
+            throw new DuplicateJobException();
+        }
+
+        internalList.set(index, editedJob);
     }
 
     /**
@@ -82,9 +134,7 @@ public class UniqueJobList {
             logger.info(j.getJobName().fullName);
             if (j.getJobName().fullName.equals(jobName)) {
                 logger.info("Job name matches!!");
-                Job changedJob =
-                    new Job(j.getJobName(), j.getMachineName(), j.getOwner(), j.getPriority(), j.getDuration(),
-                        j.getJobNote(), j.getTags());
+                Job changedJob = new Job(j);
                 return changedJob;
             }
         }
@@ -101,10 +151,20 @@ public class UniqueJobList {
     /**
      * Returns a sorted list based on custom comparator
      */
-
     public ObservableList<Job> asUnmodifiableObservableSortedList() {
         FXCollections.sort(internalList, new JobComparator());
         return FXCollections.unmodifiableObservableList(internalList);
+    }
+
+    /**
+     *
+     * checks whether the given object is equal to the UniqueJobList
+     */
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+            || (other instanceof UniqueJobList // instanceof handles nulls
+            && internalList.equals(((UniqueJobList) other).internalList));
     }
 
     /**
@@ -150,9 +210,9 @@ public class UniqueJobList {
     }
 
     /**
-     * Replaces the person {@code target} in the list with {@code editedJob}.
+     * Replaces the job {@code target} in the list with {@code editedJob}.
      * {@code target} must exist in the list.
-     * The person identity of {@code editedJob} must not be the same as another existing person in the list.
+     * The job identity of {@code editedJob} must not be the same as another existing job in the list.
      */
     public void updateJob(Job target, Job editedJob) {
         requireAllNonNull(target, editedJob);
@@ -183,7 +243,6 @@ public class UniqueJobList {
     public void cancelJob(JobName name) {
         requireAllNonNull();
         findJob(name).cancelJob();
-        ;
     }
 
     /**
@@ -239,9 +298,12 @@ public class UniqueJobList {
         if (targetIndex == -1 || targetIndex > size()) {
             throw new JobNotFoundException();
         }
-        internalList.set(targetIndex, replaceWith);
+        internalList.set(targetIndex, new Job(replaceWith));
     }
 
+    /**
+     * sets a jobStatus to finish.
+     */
     public void finishJob(Job job) {
         job.finishJob();
     }
@@ -256,7 +318,8 @@ public class UniqueJobList {
 
         @Override
         public int compare(Job j1, Job j2) {
-            return j2.hasHigherPriority(j1);
+            return j2.hasHigherDisplayPriority(j1);
         }
     }
+
 }

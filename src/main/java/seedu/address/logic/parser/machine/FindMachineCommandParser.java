@@ -8,7 +8,6 @@ import seedu.address.logic.commands.machine.FindMachineCommand;
 import seedu.address.logic.parser.Parser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.machine.MachineNameContainsKeywordsPredicate;
-import seedu.address.model.machine.MachineNameFuzzyWuzzyPredicate;
 
 /**
  * Parses input arguments and creates a new FindMachineCommand object
@@ -29,8 +28,7 @@ public class FindMachineCommandParser implements Parser<FindMachineCommand> {
 
         String[] nameKeywords = trimmedArgs.split("\\s+");
 
-        return new FindMachineCommand(new MachineNameContainsKeywordsPredicate(Arrays.asList(nameKeywords)),
-            new MachineNameFuzzyWuzzyPredicate(Arrays.asList(nameKeywords)));
+        return new FindMachineCommand(new MachineNameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
     }
 
 }

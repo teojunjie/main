@@ -9,8 +9,10 @@ import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.JobMachineTuple;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.ui.FocusMachineRequestEvent;
 import seedu.address.model.admin.Admin;
 import seedu.address.model.admin.AdminSession;
 import seedu.address.model.admin.Password;
@@ -19,9 +21,14 @@ import seedu.address.model.admin.Username;
 import seedu.address.model.job.Job;
 import seedu.address.model.job.JobName;
 import seedu.address.model.job.Status;
+import seedu.address.model.job.exceptions.JobNotFoundException;
+import seedu.address.model.job.exceptions.JobOngoingException;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineName;
+import seedu.address.model.machine.MachineStatus;
 import seedu.address.model.machine.UniqueMachineList;
+import seedu.address.model.machine.exceptions.MachineDisabledException;
+import seedu.address.model.machine.exceptions.MachineNotFoundException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -83,6 +90,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      * {@code machines} must not contain duplicate machines
      */
     public void setMachines(List<Machine> machines) {
+
         this.machines.setMachines(machines);
     }
 
@@ -97,6 +105,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void setAdminsSession(AdminSession adminsSession) {
         if (adminsSession.isAdminLoggedIn()) {
             this.adminSession.setLogin(adminsSession.getLoggedInAdmin());
+        } else {
+            this.adminSession.clearLogin();
         }
     }
 
@@ -110,7 +120,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         setMachines(newData.getMachineList());
         setAdmins(newData.getAdminList());
         setAdminsSession(newData.getAdminSession());
-
     }
 
     //======================== person methods ================================//
@@ -237,6 +246,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(machine);
         return machines.containsSameNameMachine(machine);
     }
+
     /**
      * Adds a machine if {@code machine} does not exist in the list
      */
@@ -260,6 +270,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void flushMachine(Machine toFlushMachine) {
         requireNonNull(toFlushMachine);
         toFlushMachine.flushMachine();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(new JobMachineTuple(null, toFlushMachine)));
+
     }
 
     /**
@@ -272,6 +284,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void cleanMachine(Machine toCleanMachine) {
         requireNonNull(toCleanMachine);
         toCleanMachine.cleanMachine();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(new JobMachineTuple(null, toCleanMachine)));
     }
 
     /**
@@ -291,6 +304,13 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public Machine getMostFreeMachine() {
         return machines.getMostFreeMachine();
+    }
+
+    /**
+     * Returns the machine that has least time left in Queue that is not {@code otherThanMe}
+     */
+    public Machine getMostFreeMachine(Machine otherThanMe) {
+        return machines.getMostFreeMachine(otherThanMe);
     }
 
     /**
@@ -339,6 +359,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void removeJob(JobName job) {
         requireNonNull(job);
         machines.removeJobFromMachineList(job);
+
     }
 
     /**
@@ -366,12 +387,22 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     /**
      * Starts the job
+     * Job Must exist in AddressBook else throws nullpointer exception
      *
      * @param name
      */
     public void startJob(JobName name) {
         requireNonNull(name);
-        findJob(name).job.startJob();
+        JobMachineTuple target = findJob(name);
+        if (target.machine.getStatus() == MachineStatus.DISABLED) {
+            throw new MachineDisabledException();
+        }
+        if (target.machine.getJobs().stream().anyMatch(job -> job.getStatus() == Status.ONGOING)) {
+            throw new JobOngoingException();
+        }
+        target.job.startJob();
+        target.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(target));
     }
 
     /**
@@ -381,7 +412,10 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void cancelJob(JobName name) {
         requireNonNull(name);
-        findJob(name).job.cancelJob();
+        JobMachineTuple target = findJob(name);
+        target.job.cancelJob();
+        target.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(target));
     }
 
     /**
@@ -391,41 +425,107 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void restartJob(JobName name) {
         requireNonNull(name);
-        findJob(name).job.restartJob();
+        JobMachineTuple target = findJob(name);
+        target.job.restartJob();
+        target.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(target));
     }
 
     /**
      * Only admin can do this
      * Swaps the jobs with the given jobnames
      */
-
     public void swapJobs(JobName jobName1, JobName jobName2) {
         JobMachineTuple mj1 = findJob(jobName1);
         JobMachineTuple mj2 = findJob(jobName2);
+        if (mj1 == null || mj2 == null) {
+            throw new JobNotFoundException();
+        }
+        if (mj1.job.getStatus() == Status.ONGOING || mj1.job.getStatus() == Status.ONGOING) {
+            throw new JobOngoingException();
+        }
         mj1.machine.replaceJob(mj1.job, mj2.job);
         mj2.machine.replaceJob(mj2.job, mj1.job);
+        mj1.machine.reSortJobList();
+        mj2.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(mj2));
+    }
+
+    /**
+     * Only admin can do this
+     * Moves the job with the given jobnames to the machine with the give Machine Name
+     */
+    public void moveJob(JobName jobName, MachineName targetMachineName)
+        throws JobNotFoundException, MachineNotFoundException {
+        JobMachineTuple targetJobAndMachine = findJob(jobName);
+        if (targetJobAndMachine == null) {
+            throw new JobNotFoundException();
+        }
+        if (targetJobAndMachine.job.getStatus() == Status.ONGOING) {
+            throw new JobOngoingException();
+        }
+        Machine targetMachine = findMachine(targetMachineName);
+        if (targetMachine == null) {
+            throw new MachineNotFoundException();
+        }
+        //removing job from old machine
+        targetJobAndMachine.machine.removeJob(targetJobAndMachine.job);
+        targetJobAndMachine.machine.reSortJobList();
+        //updating job
+        targetJobAndMachine.job.setMachine(targetMachine.getName());
+        //adding to new Machine
+        targetMachine.addJob(targetJobAndMachine.job);
+        targetMachine.reSortJobList();
+        EventsCenter.getInstance()
+            .post(new FocusMachineRequestEvent(new JobMachineTuple(targetJobAndMachine.job, targetMachine)));
+    }
+
+    /**
+     * Only admin can do this
+     * shifts the order job with the given jobname within a machine
+     */
+    public void shiftJob(JobName jobName, int shiftBy) {
+        JobMachineTuple targetJobAndMachine = findJob(jobName);
+        if (targetJobAndMachine == null) {
+            throw new JobNotFoundException();
+        }
+        if (targetJobAndMachine.job.getStatus() == Status.ONGOING) {
+            throw new JobOngoingException();
+        }
+        //shifting
+        targetJobAndMachine.machine.shift(targetJobAndMachine.job, shiftBy);
+        targetJobAndMachine.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(targetJobAndMachine));
     }
 
     /**
      * Changes the status of the job to FINISHED
      *
-     * @param job
+     * @param target
      */
-    public void finishJob(Job job) {
-        requireNonNull(job);
-        job.finishJob();
+    public void finishJob(JobMachineTuple target) {
+        requireNonNull(target);
+        target.job.finishJob();
+        target.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(target));
     }
 
     /**
      * Request deletion of print job
      */
     public void requestDeletion(JobName jobName) {
-        Job toRequestDelete = findJob(jobName).job;
-        toRequestDelete.setStatus(Status.DELETING);
+        JobMachineTuple toRequestDelete = findJob(jobName);
+        toRequestDelete.job.setStatus(Status.DELETING);
+        toRequestDelete.machine.reSortJobList();
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(toRequestDelete));
     }
 
     public int getTotalNumberOfStoredJobs() {
         return getMachineList().stream().mapToInt(machine -> machine.getJobs().size()).sum();
+    }
+
+    public boolean isTopJob(JobName job) {
+        return machines.isTopJob(job);
     }
 
     //======================== get lists methods ===========================//
@@ -470,6 +570,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         return persons.asUnmodifiableObservableList().size() + " persons";
         // TODO: refine later
     }
+
 
     /**
      * list all the current's version data for addressbook

@@ -42,8 +42,8 @@ public class JobListPanel extends UiPart<Region> {
         };
 
         Timer timer = new Timer();
-        long delay = 2000;
-        long intervalPeriod = 2000;
+        long delay = 100;
+        long intervalPeriod = 100;
         timer.scheduleAtFixedRate(task, delay, intervalPeriod);
     }
 
@@ -54,14 +54,14 @@ public class JobListPanel extends UiPart<Region> {
     }
 
     private void setEventHandlerForSelectionChangeEvent() {
-        jobListView.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        logger.fine("Selection in job list panel changed to : '" + newValue + "'");
-                        raise(new JobPanelSelectionChangedEvent(newValue));
-                    }
-                });
+        jobListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                logger.fine("Selection in job list panel changed to : '" + newValue + "'");
+                raise(new JobPanelSelectionChangedEvent(newValue));
+            }
+        });
     }
+
 
     /**
      * Scrolls to the {@code JobCard} at the {@code index} and selects it.
