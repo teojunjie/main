@@ -1220,6 +1220,14 @@ These instructions only provide a starting point for testers to work on; testers
 . Initial launch
 
 .. Download the jar file and copy into an empty folder
+.. Download all the data files by navigating to the data folder from the root.
+Download all 3 files and save the data files in a folder called 'data' in the same directory
+in which you saved the jar file.
+The 'data' file should contain the 3 files below. So it should be,
+... data/addressBook.xml
+... data/makerManagerAdmins.xml
+... data/makerManagerMachines.xml
+
 .. Double-click the jar file +
    Expected view:
    ... Shows the GUI with a list of printers displayed horizontally where each column represents a printer
