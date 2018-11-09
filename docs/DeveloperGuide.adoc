@@ -72,6 +72,8 @@ If all is well, the following two steps should be trivial.
 . Run the `seedu.address.MainApp` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
+=== Loading sample data
+
 === Configurations to do before writing code
 Before you start messing around with the source code, here are some tools you might want to set up in order to tactfully handle a medium-sized project such as this.
 
