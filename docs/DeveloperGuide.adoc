@@ -12,7 +12,7 @@ ifdef::env-github[]
 :note-caption: :information_source:
 :warning-caption: :warning:
 endif::[]
-:repoURL: https://github.com/se-edu/addressbook-level4/tree/master
+:repoURL: https://github.com/CS2113-AY1819S1-T09-1/main
 
 By: `CS2113-AY1819S1-T09-1`      Since: `Sep 2018`      Licence: `MIT`
 
@@ -21,7 +21,6 @@ MakerManager is a free, open-source, desktop application for managing time-share
 MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
 MakerManager is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
 Check out the User Guide to quickly see what MakerManager is capable of.
-
 
 MakerManager is written in Java, under the Object-Oriented paradigm. There are lots of ways in which you can contribute to MakerManager: coding, testing, improving tools, or contributing to the documentation.
 This guide provides information that will help you get started in your intended direction, and we hope you'll find it useful regardless of whether you're a new software developer, or an experienced hand. Some preveious experience in software engineering in Java is assumed.
@@ -126,12 +125,12 @@ understand some of the design trade-offs made during the development of the appl
 
 [[Design-Architecture]]
 === Architecture
-Let us look at the abstracted view of the application in order to get a feel of how everything is connected together.
+This section is designed to illustrate and identify the abstracted view of the architecture used to implement MakerManager. This section also contains descriptions of the separate components and process view of the communication between said components.
 
 .Architecture Diagram
 image::Architecture.png[width="600"]
 
-The *_Architecture Diagram_* given above explains the high-level design of the App. Given below is a quick overview of each component.
+The *_Architecture Diagram_* given above explains the high-level design of the App. The Architecture system for the MakerManager is Event-driven Given below is a quick overview of each component.
 
 [TIP]
 The `.pptx` files used to create diagrams in this document can be found in the link:{repoURL}/docs/diagrams/[diagrams] folder. To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
@@ -148,10 +147,10 @@ The `.pptx` files used to create diagrams in this document can be found in the l
 
 The rest of the App consists of four components.
 
-* <<Design-Ui,*`UI`*>>: The UI of the App.
-* <<Design-Logic,*`Logic`*>>: The command executor.
-* <<Design-Model,*`Model`*>>: Holds the data of the App in-memory.
-* <<Design-Storage,*`Storage`*>>: Reads data from, and writes data to, the hard disk.
+* <<Design-Ui,*`UI`*>>: The User Interface (UI) of the application is what the user sees and interacts with.
+* <<Design-Logic,*`Logic`*>>: The command executor is the main driver of the program. It handles user input and reacts to them as needed.
+* <<Design-Model,*`Model`*>>: The Model holds the data of the Application in-memory. This is the central repository for all data.
+* <<Design-Storage,*`Storage`*>>: The Storage component reads data from, and writes data to, the non-volatile memory. This ensures our data is saved between sessions.
 
 Each of the four components
 
@@ -247,7 +246,7 @@ The `Model`,
 === Storage component
 
 .Structure of the Storage Component
-image::StorageComponentClassDiagram.png[width="800"]
+image::StorageComponentClassDiagramCompleted.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
 
@@ -274,6 +273,8 @@ This section describes some noteworthy details on how certain features are imple
 
 // tag::undoredo[]
 === Undo/Redo feature
+This section describes how undo/redo is implemented in MakerManager.
+
 ==== Current Implementation
 [[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
@@ -380,12 +381,87 @@ in their correct maker manager java objects.
 (See <<versionedaddressbook>>)
 // end::fileStorageSystem[]
 
-// tag::dataencryption[]
-=== [Proposed] Data Encryption
+// tag::administratormode[]
+=== Administrator Mode
+This section describes how MakerManager builds a layer of security around critical data and restricts manipulation of such sensitive
+information to respective administrators/managers of individual makerspaces.
 
-_{Explain here how the data encryption feature will be implemented}_
+==== Current Implementation
+The following commands are directly related to admins:
+login, logout, addAdmin, removeAdmin and updatePassword
+
+Our admin mode accommodates multiple admins, and ensures that there is at least one admin present.
+The admins are stored in a `UniqueAdminList()` in `versionedAddressBook`, with their usernames and passwords being
+securely stored in-Memory and in-file (for persistence).
+
+[NOTE]
+See `File Storage` section for relevant storage part, `Model Component` for `Admin` class model and the `Password Encryption`
+section for the discussion pertaining to the encryption.
+
+The two different access types are implemented with the help of an AdminSession object inside versionedAddressBook.
+This Object keeps track of whether someone is logged in, and if so, who is. The AdminSession object has the following methods for us to use:
+
+* setLogin() - gives admin privileges to the current user
+* clearLogin() - strips admin privileges of the current user
+* isAdminLoggedIn() - returns a boolean saying whether we are in admin mode
+* getLoggedInAdmin() - returns reference to the admin currently logged in
+
+[red]#The diagram below shows the admin-related section of the Model.#
+
+image::AdminModelClassDiagram.png[width:800]
+
+The following sequence diagram for login also applies to logout. We include this because it demonstrates how AdminSessions is used as well.
+
+[red]#The diagram below shows the sequence diagram for login.#
+
+image::SDforLogin.png[width:800]
+
+We can then use AdminSession to know whether an admin is logged in, before authorizing use of a command.
+
+[red]#The simple activity diagram below shows this.#
+
+image::ActivityDiagramForAdminCommand.png[width:800]
+
+==== Design Consideration
+The team debated on whether we should use a Singleton or not. We later decided not to use a Singleton since:
+. Singletons increase coupling
+. The system and the tests were already implemented without a singleton, and changing did not give any major pros.
+
+// end::administratormode[]
+
+// tag::dataencryption[]
+
+=== Password Encryption
+This section describes how MakerManager makes sure the administrator passwords are kept secure.
+
+==== Current Implementation
+The password is encrypted using salting and hashing. The low-level implementation of this is handled by the popular open
+source library jBcrypt. The library was chosen for having a fairly simple API for generating hashes and comparing
+passwords to stored hashes. The only two static methods used from the API were:
+
+. Bcrypt.hashPW() - generates an encrypted string from the raw text password
+. Bcrypt.checkPW() - verifies given password with stored hash
+
+Other than this, we also enforce password validation to make sure a moderately strong password is chosen by the admin when signing up.
+
+==== Design Considerations
+===== Aspect: Where to encrypt
+* **Alternative 1 (current choice):** Encrypt it as it is being added to in-Memory address book.
+** Pros: Hashing needs to be done only once, after going through ModelManager. Storage Manager does not change. Able to do password validation and prevent unnecessary computations.
+** Cons: The password information is unprotected as it passes through UI and Logic.
+* **Alternative 2:** Encrypt it in UI
+** Pros: More secure transfer of passwords through the pipeline.
+** Cons: UI is heavy, and may become slower if hashing is too taxing on the system.
 
 // end::dataencryption[]
+
+// tag::managejob[]
+=== Managing Prints
+*> Explain syntax choice*
+
+*> is there a design consideration? -> syntax
+
+// end::managejob[]
 
 === Logging
 
@@ -408,6 +484,10 @@ We are using `java.util.logging` package for logging. The `LogsCenter` class is 
 Certain properties of the application can be controlled (e.g App name, logging level) through the configuration file (default: `config.json`).
 
 == Documentation
+For any software, documentation is a must. In this project we maintain a developer guide and a user guide. The developer guide is mainly focused on letting people like you ease into
+development and maintenance of the software. The user guide is for clients trying to use the functionality we enable.
+
+As you can see, documentation is non-trivial and of utmost importance. We write this section for encouraging good documentation practices, even in agile teams like ours.
 
 We use asciidoc for writing documentation.
 
@@ -460,11 +540,6 @@ If set, the name will be displayed near the top of the page.
 Setting this will add a "View on GitHub" link in the navigation bar.
 |_not set_
 
-|`site-seedu`
-|Define this attribute if the project is an official SE-EDU project.
-This will render the SE-EDU navigation bar at the top of the page, and add some SE-EDU-specific navigation items.
-|_not set_
-
 |===
 
 [[Docs-PerFileDocSettings]]
@@ -485,9 +560,8 @@ Attributes left unset in `.adoc` files will use their *default value*, if any.
 |`site-section`
 |Site section that the document belongs to.
 This will cause the associated item in the navigation bar to be highlighted.
-One of: `UserGuide`, `DeveloperGuide`, ``LearningOutcomes``{asterisk}, `AboutUs`, `ContactUs`
+One of: `UserGuide`, `DeveloperGuide`, `AboutUs`, `ContactUs`
 
-_{asterisk} Official SE-EDU projects only_
 |_not set_
 
 |`no-site-header`
@@ -508,11 +582,15 @@ These template files are written in a mixture of https://www.ruby-lang.org[Ruby]
 ====
 Modifying the template files in link:{repoURL}/docs/templates[`docs/templates`] requires some knowledge and experience with Ruby and Asciidoctor's API.
 You should only modify them if you need greater control over the site's layout than what stylesheets can provide.
-The SE-EDU team does not provide support for modified template files.
+
 ====
 
 [[Testing]]
 == Testing
+Testing your program is an essential part of the development cycle. Testing ensures the correctness, functionality and usability of the app at every step of the way.
+This will help you catch regression bugs immediately and fix them with considerably much less hassle.
+
+This section helps you discover, run and write tests for effective development.
 
 === Running Tests
 
@@ -562,25 +640,31 @@ e.g. `seedu.address.logic.LogicManagerTest`
 * Solution: Execute Gradle task `processResources`.
 
 == Dev Ops
+This section will lay out the tools we used to make the development process easier and more fun. These tools were designed for efficient building, automated testing and deployment of releases
+in an agile team.
 
 === Build Automation
-
-See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build automation.
+Build automation refers to the process of compiling, packaging and testing a piece of software automatically.
+We use `Gradle` for this purpose. See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build automation.
 
 === Continuous Integration
+Continuous Integration (CI) is the process of automating the build and testing of code every time someone commits to the repository.
+This is a best-practice in the industry, as it helps isolated team members coordinate development efforts without a big hassle.
 
 We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
 
 === Coverage Reporting
-
+Test coverage is a measure used to describe the degree to which the source code is executed when the test suite is executed.
 We use https://coveralls.io/[Coveralls] to track the code coverage of our projects. See <<UsingCoveralls#, UsingCoveralls.adoc>> for more details.
 
 === Documentation Previews
 When a pull request has changes to asciidoc files, you can use https://www.netlify.com/[Netlify] to see a preview of how the HTML version of those asciidoc files will look like when the pull request is merged. See <<UsingNetlify#, UsingNetlify.adoc>> for more details.
 
 === Making a Release
+You would want to make an official release of your application when there is a usable product, which is significantly more capable/better than the previous release, if any.
+Regular releases are also an essential component of any agile team. This section teaches you how to create a new release.
 
-Here are the steps to create a new release.
+Here are the steps:
 
 .  Update the version number in link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
@@ -589,7 +673,8 @@ Here are the steps to create a new release.
 
 === Managing Dependencies
 
-A project often depends on third-party libraries. For example, Address Book depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives. +
+A project often depends on third-party libraries. For example, MakerManager depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives: +
+
 a. Include those libraries in the repo (this bloats the repo size) +
 b. Require developers to download those libraries manually (this creates extra work for developers)
 
@@ -1134,7 +1219,11 @@ These instructions only provide a starting point for testers to work on; testers
 
 .. Download the jar file and copy into an empty folder
 .. Double-click the jar file +
-   Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   Expected view:
+   ... Shows the GUI with a list of printers displayed horizontally where each column represents a printer
+   with print jobs assigned to it.
+   ... These printers are already pre-added to the maker manager local database.
+   ... The window size may not be optimum.
 
 . Saving window preferences
 
@@ -1144,24 +1233,31 @@ These instructions only provide a starting point for testers to work on; testers
 
 _{ more test cases ... }_
 
-=== Deleting a person [ Legacy: will be changed when jobs/machines are functional ]
+=== Adding a print Job to an _available_ machine
 
-. Deleting a person while all persons are listed
+. Adding a print job when all machines are listed
+.. Prerequistes: List all machines using the 'listMachines' command to view all the machines that are
+currently _available_ and _enabled_ in the system
+...  Test case 1:
 
-.. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
-.. Test case: `delete 1` +
-   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-.. Test case: `delete 0` +
-   Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
-.. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size) _{give more}_ +
-   Expected: Similar to previous.
+    addJob n/spectacleframe m/ultimaker on/Jimmy pr/NORMAL d/0.03 jn/For a Friend t/personal
 
-_{ more test cases ... }_
+    Expected :
+    A print job named spectacleframe will be added to the column under ultimaker at the bottom of the queue.
 
-=== Saving data
+... Test case 2 :
 
-. Dealing with missing/corrupted data files
+    addJob n/phonecase m/AUTO on/George pr/NORMAL d/0.1 jn/New phonecase for new phone t/personal
 
-.. _{explain how to simulate a missing/corrupted file and the expected behavior}_
+    Expected :
+    A print job named phonecase will be added to the 'Most Free Machine' in the maker manager system
+    ** Most free machine represents the machine with the least time until released.
 
-_{ more test cases ... }_
+... Test case 3 :
+
+    addJob n/buildingmodel m/nosuchmachine on/Jerry pr/URGENT d/1 jn/for Final year project t/SchoolProject
+
+    Expected :
+    No job will be added to any machine. Error will be shown in result box as "Machine specified does not exist"
+
+

@@ -12,12 +12,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.ComponentManager;
+import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.JobMachineTuple;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.AdminListChangedEvent;
 import seedu.address.commons.events.model.JobListChangedEvent;
 import seedu.address.commons.events.model.MachineListChangedEvent;
+import seedu.address.commons.events.ui.AdminLoginEvent;
+import seedu.address.commons.events.ui.AdminLogoutEvent;
 import seedu.address.model.admin.Admin;
 import seedu.address.model.admin.Username;
 import seedu.address.model.job.Job;
@@ -353,11 +356,13 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public void setLogin(Admin admin) {
         versionedAddressBook.setLoggedInAdmin(admin);
+        EventsCenter.getInstance().post(new AdminLoginEvent());
     }
 
     @Override
     public void clearLogin() {
         versionedAddressBook.clearLogin();
+        EventsCenter.getInstance().post(new AdminLogoutEvent());
     }
 
     @Override
