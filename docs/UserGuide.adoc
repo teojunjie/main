@@ -97,6 +97,11 @@ The examples in this guide are formatted with the following conventions:
 * Words in upper-case are parameters supplied by you
 
 ====
+*Loading Sample Data*
+====
+Tailor examples in the guide for Sample data
+
+====
 *What You Can Do with MakerManager*
 ====
 For the following commands, you can execute them by typing the example in the Command Box and pressing kbd:[Enter].
