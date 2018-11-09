@@ -73,6 +73,18 @@ If all is well, the following two steps should be trivial.
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Loading sample data
+.  Ensure you have Java version `9` or later installed on your Computer. If you don't have JRE installed, you can use https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB[this link] as a reference.
+.  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
+.  Copy the jar file to the folder you want to use as the home folder for your MakerManager.
+.  Download the `DemoDataV1.4.zip` (You can find it in the root directory of the repository link:{repoURL}[here].
+.  Unzip and save the 3 xml data files in a folder called 'data' in the same directory
+in which you saved the jar file on your computer.
+The 'data' file should contain the 3 files below. So it should be,
+... data/addressBook.xml
+... data/makerManagerAdmins.xml
+... data/makerManagerMachines.xml
+. Double-click on the jar file to start the app. The GUI should appear in a few seconds.
+
 
 === Configurations to do before writing code
 Before you start messing around with the source code, here are some tools you might want to set up in order to tactfully handle a medium-sized project such as this.
