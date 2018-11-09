@@ -16,6 +16,8 @@ endif::[]
 
 By: `NUSCS2113-AY1819S1-T09-1`      Since: `Sep 2018`      Licence: `MIT`
 
+// tag::intro[]
+
 Welcome to the _MakerManager_ User Guide! Choose a topic from the Table of Contents below, get step-by-step instructions, and develop makerspace management skills.
 If you are a first time visitor, we suggest you follow this short document top-to-bottom to get the most out of it.
 
@@ -29,6 +31,8 @@ MakerManager is meant for makers, and thus is optimized for people comfortable w
 This guide gives you a brief overview about setting-up and using MakerManager. MakerManager v1.4 is available for Windows, MacOS and Linux.
 
 Still with us? Great! Jump to the Section 2, “Quick Start” to get started. Enjoy!
+
+// end::intro[]
 
 == Quick Start
 This section shows you how to fire up MakerManager and get a feel of how to use it.
@@ -113,6 +117,7 @@ Outcome: You will see a window pop up with the user guide in it for quick refere
 The administrator mode is present to prevent malicious users from harming other users' workflow easily. Only the administrator is allowed to make drastic changes to the application and its data. +
 The commands listed below will only work in admin mode. The list is non-exhaustive, and you will find more admin-specific commands later on. +
 
+// tag::adminMode[]
 
 .. *Login* +
 Enables admin mode in MakerManager. +
@@ -158,6 +163,8 @@ NEW_PW has to match the same validation criteria as the one specified in addAdmi
     Format: <updatePassword> USERNAME OLD_PW NEW_PW NEW_PW_VERIFY
 
     Example: updatePassword saif 123Abcd$ 456Wasd= 456Wasd=
+
+// end::adminMode[]
 
 // tag::addMachine[]
 . *Add Machine (Admin Only)* +
@@ -400,6 +407,7 @@ Outcome: The UI will close, and not be available anymore until the next time you
 . *Saving Data* +
 MakerManager data are saved in the hard disk automatically after any command that changes the data.There is no need to save manually.
 
+// tag::faq[]
 
 == FAQ
 *Q:* How do I transfer my data to another Computer? +
@@ -417,6 +425,8 @@ Normally, it will be located in the `data/` folder in the `root` directory.
 
 *Q:* Can I use your source code? +
 *A:* This work is under the MIT license. So Feel free to fork the repo and develop it on your own while adhearing to the license constraints. Check out the `Developer Guide` for getting started.
+
+// end::faq[]
 
 == Command Summary
 This is a nifty little list you can print and paste somewhere for quick reference. +
@@ -450,6 +460,7 @@ This is a nifty little list you can print and paste somewhere for quick referenc
 . listJobs
 . exit
 
+// tag::upcoming[]
 
 == Upcoming Features
 . More robust data security and integrity by incorporating a Database system
@@ -459,5 +470,8 @@ This is a nifty little list you can print and paste somewhere for quick referenc
 . Online MakerManager, so you can do all these from the comfort of your home.
 . Integration with OctoPrint, so that prints can be started remotely!
 . Automatically calculate duration of print from different Printer APIs.
+. Hide Passwords when signing-up or logging-in
 
 We're excited! Are you?
+
+// end::upcoming[]
