@@ -20,10 +20,12 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.job.Job;
+import seedu.address.model.job.Status;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineName;
 import seedu.address.model.machine.MachineStatus;
 import seedu.address.model.tag.Tag;
+
 
 /**
  * Edits the details of an existing machine in the address book.
@@ -32,11 +34,12 @@ public class EditMachineCommand extends Command {
 
     public static final String COMMAND_WORD = "editMachine";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the Machine identified "
-        + "by machine name. "
-        + "Existing values will be overwritten by the input values.\n" + "Parameters: MACHINE_NAME " + "[" + PREFIX_NAME
-        + "NAME] " + "[" + PREFIX_MACHINE_STATUS + "MACHINE_STATUS] " + "[" + PREFIX_TAG + "TAG]...\n" + "Example: "
-        + COMMAND_WORD + " MyPrinter " + PREFIX_NAME + "YourPrinter " + PREFIX_MACHINE_STATUS + "ENABLED";
+    public static final String MESSAGE_USAGE =
+        COMMAND_WORD + ": Edits the details of the Machine identified " + "by machine name. "
+            + "Existing values will be overwritten by the input values.\n" + "Parameters: MACHINE_NAME " + "["
+            + PREFIX_NAME + "NAME] " + "[" + PREFIX_MACHINE_STATUS + "MACHINE_STATUS] " + "[" + PREFIX_TAG + "TAG]...\n"
+            + "Example: " + COMMAND_WORD + " MyPrinter " + PREFIX_NAME + "YourPrinter " + PREFIX_MACHINE_STATUS
+            + "ENABLED";
 
     public static final String MESSAGE_EDIT_MACHINE_SUCCESS = "Edited Machine: %1$s";
     public static final String MESSAGE_MACHINE_NOT_FOUND = "Machine does not exist";
@@ -47,6 +50,7 @@ public class EditMachineCommand extends Command {
     public static final String MESSAGE_NO_CHANGES_DETECTED = "No changes detected";
     private static final String MESSAGE_ACCESS_DENIED =
         "Non-admin user is not allowed to edit a machine in maker manager";
+    private static final String MESSAGE_ONGOING_JOB = "Cannot edit Machine with ongoing Job.";
     private final MachineName machineName;
     private final EditMachineDescriptor editMachineDescriptor;
 
@@ -63,7 +67,8 @@ public class EditMachineCommand extends Command {
         this.editMachineDescriptor = new EditMachineDescriptor(editMachineDescriptor);
     }
 
-    @Override public CommandResult execute(Model model, CommandHistory history) throws CommandException {
+    @Override
+    public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
         if (!model.isLoggedIn()) {
@@ -74,6 +79,10 @@ public class EditMachineCommand extends Command {
 
         if (machineToEdit == null) {
             throw new CommandException(MESSAGE_MACHINE_NOT_FOUND);
+        }
+
+        if (machineToEdit.getJobs().stream().anyMatch(jobs -> jobs.getStatus() == Status.ONGOING)) {
+            throw new CommandException(MESSAGE_ONGOING_JOB);
         }
 
         Machine editedMachine = createEditedMachine(machineToEdit, editMachineDescriptor);
@@ -109,7 +118,8 @@ public class EditMachineCommand extends Command {
         return new Machine(updatedName, updatedJobs, updatedTags, updatedStatus);
     }
 
-    @Override public boolean equals(Object other) {
+    @Override
+    public boolean equals(Object other) {
         // short circuit if same object
         if (other == this) {
             return true;
@@ -207,7 +217,8 @@ public class EditMachineCommand extends Command {
             return Optional.ofNullable(status);
         }
 
-        @Override public boolean equals(Object other) {
+        @Override
+        public boolean equals(Object other) {
             // short circuit if same object
             if (other == this) {
                 return true;

@@ -8,11 +8,17 @@ import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.core.JobMachineTuple;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.ui.FocusMachineRequestEvent;
 import seedu.address.model.job.Job;
 import seedu.address.model.job.JobName;
+import seedu.address.model.job.Status;
 import seedu.address.model.job.exceptions.JobNotFoundException;
+import seedu.address.model.job.exceptions.JobOngoingException;
 import seedu.address.model.machine.exceptions.DuplicateMachineException;
+import seedu.address.model.machine.exceptions.MachineDisabledException;
 import seedu.address.model.machine.exceptions.MachineNotFoundException;
 
 
@@ -49,8 +55,11 @@ public class UniqueMachineList {
         if (!machinesAreUnique(machines)) {
             throw new DuplicateMachineException();
         }
-
-        internalList.setAll(machines);
+        List<Machine> temp = FXCollections.observableArrayList();
+        for (Machine machine : machines) {
+            temp.add(new Machine(machine));
+        }
+        internalList.setAll(temp);
     }
 
     /**
@@ -91,7 +100,7 @@ public class UniqueMachineList {
     /**
      * Adds a job the machine {@code target} jobs list
      */
-    public void addJobToMachineList(Job job) throws MachineNotFoundException {
+    public void addJobToMachineList(Job job) throws MachineNotFoundException, MachineDisabledException {
         requireAllNonNull(job);
 
         Machine target = this.findMachine(job.getMachineName());
@@ -100,7 +109,11 @@ public class UniqueMachineList {
             throw new MachineNotFoundException();
         }
 
+        if (target.getStatus() == MachineStatus.DISABLED) {
+            throw new MachineDisabledException();
+        }
         target.addJob(job);
+        EventsCenter.getInstance().post(new FocusMachineRequestEvent(new JobMachineTuple(job, target)));
     }
 
     /**
@@ -112,11 +125,14 @@ public class UniqueMachineList {
         for (Machine m : internalList) {
             Job query = m.findJob(job);
             if (query != null) {
+                if (query.getStatus() == Status.ONGOING) {
+                    throw new JobOngoingException();
+                }
                 m.removeJob(query);
+                EventsCenter.getInstance().post(new FocusMachineRequestEvent(new JobMachineTuple(query, m)));
                 return;
             }
         }
-
         throw new JobNotFoundException();
     }
 
@@ -152,6 +168,10 @@ public class UniqueMachineList {
      * Returns the backing list as an unmodifiable {@code ObservableList}
      */
     public ObservableList<Machine> asUnmodifiableObservableList() {
+        ObservableList<Machine> listCopy = FXCollections.observableArrayList();
+        for (Machine machine : internalList) {
+            //listCopy.add(machine.clone())
+        }
         return FXCollections.unmodifiableObservableList(internalList);
     }
 
@@ -170,17 +190,43 @@ public class UniqueMachineList {
     }
 
     public Machine getMostFreeMachine() {
+        return getMostFreeMachine(null);
+    }
+
+    public Machine getMostFreeMachine(Machine otherThanMe) {
         long minimumTime = Long.MAX_VALUE;
         Machine mostFreeMachine = null;
 
         for (Machine machine : internalList) {
-            if (machine.getTotalDuration() < minimumTime) {
+            if ((machine.getTotalDuration() < minimumTime) && (machine.getStatus().equals(MachineStatus.ENABLED))
+                && !(machine == otherThanMe)) {
                 minimumTime = machine.getTotalDuration();
                 mostFreeMachine = machine;
             }
         }
 
-        return mostFreeMachine;
+        if (mostFreeMachine != null) {
+            return mostFreeMachine;
+        } else {
+            throw new MachineNotFoundException();
+        }
+    }
+
+    /**
+     * Returns true if any machine has job at the front of the queue
+     *
+     * @param job
+     */
+    public boolean isTopJob(JobName job) {
+        for (Machine m : internalList) {
+            if (m.getJobs().isEmpty()) {
+                continue;
+            }
+            if (m.getJobs().get(0).getJobName().equals(job)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -9,11 +9,12 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <GridPane HBox.hgrow="ALWAYS">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="250" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="350" />
         </columnConstraints>
         <VBox minHeight="105" GridPane.columnIndex="0">
             <padding>
@@ -60,6 +61,11 @@
                     <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                 </VBox.margin>
             </Label>
+
+            <HBox fillHeight="true">
+                <ProgressBar fx:id="progressBar"/>
+                <ProgressIndicator fx:id="progressIndicator"/>
+            </HBox>
         </VBox>
         <rowConstraints>
             <RowConstraints />

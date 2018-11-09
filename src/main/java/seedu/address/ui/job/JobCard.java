@@ -2,11 +2,12 @@ package seedu.address.ui.job;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.job.Job;
-import seedu.address.model.job.Priority;
 import seedu.address.model.job.Status;
 import seedu.address.ui.UiPart;
 import seedu.address.ui.machine.MachineCard;
@@ -47,6 +48,10 @@ public class JobCard extends UiPart<Region> {
     private Label jobDescription;
     @FXML
     private Label jobDuration;
+    @FXML
+    private ProgressBar progressBar;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     public JobCard(Job job, int displayIndex) {
         super(FXML);
@@ -75,33 +80,19 @@ public class JobCard extends UiPart<Region> {
         jobStartTime.getChildren().add(startTimeLabel);
         jobStartTime.setHgap(2);
 
-        if (job.getPriority() == Priority.URGENT) {
-            priorityLabel.setStyle(
-                "-fx-font: 14 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #b71c1c;" + "-fx-padding: 2;"
-                    + "-fx-text-alignment: center");
-        }
+        setPriorityColor(priorityLabel);
+        setStatusColor(statusLabel);
 
-        if (job.getPriority() == Priority.HIGH) {
-            priorityLabel.setStyle(
-                "-fx-font: 14 arial;" + "-fx-text-fill: #000000;" + "-fx-background-color: #ffca28;" + "-fx-padding: 2;"
-                    + "-fx-text-alignment: center");
-        }
-        if (job.getPriority() == Priority.NORMAL) {
-            priorityLabel.setStyle(
-                "-fx-font: 14 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #00897b;" + "-fx-padding: 2;"
-                    + "-fx-text-alignment: center");
-        }
         tags.getChildren().add(priorityLabel);
-
-        statusLabel.setStyle(
-            "-fx-font: 12 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #a1887f;" + "-fx-padding: 2;"
-                + "-fx-text-alignment: center");
         tags.getChildren().add(statusLabel);
 
         job.getTags().forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
 
         jobDescription.setText(job.getJobNote().toString());
-        jobDuration.setText("Time Remaining: " + job.getReadableDurationString());
+        jobDuration.setText("Duration: " + job.getReadableDurationString());
+
+
+        setProgress(job.getPercentageCompletion());
 
 
         /* No longer need request deletion it goes under status now.
@@ -136,5 +127,73 @@ public class JobCard extends UiPart<Region> {
         // state check
         JobCard jobCard = (JobCard) other;
         return job.equals(jobCard.job);
+    }
+
+    private void setPriorityColor(Label label) {
+        switch (job.getPriority()) {
+        case URGENT:
+            label.setStyle(
+                "-fx-font: 14 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #b71c1c;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+            break;
+        case HIGH:
+            label.setStyle(
+                "-fx-font: 14 arial;" + "-fx-text-fill: #000000;" + "-fx-background-color: #ffca28;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+            break;
+        case NORMAL:
+        default:
+            label.setStyle(
+                "-fx-font: 14 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #00897b;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+
+        }
+    }
+
+
+    private void setStatusColor(Label label) {
+        switch (job.getStatus()) {
+        case ONGOING:
+            label.setStyle("-fx-font: 12 arial;" + "-fx-text-fill: rgb(255,255,255);" + "-fx-background-color: #43b581;"
+                + "-fx-padding: 2;" + "-fx-text-alignment: center");
+            break;
+        case QUEUED:
+            label.setStyle(
+                "-fx-font: 12 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #bc7000;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+            break;
+        case DELETING:
+            label.setStyle(
+                "-fx-font: 12 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #a12b2f;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+            break;
+        case FINISHED:
+            label.setStyle(
+                "-fx-font: 12 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #7289da;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+            break;
+        case CANCELLED:
+        default:
+            label.setStyle(
+                "-fx-font: 12 arial;" + "-fx-text-fill: #ffffff;" + "-fx-background-color: #839090;" + "-fx-padding: 2;"
+                    + "-fx-text-alignment: center");
+        }
+    }
+
+    private void setProgress(float progress) {
+        switch (job.getStatus()) {
+        case ONGOING:
+            progressBar.setProgress(job.getPercentageCompletion());
+            progressIndicator.setProgress(job.getPercentageCompletion());
+            break;
+        case FINISHED:
+            progressBar.setProgress(1);
+            progressIndicator.setProgress(1);
+            break;
+        default:
+            progressBar.setProgress(0);
+            progressIndicator.setProgress(0);
+        }
+
     }
 }

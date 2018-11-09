@@ -1,20 +1,17 @@
 package seedu.address.logic.parser.queue;
 
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_MACHINE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.queue.SwapJobsCommand;
 import seedu.address.logic.parser.ArgumentMultimap;
-import seedu.address.logic.parser.ArgumentTokenizer;
 import seedu.address.logic.parser.Parser;
 import seedu.address.logic.parser.Prefix;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.job.JobName;
 
 /**
  * Parses input arguments and creates a new SwapJobCommand object
@@ -27,32 +24,30 @@ public class SwapJobsCommandParser implements Parser<SwapJobsCommand> {
     /**
      * Parses the given {@code userInput} of arguments in the context
      * of SwapJobsCommandParser and returns a SwapJobCommand object
+     *
      * @throws ParseException if the user input does not conform to the expected
-     * format
+     *                        format
      */
     public SwapJobsCommand parse(String userInput) throws ParseException {
         logger.info("User input : " + userInput);
-        ArgumentMultimap argMultiMap =
-                ArgumentTokenizer.tokenize(userInput, PREFIX_NAME, PREFIX_MACHINE);
-
-
-        if (!arePrefixesPresent(argMultiMap, PREFIX_NAME, PREFIX_MACHINE)
-                || !argMultiMap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    SwapJobsCommand.MESSAGE_USAGE));
+        String trimmedArgs = userInput.trim();
+        if (trimmedArgs.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SwapJobsCommand.MESSAGE_USAGE));
         }
 
-        Optional<String> jobName1 = argMultiMap.getValue(PREFIX_NAME);
-        Optional<String> jobName2 = argMultiMap.getValue(PREFIX_MACHINE);
+        String[] temp = trimmedArgs.split(" ");
 
-
-        if (!jobName1.isPresent() || !jobName2.isPresent()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    SwapJobsCommand.MESSAGE_USAGE));
+        if (temp.length < 2) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SwapJobsCommand.MESSAGE_USAGE));
         }
 
-
-        return new SwapJobsCommand(jobName1.get(), jobName2.get());
+        try {
+            String jobName1 = temp[0];
+            String jobName2 = temp[1];
+            return new SwapJobsCommand(jobName1, jobName2);
+        } catch (IllegalArgumentException ile) {
+            throw new ParseException(JobName.MESSAGE_JOBNAME_CONSTRAINTS);
+        }
     }
 
 

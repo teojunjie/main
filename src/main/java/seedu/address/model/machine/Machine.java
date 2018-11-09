@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_JOBS;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +32,7 @@ public class Machine {
      */
     public static final String NAME_VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
     public static final String MESSAGE_NAME_CONSTRAINTS =
-        "Names should only contain alphanumeric characters and spaces, " + "and it should not be blank";
+        "Machine Names should only contain alphanumeric characters and spaces, " + "and it should not be blank";
     public static final String MESSAGE_WRONG_STATUS =
         "Status can only contain 'ENABLED' or 'DISABLED'" + "and should not be blank";
     // Identity fields
@@ -57,6 +58,14 @@ public class Machine {
         this.tags.addAll(tags);
         this.status = status;
         this.filteredJobs = new FilteredList<>(this.jobs.asUnmodifiableObservableList());
+
+    }
+
+    public Machine(Machine toBeCopied) {
+        this(toBeCopied.getName(), new ArrayList<Job>(), toBeCopied.tags, toBeCopied.status);
+        for (Job job : toBeCopied.getJobs()) {
+            this.jobs.add(new Job(job));
+        }
     }
 
     /**
@@ -101,8 +110,7 @@ public class Machine {
      */
 
     public boolean hasSameMachineParameters(Machine otherMachine) {
-        return otherMachine.getName().equals(getName())
-            && otherMachine.getStatus().equals(getStatus());
+        return otherMachine.getName().equals(getName()) && otherMachine.getStatus().equals(getStatus());
     }
 
     /**
@@ -110,9 +118,8 @@ public class Machine {
      * This defines a weaker notion of equality between two machines.
      */
     public boolean isSameMachine(Machine otherMachine) {
-        return otherMachine != null
-            && otherMachine.getName().equals(getName())
-            && otherMachine.getJobs().equals(getJobs());
+        return otherMachine != null && otherMachine.getName().equals(getName()) && otherMachine.getJobs()
+            .equals(getJobs());
     }
 
     public void setMachineStatus(MachineStatus machineStatus) throws InvalidMachineStatusException {
@@ -139,10 +146,8 @@ public class Machine {
         }
 
         Machine otherMachine = (Machine) other;
-        return otherMachine.getName().equals(getName())
-            && otherMachine.getStatus().equals(getStatus())
-            && otherMachine.getJobs().equals(getJobs())
-            && otherMachine.getTags().equals(getTags());
+        return otherMachine.getName().equals(getName()) && otherMachine.getStatus().equals(getStatus()) && otherMachine
+            .getJobs().equals(getJobs()) && otherMachine.getTags().equals(getTags());
     }
 
     @Override
@@ -186,6 +191,10 @@ public class Machine {
         return jobs.findJob(jobName);
     }
 
+    public void reSortJobList() {
+        jobs.reSortList();
+    }
+
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
@@ -209,6 +218,7 @@ public class Machine {
     public boolean hasCleanableJobs() {
         return jobs.hasCleanableJobs();
     }
+
     /**
      * Returns true if the machine contains
      * {@code job} in its list;
@@ -250,6 +260,10 @@ public class Machine {
         jobs.replaceJob(jobToBeReplaced, replaceWith);
     }
 
+    public void shift(Job toShift, int shiftBy) {
+        jobs.shift(toShift, shiftBy);
+    }
+
     /**
      * Flushes all jobs from machine
      */
@@ -264,5 +278,4 @@ public class Machine {
     public void cleanMachine() {
         jobs.cleanJobs();
     }
-
 }

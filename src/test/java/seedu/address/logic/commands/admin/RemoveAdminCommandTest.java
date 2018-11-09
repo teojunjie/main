@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.JobMachineTuple;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -177,7 +178,7 @@ public class RemoveAdminCommandTest {
         }
 
         @Override
-        public void finishJob(Job job) {
+        public void finishJob(JobMachineTuple job) {
 
         }
 
@@ -192,12 +193,16 @@ public class RemoveAdminCommandTest {
         }
 
         @Override
+        public boolean isTopJob(JobName job) {
+            return false;
+        }
+
         public void moveJobToMachine(Job job, Machine targetMachine) {
 
         }
 
         @Override
-        public void autoMoveJobs(Machine currentMachine, Machine targetMachine) {
+        public void autoMoveJobsDuringFlush(Machine currentMachine) {
 
         }
 
@@ -207,7 +212,7 @@ public class RemoveAdminCommandTest {
         }
 
         @Override
-        public Job findJob(JobName name) {
+        public JobMachineTuple findJob(JobName name) {
             return null;
         }
 
@@ -248,6 +253,11 @@ public class RemoveAdminCommandTest {
 
         @Override
         public Machine getMostFreeMachine() {
+            return null;
+        }
+
+        @Override
+        public Machine getMostFreeMachine(Machine otherThanMe) {
             return null;
         }
 
@@ -390,6 +400,16 @@ public class RemoveAdminCommandTest {
 
         @Override
         public boolean isUndoLogin() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void shiftJob(JobName jobName, int shiftBy) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void moveJob(JobName jobName, MachineName targetMachineName) {
             throw new AssertionError("This method should not be called.");
         }
     }
