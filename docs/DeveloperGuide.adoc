@@ -387,8 +387,7 @@ This section describes how MakerManager builds a layer of security around critic
 information to respective administrators/managers of individual makerspaces.
 
 ==== Current Implementation
-
-*> Explain isLogged() and how we check login status*
+The two different access types are implemented with the help of an AdminSession object inside
 
 *> insert admin class diagram*
 

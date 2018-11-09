@@ -31,7 +31,7 @@ In short, MakerManager can be used to:
 * *Major enhancement*: added commands for managing prints
 ** What it does: allows users to manage prints in general, including starting, restarting, cancelling and deleting prints.
 ** Justification: This feature is the core of the software, as the whole point of the software is to have a dynamic queue that users can leverage on to plan their own prints.
-* *Minor enhancement*: File to In-Memory load of data
+* *Minor enhancement*: Memory-to-File transfer of data modifications for separate files
 * *Minor enhancement*: Bug reports and fixes
 
 * *Code contributed*: https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=psyf[Code Dashboard by Reposense]
