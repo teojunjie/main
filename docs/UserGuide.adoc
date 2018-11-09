@@ -40,7 +40,14 @@ This section shows you how to fire up MakerManager and get a feel of how to use 
 .  Ensure you have Java version `9` or later installed on your Computer. If you don't have JRE installed, you can use https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB[this link] as a reference.
 .  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
 .  Copy the jar file to the folder you want to use as the home folder for your MakerManager.
-.  Double-click on the jar file to start the app. The GUI should appear in a few seconds.
+.  Download the `DemoDataV1.4.zip` (You can find it in the root directory of the repository link:{repoURL}[here].
+.  Unzip and save the 3 xml data files in a folder called 'data' in the same directory
+in which you saved the jar file on your computer.
+The 'data' file should contain the 3 files below. So it should be,
+... data/addressBook.xml
+... data/makerManagerAdmins.xml
+... data/makerManagerMachines.xml
+. Double-click on the jar file to start the app. The GUI should appear in a few seconds.
 +
 image::Ui.png[width="790"]
 +
@@ -95,6 +102,11 @@ The examples in this guide are formatted with the following conventions:
 * All other arguments are required for a valid command execution
 * Every argument may be subject to further validation by the parser before execution. Users will get feedback if the input is not conforming to rules.
 * Words in upper-case are parameters supplied by you
+
+====
+*Loading Sample Data*
+====
+Tailor examples in the guide for Sample data
 
 ====
 *What You Can Do with MakerManager*

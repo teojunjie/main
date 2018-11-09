@@ -72,6 +72,8 @@ If all is well, the following two steps should be trivial.
 . Run the `seedu.address.MainApp` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
+=== Loading sample data
+
 === Configurations to do before writing code
 Before you start messing around with the source code, here are some tools you might want to set up in order to tactfully handle a medium-sized project such as this.
 
@@ -1218,8 +1220,19 @@ These instructions only provide a starting point for testers to work on; testers
 . Initial launch
 
 .. Download the jar file and copy into an empty folder
+.. Download the data files by downloading the DemoDataV1.4.zip from the root.
+Unzip and save the data files in a folder called 'data' in the same directory
+in which you saved the jar file on your computer.
+The 'data' file should contain the 3 files below. So it should be,
+... data/addressBook.xml
+... data/makerManagerAdmins.xml
+... data/makerManagerMachines.xml
 .. Double-click the jar file +
-   Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   Expected view:
+   ... Shows the GUI with a list of printers displayed horizontally where each column represents a printer
+   with print jobs assigned to it.
+   ... These printers are already pre-added to the maker manager local database.
+   ... The window size may not be optimum.
 
 . Saving window preferences
 
@@ -1229,24 +1242,31 @@ These instructions only provide a starting point for testers to work on; testers
 
 _{ more test cases ... }_
 
-=== Deleting a person [ Legacy: will be changed when jobs/machines are functional ]
+=== Adding a print Job to an _available_ machine
 
-. Deleting a person while all persons are listed
+. Adding a print job when all machines are listed
+.. Prerequistes: List all machines using the 'listMachines' command to view all the machines that are
+currently _available_ and _enabled_ in the system
+...  Test case 1:
 
-.. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
-.. Test case: `delete 1` +
-   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-.. Test case: `delete 0` +
-   Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
-.. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size) _{give more}_ +
-   Expected: Similar to previous.
+    addJob n/spectacleframe m/ultimaker on/Jimmy pr/NORMAL d/0.03 jn/For a Friend t/personal
 
-_{ more test cases ... }_
+    Expected :
+    A print job named spectacleframe will be added to the column under ultimaker at the bottom of the queue.
 
-=== Saving data
+... Test case 2 :
 
-. Dealing with missing/corrupted data files
+    addJob n/phonecase m/AUTO on/George pr/NORMAL d/0.1 jn/New phonecase for new phone t/personal
 
-.. _{explain how to simulate a missing/corrupted file and the expected behavior}_
+    Expected :
+    A print job named phonecase will be added to the 'Most Free Machine' in the maker manager system
+    ** Most free machine represents the machine with the least time until released.
 
-_{ more test cases ... }_
+... Test case 3 :
+
+    addJob n/buildingmodel m/nosuchmachine on/Jerry pr/URGENT d/1 jn/for Final year project t/SchoolProject
+
+    Expected :
+    No job will be added to any machine. Error will be shown in result box as "Machine specified does not exist"
+
+

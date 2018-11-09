@@ -11,6 +11,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.ui.FocusMachineRequestEvent;
 import seedu.address.commons.events.ui.JumpToListRequestEvent;
 import seedu.address.commons.events.ui.MachinePanelSelectiononChangedEvent;
 import seedu.address.model.machine.Machine;
@@ -63,6 +64,12 @@ public class MachineListPanel extends UiPart<Region> {
     private void handleJumpToListRequestEvent(JumpToListRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         scrollTo(event.targetIndex);
+    }
+
+    @Subscribe
+    private void handleFocusMachineRequest(FocusMachineRequestEvent event) {
+        machineListView.refresh();
+        scrollTo(machineListView.getItems().indexOf(event.getMachineAndJobToFocus().machine));
     }
 
     /**

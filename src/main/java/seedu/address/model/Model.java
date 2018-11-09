@@ -3,6 +3,8 @@ package seedu.address.model;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.JobMachineTuple;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.admin.Admin;
 import seedu.address.model.admin.Username;
 import seedu.address.model.job.Job;
@@ -61,7 +63,7 @@ public interface Model {
 
     void updateJob(Job oldJob, Job updatedJob);
 
-    Job findJob(JobName name);
+    JobMachineTuple findJob(JobName name);
 
     boolean hasJob(Job job);
 
@@ -86,7 +88,11 @@ public interface Model {
 
     void swapJobs(JobName jobname1, JobName jobName2);
 
-    void finishJob(Job job);
+    void moveJob(JobName jobName, MachineName targetMachineName);
+
+    void shiftJob(JobName jobName, int shiftBy);
+
+    void finishJob(JobMachineTuple target);
 
     void requestDeletion(JobName jobName);
 
@@ -94,9 +100,12 @@ public interface Model {
 
     void moveJobToMachine(Job job, Machine targetMachine);
 
-    void autoMoveJobs(Machine currentMachine, Machine targetMachine);
+    void autoMoveJobsDuringFlush(Machine currentMachine) throws CommandException;
 
     // ============================== Machine methods ======================================= //
+
+    boolean isTopJob(JobName job);
+
     /**
      * Adds the given machine
      * Machine must not exists
@@ -150,6 +159,12 @@ public interface Model {
      * @return Machine
      */
     Machine getMostFreeMachine();
+    /**
+     * Returns the machine that is most free and not {@code otherThanMe}, in terms of time left
+     * @param otherThanMe
+     * @return Machine
+     */
+    Machine getMostFreeMachine(Machine otherThanMe);
 
     /**
      * Adds the given Admin

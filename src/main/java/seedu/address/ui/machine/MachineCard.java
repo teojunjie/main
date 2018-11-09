@@ -1,5 +1,7 @@
 package seedu.address.ui.machine;
 
+import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -10,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.job.TimeStamp;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineStatus;
@@ -23,6 +26,7 @@ import seedu.address.ui.job.JobListPanel;
 public class MachineCard extends UiPart<Region> {
 
     private static final String FXML = "MachineListCard.fxml";
+    private static final Logger logger = LogsCenter.getLogger(MachineCard.class);
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -56,28 +60,20 @@ public class MachineCard extends UiPart<Region> {
         machineName.setText(machine.getName().fullName);
         Label machineStatusLabel = new Label(machine.getStatus().toString());
         Label durationLabel = new Label("Time until released: " + TimeStamp.showAsDuration(machine.getTotalDuration()));
-        machineStatusLabel.setStyle("-fx-font: 12 arial;"
-                + "-fx-text-fill: black;"
-                + "-fx-padding: 2;"
-                + "-fx-text-alignment: center");
+        machineStatusLabel.setStyle(
+            "-fx-font: 12 arial;" + "-fx-text-fill: black;" + "-fx-padding: 2;" + "-fx-text-alignment: center");
         machineStatusLabel.setBackground(new Background(
-                new BackgroundFill(
-                        Paint.valueOf(machine.getStatus().equals(MachineStatus.ENABLED) ? "#0ec10e" : "#dd0404"),
-                        new CornerRadii(2),
-                        new javafx.geometry.Insets(0))));
+            new BackgroundFill(Paint.valueOf(machine.getStatus().equals(MachineStatus.ENABLED) ? "#0ec10e" : "#dd0404"),
+                new CornerRadii(2), new javafx.geometry.Insets(0))));
 
-        Label machineAvailabilityLabel = new Label(
-                machine.getStatus().equals(MachineStatus.ENABLED) ? "Available" : "Unavailable");
-        machineAvailabilityLabel.setStyle("-fx-font: 12 arial;"
-                + "-fx-text-fill: black;"
-                + "-fx-padding: 2;"
-                + "-fx-text-alignment: center");
+        Label machineAvailabilityLabel =
+            new Label(machine.getStatus().equals(MachineStatus.ENABLED) ? "Available" : "Unavailable");
+        machineAvailabilityLabel.setStyle(
+            "-fx-font: 12 arial;" + "-fx-text-fill: black;" + "-fx-padding: 2;" + "-fx-text-alignment: center");
 
         machineAvailabilityLabel.setBackground(new Background(
-                new BackgroundFill(
-                        Paint.valueOf(machine.getStatus().equals(MachineStatus.ENABLED) ? "#0ec10e" : "#dd0404"),
-                        new CornerRadii(2),
-                        new javafx.geometry.Insets(0))));
+            new BackgroundFill(Paint.valueOf(machine.getStatus().equals(MachineStatus.ENABLED) ? "#0ec10e" : "#dd0404"),
+                new CornerRadii(2), new javafx.geometry.Insets(0))));
 
         machineStatus.getChildren().add(machineStatusLabel);
         machineStatus.getChildren().add(machineAvailabilityLabel);
@@ -102,7 +98,6 @@ public class MachineCard extends UiPart<Region> {
 
         // state check
         MachineCard machineCard = (MachineCard) other;
-        return id.getText().equals(machineCard.id.getText())
-                && machine.equals(machineCard.machine);
+        return id.getText().equals(machineCard.id.getText()) && machine.equals(machineCard.machine);
     }
 }

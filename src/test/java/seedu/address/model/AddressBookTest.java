@@ -124,7 +124,7 @@ public class AddressBookTest {
     public void canRestartJobInMachineList() {
         AddressBook tempAddressBook = new AddressBook();
         tempAddressBook.addMachine(ValidMachines.JJPRINTER);
-        Job toAddJob = ValidJobs.IDCP;
+        Job toAddJob = ValidJobs.job1();
         tempAddressBook.addJobToMachineList(toAddJob);
         tempAddressBook.startJob(new JobName(toAddJob.getJobName().fullName));
         JobMachineTuple foundJobMachineTuple = tempAddressBook.findJob(new JobName(toAddJob.getJobName().fullName));

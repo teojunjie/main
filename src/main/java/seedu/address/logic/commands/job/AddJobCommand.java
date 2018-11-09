@@ -16,6 +16,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.job.Job;
 import seedu.address.model.machine.MachineName;
+import seedu.address.model.machine.exceptions.MachineDisabledException;
 import seedu.address.model.machine.exceptions.MachineNotFoundException;
 
 /**
@@ -36,8 +37,12 @@ public class AddJobCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New job added: %1$s";
     public static final String MESSAGE_FAILURE = "New job NOT added: %1$s";
-    public static final String MESSAGE_DUPLICATE_JOB = "This job already exists! Job Names must be unique";
-    public static final String MESSAGE_NO_MACHINE = "Machine specified does not exist";
+    public static final String MESSAGE_DUPLICATE_JOB =
+        "Failed to add Job. This job already exists! Job Names must be unique";
+    public static final String MESSAGE_NO_MACHINE = "Failed to add Job. Machine specified does not exist";
+    public static final String MESSAGE_DISBLED_MACHINE = "Failed to add Job. Machine specified is Disabled";
+    public static final String MESSAGE_NO_MACHINE_AUTO =
+        "Failed to add Job. No Available/Operational Machines to add Job";
 
     private final Job jobToAdd;
 
@@ -57,17 +62,28 @@ public class AddJobCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_JOB);
         }
 
-        try {
-            if (jobToAdd.getMachineName().equals(new MachineName("AUTO"))) {
+        if (isAutoAdd()) {
+            try {
                 jobToAdd.setMachine(model.getMostFreeMachine().getName());
+            } catch (MachineNotFoundException mfe) {
+                throw new CommandException(MESSAGE_NO_MACHINE_AUTO);
             }
+        }
+
+        try {
             model.addJob(jobToAdd);
         } catch (MachineNotFoundException mfe) {
             throw new CommandException(MESSAGE_NO_MACHINE);
+        } catch (MachineDisabledException mde) {
+            throw new CommandException(MESSAGE_DISBLED_MACHINE);
         }
 
         model.commitAddressBook();
         return new CommandResult(String.format(MESSAGE_SUCCESS, jobToAdd.getJobName()));
+    }
+
+    private boolean isAutoAdd() {
+        return jobToAdd.getMachineName().equals(new MachineName("AUTO"));
     }
 
     @Override

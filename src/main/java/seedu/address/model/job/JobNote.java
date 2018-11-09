@@ -17,7 +17,7 @@ public class JobNote {
         this.note = note;
     }
 
-    public static boolean isValidNote(String test) {
+    public static boolean isValidJobNote(String test) {
         return test.matches(NAME_VALIDATION_REGEX);
     }
 

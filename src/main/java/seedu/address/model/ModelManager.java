@@ -2,7 +2,9 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.logic.commands.machine.ManageMachineCommand.MESSAGE_NO_MORE_MACHINES;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Predicate;
@@ -21,14 +23,17 @@ import seedu.address.commons.events.model.JobListChangedEvent;
 import seedu.address.commons.events.model.MachineListChangedEvent;
 import seedu.address.commons.events.ui.AdminLoginEvent;
 import seedu.address.commons.events.ui.AdminLogoutEvent;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.admin.Admin;
 import seedu.address.model.admin.Username;
 import seedu.address.model.job.Job;
 import seedu.address.model.job.JobName;
 import seedu.address.model.job.Status;
 import seedu.address.model.job.exceptions.JobNotStartedException;
+import seedu.address.model.job.exceptions.JobOngoingException;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineName;
+import seedu.address.model.machine.exceptions.MachineNotFoundException;
 import seedu.address.model.person.Person;
 
 
@@ -68,7 +73,7 @@ public class ModelManager extends ComponentManager implements Model {
                     for (Job job : machine.getJobs()) {
                         try {
                             if (job.getStatus() == Status.ONGOING && job.isFinished()) {
-                                finishJob(job);
+                                finishJob(new JobMachineTuple(job, machine));
                             }
                         } catch (JobNotStartedException e) {
                             e.printStackTrace();
@@ -79,8 +84,8 @@ public class ModelManager extends ComponentManager implements Model {
         };
 
         Timer timer = new Timer();
-        long delay = 60000;
-        long intervalPeriod = 60000;
+        long delay = 1000;
+        long intervalPeriod = 1000;
         timer.scheduleAtFixedRate(task, delay, intervalPeriod);
 
     }
@@ -191,14 +196,13 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
 
-
     @Override
-    public Job findJob(JobName name) {
+    public JobMachineTuple findJob(JobName name) {
         requireAllNonNull(name);
         JobMachineTuple query = versionedAddressBook.findJob(name);
 
         if (query != null) {
-            return query.job;
+            return query;
         } else {
             return null;
         }
@@ -232,8 +236,20 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public void finishJob(Job job) {
-        versionedAddressBook.finishJob(job);
+    public void moveJob(JobName jobName, MachineName targetMachineName) {
+        versionedAddressBook.moveJob(jobName, targetMachineName);
+        indicateMachineListChanged();
+    }
+
+    @Override
+    public void shiftJob(JobName jobName, int shiftBy) {
+        versionedAddressBook.shiftJob(jobName, shiftBy);
+        indicateMachineListChanged();
+    }
+
+    @Override
+    public void finishJob(JobMachineTuple target) {
+        versionedAddressBook.finishJob(target);
         indicateMachineListChanged();
     }
 
@@ -256,15 +272,34 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
+    public boolean isTopJob(JobName job) {
+        return versionedAddressBook.isTopJob(job);
+    }
+
+    /**
+     * used for moving Job to Machine
+     *
+     * @param job
+     * @param targetMachine
+     */
     public void moveJobToMachine(Job job, Machine targetMachine) {
         job.setMachine(targetMachine.getName());
         targetMachine.addJob(job);
     }
 
     @Override
-    public void autoMoveJobs(Machine currentMachine, Machine targetMachine) {
-        for (Job j : currentMachine.getJobs()) {
-            moveJobToMachine(j, targetMachine);
+    public void autoMoveJobsDuringFlush(Machine currentMachine) throws CommandException {
+        if (currentMachine.getJobs().stream().anyMatch(job -> job.getStatus() == Status.ONGOING)) {
+            throw new JobOngoingException();
+        }
+        for (Job j : new ArrayList<>(currentMachine.getJobs())) {
+            System.out.println(j.getJobName().fullName);
+            try {
+                Machine mostFreeMachine = getMostFreeMachine(currentMachine);
+                moveJob(j.getJobName(), mostFreeMachine.getName());
+            } catch (MachineNotFoundException mfe) {
+                throw new CommandException(MESSAGE_NO_MORE_MACHINES);
+            }
         }
         flushMachine(currentMachine);
         indicateMachineListChanged();
@@ -322,6 +357,11 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public Machine getMostFreeMachine() {
         return versionedAddressBook.getMostFreeMachine();
+    }
+
+    @Override
+    public Machine getMostFreeMachine(Machine otherThanMe) {
+        return versionedAddressBook.getMostFreeMachine(otherThanMe);
     }
 
     @Override
@@ -467,30 +507,40 @@ public class ModelManager extends ComponentManager implements Model {
     public void undoAddressBook() {
         versionedAddressBook.undo();
         indicateAddressBookChanged();
+        indicateMachineListChanged();
+        indicateAdminListChanged();
     }
 
     @Override
     public void redoAddressBook() {
         versionedAddressBook.redo();
         indicateAddressBookChanged();
+        indicateMachineListChanged();
+        indicateAdminListChanged();
     }
 
     @Override
     public void commitAddressBook() {
         versionedAddressBook.commit();
         indicateAddressBookChanged();
+        indicateMachineListChanged();
+        indicateAdminListChanged();
     }
 
     @Override
     public void adminLoginCommitAddressBook() {
         versionedAddressBook.adminLoginCommit();
         indicateAddressBookChanged();
+        indicateMachineListChanged();
+        indicateAdminListChanged();
     }
 
     @Override
     public void adminLogoutCommitAddressBook() {
         versionedAddressBook.adminLogoutCommit();
         indicateAddressBookChanged();
+        indicateMachineListChanged();
+        indicateAdminListChanged();
     }
 
     @Override
