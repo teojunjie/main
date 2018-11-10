@@ -1,13 +1,14 @@
-= Teo Jun Jie - Project Portfolio
+== Teo Jun Jie - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
+:source-highlighter: rouge
 
-== PROJECT: Maker Manager
+=== PROJECT: Maker Manager
 
 ---
 
-== Overview
+=== Overview
 This is a desktop application for managing maker spaces.
 
 It has a GUI but most of the user interactions happen through a CLI (Command Line Interface).
@@ -42,7 +43,7 @@ There will be two categories of users for the app. The main user will be student
 
 See which 3D printers are being used, and the estimated time left until the equipment will be free. This will reduce system loss and increase the efficiency of all parties involved.
 
-== Summary of contributions
+=== Summary of contributions
 
 ---
 
@@ -100,7 +101,7 @@ ___
 *** Configured travis version 1.0 at the start of the project
 
 
-== Contributions to the User Guide
+=== Contributions to the User Guide
 
 
 |===
@@ -130,7 +131,7 @@ include::../UserGuide.adoc[tag=manageJob]
 
 :leveloffset: -1
 
-== Contributions to the Developer Guide
+=== Contributions to the Developer Guide
 
 |===
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
