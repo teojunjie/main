@@ -73,7 +73,7 @@ public class StringUtil {
 
         try {
             float value = Float.parseFloat(s);
-            return value > 0;
+            return value > 0 && (value <= 9999);
         } catch (NumberFormatException nfe) {
             return false;
         }

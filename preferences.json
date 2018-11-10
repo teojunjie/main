@@ -1,10 +1,10 @@
 {
   "guiSettings" : {
-    "windowWidth" : 1547.199951171875,
-    "windowHeight" : 828.7999877929688,
+    "windowWidth" : 1440.0,
+    "windowHeight" : 830.0,
     "windowCoordinates" : {
-      "x" : -4,
-      "y" : 0
+      "x" : 414,
+      "y" : 166
     }
   },
   "addressBookFilePath" : "data\\addressbook.xml",

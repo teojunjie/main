@@ -32,7 +32,8 @@ public class Machine {
      */
     public static final String NAME_VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
     public static final String MESSAGE_NAME_CONSTRAINTS =
-        "Machine Names should only contain alphanumeric characters and spaces, " + "and it should not be blank";
+        "Machine Names should only contain alphanumeric characters and spaces, "
+            + "and it should not be blank or the reserved keyword: AUTO";
     public static final String MESSAGE_WRONG_STATUS =
         "Status can only contain 'ENABLED' or 'DISABLED'" + "and should not be blank";
     // Identity fields
@@ -41,9 +42,8 @@ public class Machine {
     private MachineStatus status;
 
     // Data fields
-    //Name is a placeholder. To be replaced by Job class in the future
     private final UniqueJobList jobs = new UniqueJobList();
-    private final Set<Tag> tags = new HashSet<>();
+    private final Set<Tag> tags = new HashSet<>(); // Tags are present for future releases, but are currently unused.
 
     //Display fields
     private final FilteredList<Job> filteredJobs;
@@ -159,15 +159,10 @@ public class Machine {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(getName()).append(" Tags: ");
-        getTags().forEach(builder::append);
-
-        builder.append(" Jobs: ");
-        getJobs().forEach(builder::append);
-
+        builder.append(getName());
         builder.append(" Status: ");
         builder.append(getStatus().toString());
-        return builder.toString();
+        return builder.toString() + "\n";
     }
 
     /**

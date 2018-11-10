@@ -122,8 +122,9 @@
 
 .cell_big_label {
     -fx-font-family: "Segoe UI Semibold";
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
     -fx-text-fill: #010504;
+    -fx-font-weight: BOLD;
 }
 
 .cell_small_label {
@@ -349,4 +350,3 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
-

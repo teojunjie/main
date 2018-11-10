@@ -33,7 +33,7 @@ public class  AddMachineCommand extends Command {
             + "\nReserved names are : [ AUTO ]";
     public static final String MESSAGE_SUCCESS = "New machine added: %1$s";
     public static final String MESSAGE_DUPLICATE_MACHINE = " This machine already exists in MakerManager address book";
-    private static final String MESSAGE_ACCESS_DENIED =
+    public static final String MESSAGE_ACCESS_DENIED =
             "Non admin user is not allowed to add a machine to maker manager";
 
     private final Machine machineToAdd;

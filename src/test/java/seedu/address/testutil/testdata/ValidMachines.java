@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.model.AddressBook;
+import seedu.address.model.job.Job;
 import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineStatus;
 import seedu.address.testutil.builders.MachineBuilder;
@@ -24,6 +25,9 @@ public class ValidMachines {
     public static final Machine JIAHUAPRINTER =
         new MachineBuilder().withMachineName("JiaHuaPrinter").withMachineStatus(MachineStatus.ENABLED).build();
 
+    public static final Machine ONGOINGJOBPRINTER =
+        new MachineBuilder().withMachineName("ONGOINGJOBPRINTER").withJobs(new ArrayList<Job>())
+            .withMachineStatus(MachineStatus.ENABLED).build();
 
     public static AddressBook getMachinesData() {
         AddressBook makerManagerMachinesData = new AddressBook();
@@ -34,6 +38,6 @@ public class ValidMachines {
     }
 
     public static List<Machine> getValidMachines() {
-        return new ArrayList<>(Arrays.asList(JJPRINTER, TYPRINTER));
+        return new ArrayList<>(Arrays.asList(JJPRINTER, TYPRINTER, JIAHUAPRINTER));
     }
 }

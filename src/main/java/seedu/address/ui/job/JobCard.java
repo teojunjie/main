@@ -57,7 +57,6 @@ public class JobCard extends UiPart<Region> {
         super(FXML);
         this.job = job;
         jobName.setText(job.getJobName().fullName);
-
         Label informationLabel =
             new Label("Added by " + job.getOwner().getName().fullName + " at " + job.getAddedTime().showTime());
         Label startTimeLabel;
