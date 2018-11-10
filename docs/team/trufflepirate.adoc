@@ -93,7 +93,6 @@ include::../UserGuide.adoc[tag=manageJob]
 include::../UserGuide.adoc[tag=findJob]
 include::../UserGuide.adoc[tag=undoredo]
 
-include::../UserGuide.adoc[tag=commandsummary]
 
 == Contributions to the Developer Guide
 

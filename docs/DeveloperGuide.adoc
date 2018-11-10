@@ -493,7 +493,7 @@ The syntax for the commands are implemented in the following manner: +
 
 The subcommands `start`, `restart` and `cancel` do not make use of *<operand2>*, whereas the subcommands
 `swap` `move` and `shift` require
-require <operand2> to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
+require *<operand2>* to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
 
 We have nested these commands as subcommands of `manageJob` to centralise the management of Jobs for users, therefore making it
 easier for users to manipulate Jobs.
