@@ -1,43 +1,43 @@
 package seedu.address.logic.commands.machine;
 
-import static java.util.Objects.requireNonNull;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.testdata.ValidMachines.getMachinesData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.function.Predicate;
-
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import javafx.collections.ObservableList;
-import seedu.address.commons.core.JobMachineTuple;
 import seedu.address.logic.CommandHistory;
-import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.admin.Admin;
+import seedu.address.model.admin.Password;
 import seedu.address.model.admin.Username;
-import seedu.address.model.job.Job;
-import seedu.address.model.job.JobName;
 import seedu.address.model.machine.Machine;
-import seedu.address.model.machine.MachineName;
-import seedu.address.model.person.Person;
 import seedu.address.testutil.MachineBuilder;
+import seedu.address.testutil.testdata.ValidMachines;
 
 public class AddMachineCommandTest {
-
-    private static final CommandHistory EMPTY_COMMAND_HISTORY = new CommandHistory();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    private Model model = new ModelManager(getMachinesData(), new UserPrefs());
     private CommandHistory commandHistory = new CommandHistory();
+
+    @Before
+    public void setup() {
+        model.setLogin(new Admin(new Username("dummyUsername"), new Password("aaaAAA123$")));
+    }
 
     @Test
     public void constructor_nullMachine_throwsNullPointerException() {
@@ -46,438 +46,85 @@ public class AddMachineCommandTest {
     }
 
     @Test
-    public void execute_machineAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingMachineAdded modelStub = new ModelStubAcceptingMachineAdded();
-        Machine validMachine = new MachineBuilder().build();
+    public void execute_machineAcceptedByModel_successful() throws Exception {
+        Machine toBeAdded = new MachineBuilder().build();
+        AddMachineCommand addMachineCommand = new AddMachineCommand(toBeAdded);
+        String expectedMessage = String.format(AddMachineCommand.MESSAGE_SUCCESS, toBeAdded);
 
-        CommandResult commandResult = new AddMachineCommand(validMachine).execute(modelStub, commandHistory);
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.addMachine(toBeAdded);
+        expectedModel.commitAddressBook();
 
-        assertEquals(String.format(AddMachineCommand.MESSAGE_SUCCESS, validMachine), commandResult.feedbackToUser);
-        assertEquals(Arrays.asList(validMachine), modelStub.machinesAdded);
-        assertEquals(EMPTY_COMMAND_HISTORY, commandHistory);
+        assertCommandSuccess(addMachineCommand, model, commandHistory, expectedMessage, expectedModel);
+
+        // undo -> reverts makerManager back to previous state
+        expectedModel.undoAddressBook();
+        assertCommandSuccess(new UndoCommand(), model, commandHistory, UndoCommand.MESSAGE_SUCCESS, expectedModel);
+
+        // redo -> same first Machine edited again
+        expectedModel.redoAddressBook();
+        assertCommandSuccess(new RedoCommand(), model, commandHistory, RedoCommand.MESSAGE_SUCCESS, expectedModel);
+
     }
 
     @Test
-    public void execute_duplicateMachine_throwsCommandException() throws Exception {
-        Machine validMachine = new MachineBuilder().build();
-        AddMachineCommand addMachineCommand = new AddMachineCommand(validMachine);
-        ModelStub modelStub = new AddMachineCommandTest.ModelStubWithMachine(validMachine);
+    public void execute_exactDuplicateMachine_failure() throws Exception {
+        Machine toBeAdded = model.getFilteredMachineList().get(0);
+        AddMachineCommand addMachineCommand = new AddMachineCommand(toBeAdded);
+        String expectedMessage = String.format(AddMachineCommand.MESSAGE_DUPLICATE_MACHINE, toBeAdded);
 
-        thrown.expect(CommandException.class);
-        thrown.expectMessage(AddMachineCommand.MESSAGE_DUPLICATE_MACHINE);
-        addMachineCommand.execute(modelStub, commandHistory);
+        assertCommandFailure(addMachineCommand, model, commandHistory, expectedMessage);
+
+        assertCommandFailure(new UndoCommand(), model, commandHistory, UndoCommand.MESSAGE_FAILURE);
+        assertCommandFailure(new RedoCommand(), model, commandHistory, RedoCommand.MESSAGE_FAILURE);
+    }
+
+    @Test
+    public void execute_sameNameMachine_failure() throws Exception {
+        Machine toBeAdded =
+            new MachineBuilder().withName(model.getFilteredMachineList().get(0).getName().toString()).build();
+        AddMachineCommand addMachineCommand = new AddMachineCommand(toBeAdded);
+        String expectedMessage = String.format(AddMachineCommand.MESSAGE_DUPLICATE_MACHINE, toBeAdded);
+
+        assertCommandFailure(addMachineCommand, model, commandHistory, expectedMessage);
+
+        assertCommandFailure(new UndoCommand(), model, commandHistory, UndoCommand.MESSAGE_FAILURE);
+        assertCommandFailure(new RedoCommand(), model, commandHistory, RedoCommand.MESSAGE_FAILURE);
+    }
+
+    @Test
+    public void execute_notLoggedIn_failure() {
+        model.clearLogin();
+        Machine toBeAdded = new MachineBuilder().build();
+        AddMachineCommand addMachineCommand = new AddMachineCommand(toBeAdded);
+        String expectedMessage = String.format(AddMachineCommand.MESSAGE_ACCESS_DENIED, toBeAdded);
+
+        assertCommandFailure(addMachineCommand, model, commandHistory, expectedMessage);
+
+        assertCommandFailure(new UndoCommand(), model, commandHistory, UndoCommand.MESSAGE_FAILURE);
+        assertCommandFailure(new RedoCommand(), model, commandHistory, RedoCommand.MESSAGE_FAILURE);
+
     }
 
     @Test
     public void equals() {
-        Machine m1 = new MachineBuilder().withName("Machine1").build();
-        Machine m2 = new MachineBuilder().withName("Machine2").build();
-        AddMachineCommand addm1Command = new AddMachineCommand(m1);
-        AddMachineCommand addm2Command = new AddMachineCommand(m2);
+        final AddMachineCommand standardCommand = new AddMachineCommand(ValidMachines.JJPRINTER);
+
+        AddMachineCommand commandWithSameValues = new AddMachineCommand(ValidMachines.JJPRINTER);
+        assertTrue(standardCommand.equals(commandWithSameValues));
 
         // same object -> returns true
-        assertTrue(addm1Command.equals(addm1Command));
-
-        // same values -> returns true
-        AddMachineCommand addm1CommandCopy = new AddMachineCommand(m1);
-        assertTrue(addm1Command.equals(addm1CommandCopy));
-
-        // different types -> returns false
-        assertFalse(addm1Command.equals(1));
+        assertTrue(standardCommand.equals(standardCommand));
 
         // null -> returns false
-        assertFalse(addm1Command.equals(null));
+        assertFalse(standardCommand.equals(null));
 
-        // different person -> returns false
-        assertFalse(addm1Command.equals(addm2Command));
-    }
+        // different types -> returns false
+        assertFalse(standardCommand.equals(new ClearCommand()));
 
-    /**
-     * A default model stub that have all of the methods failing.
-     */
-    private class ModelStub implements Model {
-        @Override
-        public void addPerson(Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
+        // different targetName -> returns false
+        assertFalse(standardCommand.equals(new AddMachineCommand(ValidMachines.TYPRINTER)));
 
-        @Override
-        public void resetData(ReadOnlyAddressBook newData) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean hasPerson(Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void deletePerson(Person target) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updatePerson(Person target, Person editedPerson) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean hasJob(Job job) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void addJob(Job job) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void deleteJob(JobName job) {
-
-        }
-
-        public void startJob(JobName name) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void cancelJob(JobName name) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void restartJob(JobName name) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void swapJobs(JobName jobname1, JobName jobName2) {
-            return;
-        }
-
-        @Override
-        public void finishJob(JobMachineTuple job) {
-
-        }
-
-        @Override
-        public void requestDeletion(JobName jobName) {
-
-        }
-
-        @Override
-        public int getTotalNumberOfJobsDisplayed() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean isTopJob(JobName job) {
-            return false;
-        }
-
-        public void moveJobToMachine(Job job, Machine targetMachine) {
-
-        }
-
-        @Override
-        public void autoMoveJobsDuringFlush(Machine currentMachine) {
-
-        }
-
-        @Override
-        public Machine findMachine(MachineName machinename) {
-            return null;
-        }
-
-        @Override
-        public void updateJob(Job oldJob, Job updatedJob) {
-
-        }
-
-        @Override
-        public JobMachineTuple findJob(JobName name) {
-            return null;
-        }
-
-        @Override
-        public void addMachine(Machine machine) {
-            throw new AssertionError("This method should not be called");
-        }
-
-        @Override
-        public void updateMachine(Machine target, Machine editedMachine) {
-            throw new AssertionError("This method should not be called");
-        }
-
-        @Override
-        public Machine getMostFreeMachine() {
-            return null;
-        }
-
-        @Override
-        public Machine getMostFreeMachine(Machine otherThanMe) {
-            return null;
-        }
-
-        @Override
-        public void removeMachine(Machine machine) {
-            throw new AssertionError("This method should not be called");
-        }
-
-        @Override
-        public boolean hasMachine(Machine machine) {
-            throw new AssertionError("This method should not be called");
-        }
-
-        @Override
-        public boolean hasSameMachineName(Machine machine) {
-            return false;
-        }
-
-        @Override
-        public void flushMachine(Machine toFlushMachine) {
-
-        }
-
-        @Override
-        public void cleanMachine(Machine toCleanMachine) {
-
-        }
-
-        @Override
-        public void addAdmin(Admin admin) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void removeAdmin(Admin admin) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updateAdmin(Admin admin, Admin updatedAdmin) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void setLogin(Admin admin) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void clearLogin() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public Admin findAdmin(Username username) {
-            return null;
-        }
-
-        @Override
-        public int numAdmins() {
-            return 0;
-        }
-
-
-        @Override
-        public ObservableList<Person> getFilteredPersonList() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updateFilteredPersonList(Predicate<Person> predicate) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public ObservableList<Admin> getFilteredAdminList() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updateFilteredAdminList(Predicate<Admin> predicate) {
-            throw new AssertionError("This method should not be called");
-        }
-
-        @Override
-        public ObservableList<Machine> getFilteredMachineList() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updateFilteredMachineList(Predicate<Machine> predicate) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updateFilteredJobListInAllMachines(Predicate<Job> predicate) {
-        }
-
-        @Override
-        public boolean canUndoAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean canRedoAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void undoAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void redoAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void commitAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void adminLoginCommitAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void adminLogoutCommitAddressBook() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean isRedoLogin() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean isUndoLogout() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public Admin currentlyLoggedIn() {
-            return null;
-        }
-
-        @Override
-        public boolean isUndoLogin() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void shiftJob(JobName jobName, int shiftBy) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void moveJob(JobName jobName, MachineName targetMachineName) {
-            throw new AssertionError("This method should not be called.");
-        }
-    }
-
-    /**
-     * A Model stub that contains a single Machine.
-     */
-    private class ModelStubWithMachine extends ModelStub {
-        private final Machine machine;
-
-        ModelStubWithMachine(Machine machine) {
-            requireNonNull(machine);
-            this.machine = machine;
-        }
-
-        @Override
-        public boolean hasMachine(Machine machine) {
-            requireNonNull(machine);
-            return this.machine.isSameMachine(machine);
-        }
-
-        @Override
-        public Machine findMachine(MachineName machineName) {
-            requireNonNull(machineName);
-            if (this.machine.getName().equals(machineName)) {
-                return machine;
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return true;
-        }
-    }
-
-    /**
-     * A Model stub that is logged in.
-     */
-    private class ModelStubNonAdmin extends ModelStub {
-        ModelStubNonAdmin() {
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return true;
-        }
-    }
-
-    /**
-     * A Model stub that always accept the person being added.
-     */
-    private class ModelStubAcceptingMachineAdded extends ModelStub {
-        final ArrayList<Machine> machinesAdded = new ArrayList<>();
-
-        @Override
-        public boolean hasMachine(Machine machine) {
-            requireNonNull(machine);
-            return machinesAdded.stream().anyMatch(machine::isSameMachine);
-        }
-
-        @Override
-        public Machine findMachine(MachineName machineName) {
-            requireNonNull(machineName);
-            for (Machine machine : machinesAdded) {
-                if (machine.getName().equals(machineName)) {
-                    return machine;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public void addMachine(Machine machine) {
-            requireNonNull(machine);
-            machinesAdded.add(machine);
-        }
-
-        @Override
-        public void commitAddressBook() {
-            // called by {@code AddCommand#execute()}
-        }
-
-        @Override
-        public ReadOnlyAddressBook getAddressBook() {
-            return new AddressBook();
-        }
-
-        @Override
-        public boolean isLoggedIn() {
-            return true;
-        }
     }
 
 }

@@ -57,26 +57,12 @@ public class XmlAdaptedAdmin {
                     Username.class.getSimpleName()));
         }
 
-        //TODO: don't forget this
-        /*
-        if (!Name.isValidName(name)) {
-            throw new IllegalValueException(Name.MESSAGE_NAME_CONSTRAINTS);
-        }
-        */
-
         final Username modelUsername = new Username(username);
 
         if (password == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     Password.class.getSimpleName()));
         }
-
-        //TODO: Don't forget this
-        /*
-        if (!Phone.isValidPhone(phone)) {
-            throw new IllegalValueException(Phone.MESSAGE_PHONE_CONSTRAINTS);
-        }
-        */
 
         final Password modelPassword = new Password(password);
 

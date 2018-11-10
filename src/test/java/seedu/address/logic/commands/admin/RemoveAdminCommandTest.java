@@ -103,8 +103,6 @@ public class RemoveAdminCommandTest {
         assertEquals(modelStub.isLoggedIn(), false);
     }
 
-    //TODO: equals not tested
-
     /**
      * A default model stub that has some methods failing
      */

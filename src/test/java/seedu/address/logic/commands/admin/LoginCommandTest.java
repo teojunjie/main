@@ -47,7 +47,6 @@ public class LoginCommandTest {
         ModelStub modelStub = new ModelStub();
         Admin admin = new Admin(new Username("Notice how this is never made idiot proof"), new Password("oldPW"));
         modelStub.setLogin(admin);
-        //TODO: make modelManager.setLogin idiotProof
 
         thrown.expect(CommandException.class);
         thrown.expectMessage(LoginCommand.MESSAGE_ALREADY_LOGGED_IN);
@@ -63,9 +62,6 @@ public class LoginCommandTest {
         thrown.expectMessage(LoginCommand.MESSAGE_WRONG_DETAILS);
         loginCommand.execute(modelStub, commandHistory);
     }
-
-    //TODO: test successful login by bypassing jBCrypt
-    //TODO: equals Method not tested
 
     /**
      * A default model stub that has some methods failing
