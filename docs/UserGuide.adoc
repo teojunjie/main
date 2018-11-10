@@ -61,6 +61,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * `1. abc`, `2. cdt` and such columns represent machines
 * The scrollable panel under each machine represents the machine's queue, with Prints divided by alternating shades of grey.
 * The tags are self-explanatory, but you can read the next section for getting a good understanding of what they represent.
+
+image::MarkedUi.png[width="790"]
 [NOTE]
 The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 The "Admin Mode" is giving special access to lab managers in real life to manage the makerspace facilities, such as adding, removing or changing the status.
