@@ -27,7 +27,6 @@ public class XmlSerializableMakerManagerAdmins {
     /**
      * Creates an empty XmlSerializableMakerManagerAdmins.
      * This empty constructor is required for marshalling.
-     * TODO: What is marshalling?
      */
     public XmlSerializableMakerManagerAdmins() {
         admins = new ArrayList<>();

@@ -18,6 +18,7 @@ import seedu.address.logic.parser.ArgumentTokenizer;
 import seedu.address.logic.parser.Parser;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.machine.Machine;
 import seedu.address.model.machine.MachineName;
 import seedu.address.model.tag.Tag;
 
@@ -45,12 +46,19 @@ public class EditMachineCommandParser implements Parser<EditMachineCommand> {
                 pe);
         }
 
-        EditMachineDescriptor editMachineDescriptor = new EditMachineDescriptor();
-        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            editMachineDescriptor.setName(ParserUtil.parseMachineName(argMultimap.getValue(PREFIX_NAME).get()));
+        if (machineName.fullName.equals("AUTO")) {
+            throw new ParseException(Machine.MESSAGE_NAME_CONSTRAINTS);
         }
 
-        parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editMachineDescriptor::setTags);
+        EditMachineDescriptor editMachineDescriptor = new EditMachineDescriptor();
+        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
+            MachineName newName = ParserUtil.parseMachineName(argMultimap.getValue(PREFIX_NAME).get());
+            if (newName.toString().equals("AUTO")) {
+                throw new ParseException(Machine.MESSAGE_NAME_CONSTRAINTS);
+            }
+            editMachineDescriptor.setName(newName);
+        }
+
 
         if (argMultimap.getValue(PREFIX_MACHINE_STATUS).isPresent()) {
             editMachineDescriptor

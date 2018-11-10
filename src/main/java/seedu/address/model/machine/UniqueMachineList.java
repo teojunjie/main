@@ -113,6 +113,7 @@ public class UniqueMachineList {
             throw new MachineDisabledException();
         }
         target.addJob(job);
+        target.reSortJobList();
         EventsCenter.getInstance().post(new FocusMachineRequestEvent(new JobMachineTuple(job, target)));
     }
 

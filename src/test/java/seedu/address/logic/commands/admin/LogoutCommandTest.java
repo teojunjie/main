@@ -53,8 +53,6 @@ public class LogoutCommandTest {
         assertEquals(modelStub.isLoggedIn(), false);
     }
 
-    //TODO: did not test equals
-
     /**
      * A default model stub that have some methods
      */

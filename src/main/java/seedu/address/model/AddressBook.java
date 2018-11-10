@@ -571,34 +571,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         // TODO: refine later
     }
 
-
-    /**
-     * list all the current's version data for addressbook
-     */
-    /*
-    public void listCurrentVersionData() {
-        logger.info("Listing current version data");
-        logger.info("-----------------------Machine data---------------------");
-        for (Machine m : machines.asUnmodifiableObservableList()) {
-            logger.info(m.getName().fullName);
-        }
-
-        logger.info("-----------------------Jobs data-----------------------");
-        for (Job j : jobs.asUnmodifiableObservableList()) {
-            logger.info(j.getJobName().fullName);
-        }
-
-        logger.info("----------------------Admins data----------------------");
-        for (Admin a : admins.asUnmodifiableObservableList()) {
-            logger.info(a.getUsername().toString());
-        }
-
-        logger.info("-----------------------Persons data---------------------");
-        for (Person p : persons.asUnmodifiableObservableList()) {
-            logger.info(p.getName().fullName);
-        }
-    }
-    */
 }
 
 

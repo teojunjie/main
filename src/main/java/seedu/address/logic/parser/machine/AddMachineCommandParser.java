@@ -45,7 +45,7 @@ public class AddMachineCommandParser implements Parser<AddMachineCommand> {
 
         MachineName name = ParserUtil.parseMachineName(argMultimap.getValue(PREFIX_NAME).get());
         if (name.fullName.equals("AUTO")) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddMachineCommand.MESSAGE_USAGE));
+            throw new ParseException(Machine.MESSAGE_NAME_CONSTRAINTS);
         }
         MachineStatus machineStatus = ParserUtil.parseMachineStatus(argMultimap.getValue(PREFIX_MACHINE_STATUS).get());
         ArrayList<Job> jobs = new ArrayList<>();

@@ -193,42 +193,6 @@ public class ManageJobCommand extends Command {
             throw new CommandException(MESSAGE_NO_SUCH_OPTION);
         }
 
-        // TODO: 11/5/2018 REMOVE IF CASE SWITCH WORKS
-        /*
-        if (option.equals(OPTION_START)) {
-            if (!model.isTopJob(name)) {
-                throw new CommandException(MESSAGE_ONLY_TOP_JOB_STARTABLE);
-            }
-            model.startJob(name);
-            model.commitAddressBook();
-            model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
-            return new CommandResult(MESSAGE_STARTED_JOB);
-        } else if (option.equals(OPTION_RESTART)) {
-            if (!model.isTopJob(name)) {
-                throw new CommandException(MESSAGE_ONLY_TOP_JOB_STARTABLE);
-            }
-            model.restartJob(name);
-            model.commitAddressBook();
-            model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
-            return new CommandResult(MESSAGE_RESTARTED_JOB);
-        } else if (option.equals(OPTION_CANCEL)) {
-            model.cancelJob(name);
-            model.commitAddressBook();
-            model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
-            return new CommandResult(MESSAGE_CANCELLED_JOB);
-        } else if (option.equals(OPTION_DELETE)) {
-            if (!model.isLoggedIn()) {
-                throw new CommandException(MESSAGE_ACCESS_DENIED);
-            }
-            model.deleteJob(name);
-            model.commitAddressBook();
-            model.updateFilteredMachineList(PREDICATE_SHOW_ALL_MACHINES);
-            return new CommandResult(MESSAGE_DELETED_JOB);
-
-        } else {
-            return new CommandResult(MESSAGE_NO_SUCH_OPTION);
-        }
-        */
     }
 
     @Override

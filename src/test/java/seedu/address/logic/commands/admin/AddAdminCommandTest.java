@@ -114,8 +114,6 @@ public class AddAdminCommandTest {
         assertEquals(modelStub.adminList, Arrays.asList(adminToAdd));
     }
 
-    //TODO: equals not tested
-
     /**
      * A default model stub that has some methods failing
      */
