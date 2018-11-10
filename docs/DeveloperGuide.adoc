@@ -476,45 +476,49 @@ More specifically, this section will detail the implementation of the manageJob 
 its various sub-features.
 
 
-The main command to manage and manipulate the Jobs in the makerManager is ManageJob which has the following subcommands:
+The main command to manage and manipulate the Jobs in the makerManager
+is `manageJob` which has the following subcommands:
 
-* *start* - sets the status of a job to "ONGOING"
-* *restart* - sets the status of a job to "ONGOING", functionally the same as start, but used for restarting cancelled Jobs.
-* *cancel* - sets the status of a job to "CANCELLED"
-* *remove* - removes the Job from the Maker Manager
-* *swap* - Swaps the position of two Jobs
-* *move* - Moves a Job to another Machine
-* *shift* - Shift a Job's order within a machine
+* `start` - sets the status of a job to "ONGOING"
+* `restart` - sets the status of a job to "ONGOING", functionally the same as start, but used for restarting cancelled Jobs.
+* `cancel` - sets the status of a job to "CANCELLED"
+* `remove` - removes the Job from the Maker Manager
+* `swap` - Swaps the position of two Jobs
+* `move` - Moves a Job to another Machine
+* `shift` - Shift a Job's order within a machine
 
 The syntax for the commands are implemented in the following manner: +
 
 *manageJob <Jobname> subcommand <operand2>* +
 
-The subcommands start, restart and cancel do not make use of operand2, whereas the subcommands swap move and shift require
-require operand2 to specify target Job for *swap*, Machine for *move*, and up/down for *shift*.
+The subcommands `start`, `restart` and `cancel` do not make use of *<operand2>*, whereas the subcommands
+`swap` `move` and `shift` require
+require <operand2> to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
 
-We have nested these commands as subcommands of manageJob to centralise the management of Jobs for users, therefore making it
+We have nested these commands as subcommands of `manageJob` to centralise the management of Jobs for users, therefore making it
 easier for users to manipulate Jobs.
 
 ==== Current Implementation
 
 Our MakerManager keeps a record of all Jobs or Prints in a makerspace distributed across many machines.
 Within each `Machine`, Jobs are stored within a `uniqueJobsList`. The `Machines` are in turn stored in a
-`UniqueMachineList` in the `versionedAddressBook`. The manipulation of the order and the content of the is facilitated by the `ModelManager`, which exposes the methods
+`UniqueMachineList` in the `VersionedAddressBook`. The manipulation of the order and the content of the is facilitated by the `ModelManager`, which exposes the methods
 implemented by the `VersionedAddressBook`.
 
 [red]#The diagram below shows the Jobs related section of the Model.#
 
-There are three main types of methods in VersionedAddressBook that concern the manipulation of Jobs: +
+There are three main types of methods in `VersionedAddressBook` that concern
+the manipulation of Jobs:
 
-* Helper Methods that return a handle to a Job or Machine:
-** findJob()
-** findMachine()
+    * *Lookup Methods* that return a handle to a Job or Machine:
+    ** findJob()
+    ** findMachine()
 
 These Methods are used to obtain a handle a particular Job or Machine using each's classes name property. All Jobs
-must have a unique name, and all Machines must also have a unique name.
+must have a unique name, and all Machines must also have a unique name. findJob() returns both a Job and its parent
+Machine as a `JobMachineTuple`, a utility class container object that contains a Job and a Machine.
 
-* Methods that mutate Jobs:
+* Methods that *mutate Jobs*:
 ** startJob()
 ** cancelJob()
 ** restartJob()
@@ -531,6 +535,7 @@ same property in Job. We will therefore only detail the sequence diagram of star
 ** shiftJob()
 ** removeJob()
 
+
 Much like before, the sequence diagram for these methods are very similar. However, of the
 three methods, swapJobs() is the most complex, and therefore we will display it's sequence
 diagram below.
@@ -545,10 +550,28 @@ in the simple activity Diagram below.
 [red]#The following diagram shows the generic activity diagram for a managing a Job.#
 
 
+The generic flow of a typical manageJob command is as follows:
 
-*> Explain syntax choice*
+. User enters a manageJob command
+. The method associated with its subcommand will be called.
+. Lookup methods findJob() / findMachine() will be called to obtain a handle on the target Job or Machine.
+If the these methods do not find the Job / Machine with the correct unique identifier (name), an Exception will be raised.
+. If the handles are found, then the appropriate action will be taken.
 
-*> is there a design consideration? -> syntax
+==== Design Considerations
+===== Aspect: Direct Mutation of Objects (Jobs and Machines)
+* **Alternative 1 (current choice):** mutate object's data fields directly.
+** Pros: No new objects have to be created, therefore saving unnecessary computations since only the required
+data fields are changed.
+** Cons: Objects are mutable. Additional care needs to be taken in ensuring that these objects are accessed defensively
+by methods that might cause unintended mutation. Additionally, mutation events must be flagged and raised, since they
+mutations within the Objects are not observed by its container.
+* **Alternative 2:** Create a new instance with edited fields
+** Pros: Defensive. Objects will never mutate, therefore there is no chance of unintended or illegal mutation. Changes
+observed by Observable Containers since a new object is created/added.
+** Cons: More computationally intensive, commands will take longer to execute. Also less room for extension since
+performance is now inversely proportional to object size.
+
 
 // end::managejob[]
 
