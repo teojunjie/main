@@ -72,7 +72,7 @@ https://github.com/CS2113-AY1819S1-T09-1/main/pull/126[#126]
 ** Documentation:
 *** Initialised Readme for MakerManager
 https://github.com/CS2113-AY1819S1-T09-1/main/pull/3[#3]
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** ScreenShots and visual Aids: https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153]
 
 ** Tools:
 *** Integrated a new Github plugin (Coveralls) to the team repo to track coverage
