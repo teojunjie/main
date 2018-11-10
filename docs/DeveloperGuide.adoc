@@ -471,6 +471,81 @@ Other than this, we also enforce password validation to make sure a moderately s
 
 // tag::managejob[]
 === Managing Prints
+This section describes how MakerManager manages the Jobs or Prints within the makerspace.
+More specifically, this section will detail the implementation of the manageJob command and
+its various sub-features.
+
+
+The main command to manage and manipulate the Jobs in the makerManager is ManageJob which has the following subcommands:
+
+* *start* - sets the status of a job to "ONGOING"
+* *restart* - sets the status of a job to "ONGOING", functionally the same as start, but used for restarting cancelled Jobs.
+* *cancel* - sets the status of a job to "CANCELLED"
+* *remove* - removes the Job from the Maker Manager
+* *swap* - Swaps the position of two Jobs
+* *move* - Moves a Job to another Machine
+* *shift* - Shift a Job's order within a machine
+
+The syntax for the commands are implemented in the following manner: +
+
+*manageJob <Jobname> subcommand <operand2>* +
+
+The subcommands start, restart and cancel do not make use of operand2, whereas the subcommands swap move and shift require
+require operand2 to specify target Job for *swap*, Machine for *move*, and up/down for *shift*.
+
+We have nested these commands as subcommands of manageJob to centralise the management of Jobs for users, therefore making it
+easier for users to manipulate Jobs.
+
+==== Current Implementation
+
+Our MakerManager keeps a record of all Jobs or Prints in a makerspace distributed across many machines.
+Within each `Machine`, Jobs are stored within a `uniqueJobsList`. The `Machines` are in turn stored in a
+`UniqueMachineList` in the `versionedAddressBook`. The manipulation of the order and the content of the is facilitated by the `ModelManager`, which exposes the methods
+implemented by the `VersionedAddressBook`.
+
+[red]#The diagram below shows the Jobs related section of the Model.#
+
+There are three main types of methods in VersionedAddressBook that concern the manipulation of Jobs: +
+
+* Helper Methods that return a handle to a Job or Machine:
+** findJob()
+** findMachine()
+
+These Methods are used to obtain a handle a particular Job or Machine using each's classes name property. All Jobs
+must have a unique name, and all Machines must also have a unique name.
+
+* Methods that mutate Jobs:
+** startJob()
+** cancelJob()
+** restartJob()
+
+The sequence diagram for these methods are very similar, they follow a similar pathway and mutate the
+same property in Job. We will therefore only detail the sequence diagram of startJob().
+
+[red]#The following diagram shows the sequence diagram for startJob().#
+
+
+* Methods that mutates the UniqueJobList within a Machine:
+** swapJobs()
+** moveJob()
+** shiftJob()
+** removeJob()
+
+Much like before, the sequence diagram for these methods are very similar. However, of the
+three methods, swapJobs() is the most complex, and therefore we will display it's sequence
+diagram below.
+
+[red]#The following diagram shows the sequence diagram for swapJob().#
+
+
+Therefore, we can use the manageJob command to manipulate the prints Jobs to
+achieve a representation of the actual prints in the makerspace. This can be illustrated
+in the simple activity Diagram below.
+
+[red]#The following diagram shows the generic activity diagram for a managing a Job.#
+
+
+
 *> Explain syntax choice*
 
 *> is there a design consideration? -> syntax
