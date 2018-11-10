@@ -507,6 +507,8 @@ implemented by the `VersionedAddressBook`.
 
 [red]#The diagram below shows the Jobs related section of the Model.#
 
+image::JobsClassDiagram.png[width:800]
+
 There are three main types of methods in `VersionedAddressBook` that concern
 the manipulation of Jobs:
 
@@ -528,20 +530,16 @@ same property in Job. We will therefore only detail the sequence diagram of star
 
 [red]#The following diagram shows the sequence diagram for startJob().#
 
+image::SDStartJob.png[width:800]
 
 * Methods that mutates the UniqueJobList within a Machine:
 ** swapJobs()
 ** moveJob()
 ** shiftJob()
-** removeJob()
 
 
-Much like before, the sequence diagram for these methods are very similar. However, of the
-three methods, swapJobs() is the most complex, and therefore we will display it's sequence
-diagram below.
-
-[red]#The following diagram shows the sequence diagram for swapJob().#
-
+Much like before, the sequence diagram for these methods are very similar, but will call
+methods from the UniqueJobsList as well.
 
 Therefore, we can use the manageJob command to manipulate the prints Jobs to
 achieve a representation of the actual prints in the makerspace. This can be illustrated
@@ -549,6 +547,7 @@ in the simple activity Diagram below.
 
 [red]#The following diagram shows the generic activity diagram for a managing a Job.#
 
+image::ADManagePrints.PNG[width:800]
 
 The generic flow of a typical manageJob command is as follows:
 
