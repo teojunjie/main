@@ -1451,6 +1451,34 @@ These instructions only provide a starting point for testers to work on; testers
     Expected:
     No job will be added to any machine. Error will be shown in result box as "Failed to add Job. Machine specified is Disabled"
 
+. Test case: add a job with invalid name
+
+    addJob n/!!!NAME!!! m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job names should only contain alphanumeric characters and spaces, and it should not be blank"
+
+. Test case: add a job with invalid priority
+
+    addJob n/model m/ender on/Rakuten pr/FAKEPRIORITY d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job priority can only be URGENT, HIGH and NORMAL"
+
+. Test case: add a job with invalid duration
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/NotATime jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
+. Test case: add a job with duration exceeding 9999 hours
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/9999.1 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
 === Managing jobs which have been added to machines
 
 . Test case: find job(s) by its naming keywords
@@ -1505,6 +1533,12 @@ These instructions only provide a starting point for testers to work on; testers
 
     Expected:
     No swapping operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
 
     login saif aaaAAA123$
     manageJob stool swap batterycontainer
