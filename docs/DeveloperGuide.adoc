@@ -493,7 +493,7 @@ The syntax for the commands are implemented in the following manner: +
 
 The subcommands `start`, `restart` and `cancel` do not make use of *<operand2>*, whereas the subcommands
 `swap` `move` and `shift` require
-require <operand2> to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
+require *<operand2>* to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
 
 We have nested these commands as subcommands of `manageJob` to centralise the management of Jobs for users, therefore making it
 easier for users to manipulate Jobs.
@@ -506,6 +506,8 @@ Within each `Machine`, Jobs are stored within a `uniqueJobsList`. The `Machines`
 implemented by the `VersionedAddressBook`.
 
 [red]#The diagram below shows the Jobs related section of the Model.#
+
+image::JobsClassDiagram.png[width:800]
 
 There are three main types of methods in `VersionedAddressBook` that concern
 the manipulation of Jobs:
@@ -528,20 +530,16 @@ same property in Job. We will therefore only detail the sequence diagram of star
 
 [red]#The following diagram shows the sequence diagram for startJob().#
 
+image::SDStartJob.png[width:800]
 
 * Methods that mutates the UniqueJobList within a Machine:
 ** swapJobs()
 ** moveJob()
 ** shiftJob()
-** removeJob()
 
 
-Much like before, the sequence diagram for these methods are very similar. However, of the
-three methods, swapJobs() is the most complex, and therefore we will display it's sequence
-diagram below.
-
-[red]#The following diagram shows the sequence diagram for swapJob().#
-
+Much like before, the sequence diagram for these methods are very similar, but will call
+methods from the UniqueJobsList as well.
 
 Therefore, we can use the manageJob command to manipulate the prints Jobs to
 achieve a representation of the actual prints in the makerspace. This can be illustrated
@@ -549,6 +547,7 @@ in the simple activity Diagram below.
 
 [red]#The following diagram shows the generic activity diagram for a managing a Job.#
 
+image::ADManagePrints.PNG[width:800]
 
 The generic flow of a typical manageJob command is as follows:
 
@@ -1452,6 +1451,34 @@ These instructions only provide a starting point for testers to work on; testers
     Expected:
     No job will be added to any machine. Error will be shown in result box as "Failed to add Job. Machine specified is Disabled"
 
+. Test case: add a job with invalid name
+
+    addJob n/!!!NAME!!! m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job names should only contain alphanumeric characters and spaces, and it should not be blank"
+
+. Test case: add a job with invalid priority
+
+    addJob n/model m/ender on/Rakuten pr/FAKEPRIORITY d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job priority can only be URGENT, HIGH and NORMAL"
+
+. Test case: add a job with invalid duration
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/NotATime jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
+. Test case: add a job with duration exceeding 9999 hours
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/9999.1 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
 === Managing jobs which have been added to machines
 
 . Test case: find job(s) by its naming keywords
@@ -1506,6 +1533,12 @@ These instructions only provide a starting point for testers to work on; testers
 
     Expected:
     No swapping operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
 
     login saif aaaAAA123$
     manageJob stool swap batterycontainer

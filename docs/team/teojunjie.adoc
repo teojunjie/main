@@ -121,9 +121,6 @@ include::../UserGuide.adoc[tag=requestDeletion]
 
 include::../UserGuide.adoc[tag=manageMachine]
 
-#_SwapJobs Version 1.2_#
-
-include::../UserGuide.adoc[tag=swapJobs]
 
 #_ManageJob Version 1.3 (Integrated code with storage and UI)_#
 

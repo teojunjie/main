@@ -36,7 +36,7 @@ progress of each print, as well as dynamically updating when there are changes t
 ** Justification: This feature is essential to the software, allowing MakerSpace users and managers to have a easily accessed overview of the MakerSpace that\
 changes dynamically to reflect the status of Prints.
 
-* *Major enhancement*: added *the ability to edit a Machine* https://github.com/CS2113-AY1819S1-T09-1/main/pull/47[#47]
+* *Major enhancement*: added the ability to edit a Machine https://github.com/CS2113-AY1819S1-T09-1/main/pull/47[#47]
 ** What it does: Allows a user to edit the data fields of a Machine.
 ** Justification: This feature is important because it allows Users to make changes to a Machine without affecting its Jobs, allowing the
 app to accommodate changes in the equipment in the makerspace.
@@ -58,7 +58,7 @@ https://github.com/CS2113-AY1819S1-T09-1/main/pull/151[#151]
 * *Minor enhancement*: Bug reports and fixes
 
 
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Code contributed*: https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=trufflepirate[Code Dashboard by Reposense]
 
 * *Other contributions*:
 
@@ -72,7 +72,7 @@ https://github.com/CS2113-AY1819S1-T09-1/main/pull/126[#126]
 ** Documentation:
 *** Initialised Readme for MakerManager
 https://github.com/CS2113-AY1819S1-T09-1/main/pull/3[#3]
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** ScreenShots and visual Aids: https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153]
 
 ** Tools:
 *** Integrated a new Github plugin (Coveralls) to the team repo to track coverage
@@ -88,9 +88,11 @@ https://github.com/CS2113-AY1819S1-T09-1/main/pull/47[#47]
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
+
+include::../UserGuide.adoc[tag=manageJob]
+include::../UserGuide.adoc[tag=findJob]
 include::../UserGuide.adoc[tag=undoredo]
 
-include::../UserGuide.adoc[tag=dataencryption]
 
 == Contributions to the Developer Guide
 
@@ -98,13 +100,6 @@ include::../UserGuide.adoc[tag=dataencryption]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=undoredo]
-
-include::../DeveloperGuide.adoc[tag=dataencryption]
+include::../DeveloperGuide.adoc[tag=managejob]
 
 
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_
