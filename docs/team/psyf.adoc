@@ -3,8 +3,7 @@
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: MakerManager
-== Overview
+== Overview : MakerManager
 This project portfolio is written to document my contribution to MakerManager and role assumed during the project.
 
 MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
