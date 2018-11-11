@@ -12,29 +12,14 @@
 MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
 MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
 The app is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
-
-The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS.
-The user interacts with MakerManager using a Command Line Interface (CLI), but can also choose to use the Graphical User Interface (GUI) built in JavaFX.
-The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
-
-This is a desktop application for managing maker spaces.
-
-It has a GUI but most of the user interactions happen through a CLI (Command Line Interface).
-
-It is a Java application intended for managing 3-D prints, but has capabilities to handle other forms of manufacturing machines as well.
-
-It is written in OOP fashion. It provides a reasonably well-written code that is based on Address Book (level 4).
+The project was developed by a team of 4, and you can find out more about the developers in the <<AboutUs#, About Us>> section.
 
 *Features*:
 
 . A GUI for displaying all available machines at a glance.+
-
 . Two different access levels, for two separate target profiles (see below)
-
 . Ability to manipulate prints, queues, and machines, depending on access level
-
 . More test cases, including automated GUI testing.
-
 . Support for Build Automation using Gradle and for Continuous Integration using Travis CI.
 
 *Target user profile*:
@@ -54,6 +39,7 @@ See which 3D printers are being used, and the estimated time left until the equi
 === Summary of contributions
 
 ---
+* *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]]
 
 * *Major enhancements*:
    . Added the feature to *add a machine* to makerManager systems
@@ -84,11 +70,6 @@ ___
 *** Improved editMachine command and resolved the bugs that we had in V1.3
 *** File-to-Memory transfer of data modifications for separate files
 
-___
-
-* *Code contributed*: [https://github.com/CS2113-AY1819S1-T09-1/main[Functional code]]
-
-___
 * *Other contributions*:
 
 ** Project management:
