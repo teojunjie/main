@@ -75,7 +75,7 @@ If all is well, the following two steps should be trivial.
 === Loading sample data (Recommended for first-timers)
 
 . Download `DemoDataV1.4.zip` (You can find it in the root directory of the repository link:{repoURL}[here])
-. Unzip (using WinRar or 7Zip, for example) and move the 3 `xml` files in the folder named `data` in which you ran the jar file on your computer.
+. Unzip (using WinRar or 7Zip, for example) and keep the `data` folder inside in the same directory as the jar file.
 . The 'data' file should contain the 3 files below:
 ... data/addressBook.xml
 ... data/makerManagerAdmins.xml
