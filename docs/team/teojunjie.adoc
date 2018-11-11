@@ -9,6 +9,14 @@
 ---
 
 === Overview
+MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
+MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
+The app is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
+
+The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS.
+The user interacts with MakerManager using a Command Line Interface (CLI), but can also choose to use the Graphical User Interface (GUI) built in JavaFX.
+The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
+
 This is a desktop application for managing maker spaces.
 
 It has a GUI but most of the user interactions happen through a CLI (Command Line Interface).
