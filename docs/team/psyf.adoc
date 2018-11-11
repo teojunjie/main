@@ -64,7 +64,7 @@ This section includes some of my contributions towards developing MakerManager w
 
 include::../UserGuide.adoc[tag=adminMode]
 
-include::../UserGuide.adoc[tag=managejob]
+include::../UserGuide.adoc[lines=302..338]
 
 include::../UserGuide.adoc[tag=faq]
 
