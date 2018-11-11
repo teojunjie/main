@@ -5,15 +5,18 @@
 
 == PROJECT: MakerManager
 == Overview
-This project protfolio is written to document the author's contribution to MakerManager.
+This project portfolio is written to document my contribution to MakerManager and role assumed during the project.
 
 MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
 MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
-MakerManager is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
+The app is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
 
-The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS. The user interacts with MakerManager using a Command Line Interface (CLI), but can also choose to use the Graphical User Interface (GUI) built in JavaFX. The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
+The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS.
+The user interacts with MakerManager using a Command Line Interface (CLI), but can also choose to use the Graphical User Interface (GUI) built in JavaFX.
+The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
 
 In short, MakerManager can be used to:
+
 * effectively time-share 3D printers
 * see status and time-left for printers
 * add prints to a particular printer (or let the software automatically optimize it for you)
@@ -21,37 +24,36 @@ In short, MakerManager can be used to:
 * add, remove and maintain printer queues and machines - if you have administrative rights
 
 == Summary of contributions
+This section includes some of my contributions towards developing MakerManager within a small span of a few weeks.
 
-* *Major enhancement*: added authentication system for administrators
-** What it does: allows lab managers to login to the system and gain extra-privileges, which can be used to manage the makerspace effectively.
-** Justification: This feature is a must-have because we need to ensure only authorized personnel can edit critical information
-** Highlights: This enhancement requires existing and future commands to keep the level of authorization in mind. It required an in-depth analysis of third party libraries. The implementation was challenging as we had to make sure the application had no security loopholes
+* *Major enhancement*: Added authentication system for administrators.
+** What it does: This feature allows lab managers to login to the system and gain extra privileges, which can be used to manage the makerspace effectively.
+** Justification: This feature is a must-have as we need to ensure only authorized personnel can edit critical information.
+** Highlights: This enhancement requires existing and future commands to integrate the level of authorization. It required an in-depth analysis of third party libraries. The implementation was challenging as we had to make sure the application had no security loopholes.
 ** Credits: jBcrypt
 
-* *Major enhancement*: added commands for managing prints
-** What it does: allows users to manage prints in general, including starting, restarting, cancelling and deleting prints.
-** Justification: This feature is the core of the software, as the whole point of the software is to have a dynamic queue that users can leverage on to plan their own prints.
-* *Minor enhancement*: Memory-to-File transfer of data modifications for separate files
-* *Minor enhancement*: Bug reports and fixes
+* *Major enhancement*: Added commands for managing prints.
+** What it does: This feature allows users to manage prints in general, including starting, restarting, cancelling and deleting prints.
+** Justification: This feature is the core of the software, as the crux of the software is to have a dynamic queue that users can leverage on to plan their own prints.
+* *Minor enhancement*: Memory-to-File transfer of data. The existing implementation had to be reworked to allow segregation of different types of data.
+* *Minor enhancement*: Bug Fixes
 
-* *Code contributed*: https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=psyf[Code Dashboard by Reposense]
+* *Code contributed*: You can see my code contributions in this https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=psyf[Code Dashboard by Reposense]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases v1.2.1 - v1.4 (4 releases) on GitHub
-** Enhancements to features:
-*** Wrote some tests for features added in makerManager (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/43[#43])
-** Documentation:
-*** Maintained User Guide and Developer Guide for features I worked on.
-*** Regularly updated User Guide and Developer Guide to keep up with the releases.
-*** Standardized the User Guide and Developer Guide formats (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153])
-** Community:
+*** Managed releases v1.2.1 - v1.4 on GitHub
 *** Reviewed most PRs (with non-trivial review comments). (https://github.com/CS2113-AY1819S1-T09-1/main/pulls?q=is%3Apr+reviewed-by%3APsyf+is%3Aclosed[examples])
 *** Managed https://github.com/CS2113-AY1819S1-T09-1/main/issues[issue-board] and https://github.com/CS2113-AY1819S1-T09-1/main/milestones[milestones]
+** Enhancements to features:
+*** Wrote tests for features added in makerManager (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/43[#43])
+** Documentation:
+*** Maintained User Guide and Developer Guide for features I worked on.
+*** Standardized the User Guide and Developer Guide formats (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153])
+** Community:
 *** Contributed to forum discussions (Example: https://github.com/nusCS2113-AY1819S1/forum/issues/87[#87])
-*** Reported bugs and suggestions for other teams in the class (https://github.com/CS2113-AY1819S1-F10-3/main/issues?q=is%3Aopen+mentions%3APsyf[examples])
-***
+*** Reported bugs and suggestions for another team in the class (https://github.com/CS2113-AY1819S1-F10-3/main/issues?q=is%3Aopen+mentions%3APsyf[examples])
 ** Tools:
 *** Integrated a third party library (jBcrypt) to the project (https://github.com/CS2113-AY1819S1-T09-1/main/pull/12[#12])
 
@@ -67,7 +69,6 @@ include::../UserGuide.adoc[tag=managejob]
 
 include::../UserGuide.adoc[tag=faq]
 
-
 include::../UserGuide.adoc[tag=upcoming]
 
 == Contributions to the Developer Guide
@@ -77,7 +78,7 @@ include::../UserGuide.adoc[tag=upcoming]
 |===
 
 include::../DeveloperGuide.adoc[tag=administratormode]
----
+
 include::../DeveloperGuide.adoc[tag=dataencryption]
 
 
