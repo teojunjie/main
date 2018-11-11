@@ -82,5 +82,6 @@ include::../DeveloperGuide.adoc[tag=modelComponent]
 include::../DeveloperGuide.adoc[tag=storageComponent]
 
 === Manual Testing Cases
-
+__Due to the limit of page, full testing cases can be referred in the Developer Guide.
+__
 include::../DeveloperGuide.adoc[tag=testingCase]

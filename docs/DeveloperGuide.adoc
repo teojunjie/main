@@ -1103,6 +1103,8 @@ These instructions only provide a starting point for testers to work on; testers
     Expected:
     A pop-up window containing the user guide will be displayed.
 
+// end::testingCase[]
+
 === Managing the admin access
 . Test case: login to a default admin account
 
