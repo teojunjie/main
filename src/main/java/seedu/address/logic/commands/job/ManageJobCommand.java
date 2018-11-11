@@ -49,7 +49,7 @@ public class ManageJobCommand extends Command {
     private static final String MESSAGE_RESTARTED_JOB = "The print has restarted.";
     private static final String MESSAGE_DELETED_JOB = "The print has been deleted";
     private static final String MESSAGE_NO_SUCH_JOB = "No such print found";
-    private static final String MESSAGE_NO_SUCH_OPTION = "No such options. Only use: start, restart, cancel.";
+    private static final String MESSAGE_NO_SUCH_OPTION = "No such options. Only use: start, restart, cancel, shift, swap, move, delete.";
     private static final String MESSAGE_ACCESS_DENIED_1 = "Non admin user is not allowed to ";
     private static final String MESSAGE_ACCESS_DENIED_2 = " Jobs in Maker Manager";
     private static final String MESSAGE_MACHINE_NOT_FOUND = "Machine not found in MakerManager!";

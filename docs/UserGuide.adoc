@@ -506,7 +506,7 @@ This is a nifty little list you can print and paste somewhere for quick referenc
 . manageJob JOB_NAME move TARGET_MACHINE_NAME
 . manageJob JOB_NAME shift up
 . manageJob JOB_NAME shift down
-. manageJob JOB_NAME remove
+. manageJob JOB_NAME delete
 . requestDeletion n/JOB_NAME
 . findJob [JOB_NAME_1] [JOB_NAME_2]
 . listJobs
