@@ -1,21 +1,26 @@
-= PLACEHOLDER - Project Portfolio
+= Fu Tianyuan - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
-
----
-
+== PROJECT: MakerManager
 == Overview
-PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+This document is meant for recording the contributions I have committed and the role played in the developing of this project.
+
+MakerManger is a free, open-sourced desktop application developed to improve the efficiency of existing facilities at makerspace at SoC. Currently, the facilities are mostly 3D printers.
+Without the traditional tedious and complicated method of managing the usage of the facilities, MakerManger provides a real-time list and appended job queue for each. Algorithms are also able to provide the tasking method which consumes least time.
+
+In abstract, MakerManager has these features: +
+* A 2-level access system, for the normal users and lab managers. +
+* Normal users can add jobs to specified machines or let the system help them allocate to the most free one. +
+* Admin users can register/deregister machines, manage job queues of machines. +
+* All users can monitor the status of machines and printing progress of all jobs.
 
 == Summary of contributions
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
+* *Major enhancement*: added *addJob command*
+** What it does: allows the user to add a job with specified name and priority to the job list.
+** Justification: This feature is one of the key features of MakerManger. Without this, users will not be able to add any jobs to any machine.
 ** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
 ** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
 
