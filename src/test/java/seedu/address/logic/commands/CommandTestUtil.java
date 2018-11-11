@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MACHINE_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -19,13 +20,16 @@ import java.util.List;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.machine.EditMachineCommand;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.job.Priority;
 import seedu.address.model.job.Status;
+import seedu.address.model.machine.MachineStatus;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.builders.EditMachineDescriptorBuilder;
 
 /**
  * Contains helper methods for testing commands.
@@ -42,6 +46,12 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_BOB = "Block 123, Bobby Street 3";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
+
+    public static final String VALID_MACHINE_NAME_ULTIMAKER = "ULTIMAKER";
+    public static final String VALID_MACHINE_NAME_ENDER = "ENDER";
+
+    public static final String VALID_MACHINE_STATUS_ENABLED = "ENABLED";
+    public static final String VALID_MACHINE_STATUS_DISABLED = "DISABLED";
 
     //--------------------------Valid Job Configuration String Parameters------------------------
     public static final String VALID_JOBNAME_PROONE = "proone";
@@ -64,10 +74,17 @@ public class CommandTestUtil {
     public static final String VALID_JOBADDEDTIME_SOMEDAY = "sample day";
     public static final String VALID_JOBADDEDTIME_SOMETIME = "3/10 13:19:20";
 
+    public static final String MACHINE_NAME_DESC_ULTIMAKER = " " + PREFIX_NAME + VALID_MACHINE_NAME_ULTIMAKER;
+    public static final String MACHINE_NAME_DESC_ENDER = " " + PREFIX_NAME + VALID_MACHINE_NAME_ULTIMAKER;
+    public static final String MACHINESTATUS_DESC_ENABLED = " " + PREFIX_MACHINE_STATUS + VALID_MACHINE_STATUS_ENABLED;
+    public static final String MACHINESTATUS_DESC_DISABLED =
+        " " + PREFIX_MACHINE_STATUS + VALID_MACHINE_STATUS_DISABLED;
 
+    // '&' not allowed in names
+    public static final String INVALID_MACHINENAME_DESC = " " + PREFIX_NAME + "ultimaker&";
 
-
-
+    // 'a' not allowed in phones
+    public static final String INVALID_MACHINESTATUS_DESC = " " + PREFIX_MACHINE_STATUS + "PEANUTMAN";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -93,12 +110,23 @@ public class CommandTestUtil {
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
 
     static {
-        DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
-            .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
-            .withTags(VALID_TAG_FRIEND).build();
-        DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-            .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB)
-            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+        DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY)
+            .withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY).withTags(VALID_TAG_FRIEND).build();
+        DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
+            .withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
+            .build();
+    }
+
+    public static final EditMachineCommand.EditMachineDescriptor DESC_ULTIMAKER;
+    public static final EditMachineCommand.EditMachineDescriptor DESC_ENDER;
+
+    static {
+        DESC_ULTIMAKER =
+            new EditMachineDescriptorBuilder().withName(VALID_MACHINE_NAME_ULTIMAKER).withStatus(MachineStatus.ENABLED)
+                .build();
+        DESC_ENDER =
+            new EditMachineDescriptorBuilder().withName(VALID_MACHINE_NAME_ENDER).withStatus(MachineStatus.ENABLED)
+                .build();
     }
 
     /**

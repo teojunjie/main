@@ -81,7 +81,7 @@ public class UpdatePasswordCommand extends Command {
 
 
         model.updateAdmin(toUpdate, updatedAdmin);
-        model.commitAddressBook();  //TODO: not sure what this does;
+        model.commitAddressBook();
 
         return new CommandResult(MESSAGE_SUCCESS);
     }

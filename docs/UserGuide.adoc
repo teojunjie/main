@@ -61,6 +61,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * `1. abc`, `2. cdt` and such columns represent machines
 * The scrollable panel under each machine represents the machine's queue, with Prints divided by alternating shades of grey.
 * The tags are self-explanatory, but you can read the next section for getting a good understanding of what they represent.
+
+image::MarkedUi.png[width="790"]
 [NOTE]
 The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 The "Admin Mode" is giving special access to lab managers in real life to manage the makerspace facilities, such as adding, removing or changing the status.
@@ -119,17 +121,18 @@ If any particular outcome is not listed, it implies that only a message will be 
 [NOTE]
 The words 'Print', 'Job' and 'Print Job' are used interchangeably. This app now specializes in 3D Prints, but can be extended to other equipments in the future.
 
-. *Viewing Help* +
+* *Viewing Help* +
 Provides a guidance as to what you can do with MakerManager. +
 Outcome: You will see a window pop up with the user guide in it for quick reference. +
 
     Format: help
 
-. *Administrator mode* +
+// tag::adminMode[]
+* *Administrator mode* +
 The administrator mode is present to prevent malicious users from harming other users' workflow easily. Only the administrator is allowed to make drastic changes to the application and its data. +
 The commands listed below will only work in admin mode. The list is non-exhaustive, and you will find more admin-specific commands later on. +
 
-// tag::adminMode[]
+
 
 .. *Login* +
 Enables admin mode in MakerManager. +
@@ -177,9 +180,9 @@ NEW_PW has to match the same validation criteria as the one specified in addAdmi
     Example: updatePassword saif 123Abcd$ 456Wasd= 456Wasd=
 
 // end::adminMode[]
-
 // tag::addMachine[]
-. *Add Machine (Admin Only)* +
+
+* *Add Machine (Admin Only)* +
 Adds a new machine to MakerManager. You might be extending your printer fleet by adding new printers, and this lets the users of the space know. Especially handy if it's a big place! +
 Outcome: You will see a new column added to the UI. +
 +
@@ -196,10 +199,11 @@ and it should not be blank.
     Format: <addMachine> n/MACHINE_NAME ms/STATUS
 
     Example: addMachine n/myMachine ms/DISABLED
+
 // end::addMachine[]
 
 // tag::editMachine[]
-. *Edit Machine* +
+* *Edit Machine* +
 Edits an existing machine in MakerManager. +
 Outcome: You will see a change in the fields of the specific machine. +
 _This command adhere to the same constraints as addMachine Command. +
@@ -211,12 +215,12 @@ Machines with `ongoing` prints cannot be edited!
 
     Format: <editMachine> MACHINE_NAME [n/MACHINE_NAME] [ms/STATUS]
 
-    Example: editMachine myMachine n/UpBox ms/ENABLED
+    Example: editMachine oldupbox n/newupbox ms/ENABLED
 
 // end::editMachine[]
 
 // tag::manageMachine[]
-. *Manage machine (Admin only)* +
+* *Manage machine (Admin only)* +
 .. *Clean a Machine* +
 Cleans a machine by removing jobs that have status `CANCELLED`, `FINISHED` or `DELETING`. This is a convenient and fast way for you to get things done. +
 Outcome: The machine will no longer have any of these jobs listed afterwards, making it easier for others to view. +
@@ -230,11 +234,11 @@ Removes all the jobs from the specified machine. You will be warned and asked fo
 Outcome: If you press OK, the machine's queue will be empty. If you press CANCEL, nothing happens. +
     _If you specify AUTO, the prints in the existing machine will be transferred to other machines optimally._ +
 
-    Format: manageMachine MACHINE_NAME flush
+    Format: <manageMachine> MACHINE_NAME flush
 
     Examples:
-    manageMachine UpBox flush
-    manageMachine UpBox flush AUTO
+    manageMachine oldupbox flush
+    manageMachine oldupbox flush AUTO
 
 .. *Remove a Machine* +
 Removes a machine from MakerManager. This helps you decommission a machine and let users know instantly. +
@@ -242,11 +246,11 @@ Outcome: You will no longer see the machine as a column in the UI. +
 [NOTE]
 You can't do this unless the machine's queue is empty. +
 
-    Format : manageMachine MACHINE_NAME remove
+    Format : <manageMachine> MACHINE_NAME remove
 
-    Example: manageMachine UpBox remove
+    Example: manageMachine oldupbox remove
 
-. *Finding Machines:*
+* *Finding Machines:* +
 Finds machines based on given keywords. You have to give at least 1 argument. +
 Outcome: You will see only matching machines shown in the UI. +
 [NOTE]
@@ -254,10 +258,11 @@ After the filtered machine list is displayed, use the `listMachines` command to 
 
     Format: findMachine [MACHINE_NAME_1] [MACHINE_NAME_2]...
 
-    Example: findMachine UpBox DownBox LeftBox RightBox
+    Example: findMachine oldupbox mbot
 
 // end::manageMachine[]
-. *Listing Machines* +
+
+* *Listing Machines* +
 Lists all the machines present in the makerspace. +
 Outcome: All the queues will be visible in the UI. +
 
@@ -266,7 +271,7 @@ Outcome: All the queues will be visible in the UI. +
     Example: listMachines
 
 // tag::addJob[]
-. *Add a Print Job* +
+* *Add a Print Job* +
 Adds a print job to a machine's queue in MakerManager. +
 Outcome: You will see the job in if you scroll down the queue of the machine you specified. +
 _Specifying `AUTO` as MACHINE_NAME will let the software optimize which queue to add the print to. +
@@ -283,7 +288,7 @@ Multiple tags can be added to one print job.
 // end::addJob[]
 
 // tag::manageJob[]
-. *Manage Print*
+* *Manage Print*
 .. *Start a Print* +
 Starts an existing print job, if it is at the top of the queue. +
 Outcome: The print tag will be set to `ONGOING` and the machine will start a timer. The print will be automatically flagged as `FINISHED` after the time specified in the duration has passed. +
@@ -293,7 +298,7 @@ If `admin` mode is enabled, users are able to start jobs that are not at the top
 
     Format: manageJob/<manageJob> PRINT_NAME start
 
-    Example: manageJob iDCP start
+    Example: manageJob gears start
 
 .. *Cancel a Print* +
 Cancels an existing print in the queue. You might want to use this if the print fails, which is very common for 3D printers, or if you no longer want to print for whatever reason. +
@@ -301,22 +306,24 @@ Outcome: The print tag will be changed to `CANCELLED`. +
 
     Format: manageJob PRINT_NAME cancel
 
-    Example: manageJob iDCP cancel
+    Example: manageJob gears cancel
+
 
 .. *Restarting a Print:*
 Restarts an existing print in the queue. Same as start. This is be used after a failed(cancelled) print. +
 
     Format: manageJob PRINT_NAME restart
 
-    Example: manageJob iDCP restart
+    Example: manageJob gears restart
 
 .. *Delete a Print (Admin only)* +
 Deletes an existing print in the queue. +
 Outcome: You will no longer see the specified print in the UI. +
 
-    Format: manageJob PRINT_NAME delete
+    Format: <manageJob> PRINT_NAME delete
 
-    Example: manageJob iDCP delete
+    Example: manageJob gears delete
+
 
 .. *Move a Print (Admin only)* +
 Moves an existing print that is not `ONGOING` to another machine. This command inserts the print at the bottom of the target Machine's queue +
@@ -327,7 +334,7 @@ Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, 
 
     Format: <manageJob> PRINT_NAME move MACHINE_NAME
 
-    Example: manageJob iDCP move ultimaker
+    Example: manageJob gears move ultimaker
 
 
 .. *Shifting a Print (Admin only)* +
@@ -344,11 +351,9 @@ Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, 
     Format: <manageJob> PRINT_NAME shift SHIFT_OPTION
 
 
-    Example: manageJob iDCP shift up
+    Example: manageJob chassis shift up
 
-// end::manageJob[]
 
-// tag::swapJobs[]
 .. *Swap a Print (Admin only)* +
 Swaps an existing print with another existing print. Both Prints must not be `ONGOING`.
 [NOTE]
@@ -357,22 +362,24 @@ Prints are always displayed sorted in order of `ONGOING`, followed by `QUEUED`, 
 
     Format: <manageJob> PRINT_NAME swap TARGET_PRINT_NAME
 
-    Example: manageJob iDCP swap toycar
+    Example: manageJob gears swap cup
 
-// end::swapJobs[]
+// end::manageJob[]
 
 // tag::requestDeletion[]
-. *Requests a print job to be deleted by admin* +
+* *Requests a print job to be deleted by admin* +
 This command ensures that a malicious user cannot delete prints from a queue just so that (s)he can get the print done fast. +
 Outcome: Marks a print with a `requestDeletion` tag, after which the admin might decide to remove it. +
 
     Format: requestDeletion n/PRINT_NAME
 
-    Example: requestDeletion n/iDCP
+    Example: requestDeletion n/gears
 
 // end::requestDeletion[]
 
-. *Finding Prints:*
+// tag::findJob[]
+
+* *Finding Prints:*
 Finds Jobs based on given keywords. You have to give at least 1 argument. +
 Outcome: You will see only matching Jobs shown in the UI. +
 [NOTE]
@@ -380,9 +387,10 @@ After the filtered job list is displayed, use the `listJobs` command to return t
 
     Format: findJob [JOB_NAME_1] [JOB_NAME_2]...
 
-    Example: findJob toycar toyboat toydinosaur
+    Example: findJob gears chassis cup
 
-. *Listing Prints* +
+
+* *Listing Prints* +
 Lists all prints. +
 Outcome: All Prints will be visible in the UI. +
 
@@ -390,9 +398,18 @@ Outcome: All Prints will be visible in the UI. +
 
     Example: listJobs
 
-. *Undoing and Redoing Commands* +
+// end::findJob[]
+
+// tag::undoredo[]
+* *Undoing and Redoing Commands* +
 The Maker Manager is remembers the  sequence of commands entered, and provides the option for users to
 undo or redo actions should the need arises.
+[NOTE]
+The Commands `help` `history` `findJob` `findMachine` `listJobs` and `listMachines` do not count as
+commands for the purposes of `undo` and `redo`, and therefore trying to undo or
+redo these commands will instead undo or redo the most recent
+command that does not belong to the above list!
+
 .. *Undo:*
 This command reverts the state of Maker Manager to a state before the most recent successful command.
  +
@@ -409,6 +426,14 @@ This command reverts the state of Maker Manager to a state before the most recen
 `Login` commands cannot be redone!
 
     Format: redo
+
+.. *History:*
+This command displays a list of commands entered by the user.
+ +
+
+    Format: history
+
+// end::undoredo[]
 
 . *Exit the program* +
 Exits MakerManager. +
@@ -441,11 +466,14 @@ Normally, it will be located in the `data/` folder in the `root` directory.
 // end::faq[]
 
 == Command Summary
+// tag::commandsummary[]
+
 This is a nifty little list you can print and paste somewhere for quick reference. +
 
 . help
 . undo
 . redo
+. history
 . login ADMIN_ID PASSWORD
 . logout
 . addAdmin USERNAME PASSWORD VERIFY_PASSWORD
@@ -467,10 +495,13 @@ This is a nifty little list you can print and paste somewhere for quick referenc
 . manageJob JOB_NAME move TARGET_MACHINE_NAME
 . manageJob JOB_NAME shift up
 . manageJob JOB_NAME shift down
+. manageJob JOB_NAME remove
 . requestDeletion n/JOB_NAME
 . findJob [JOB_NAME_1] [JOB_NAME_2]
 . listJobs
 . exit
+
+// end::commandsummary[]
 
 // tag::upcoming[]
 

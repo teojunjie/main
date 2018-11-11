@@ -73,6 +73,18 @@ If all is well, the following two steps should be trivial.
 . <<Testing,Run the tests>> to ensure they all pass.
 
 === Loading sample data
+.  Ensure you have Java version `9` or later installed on your Computer. If you don't have JRE installed, you can use https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB[this link] as a reference.
+.  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
+.  Copy the jar file to the folder you want to use as the home folder for your MakerManager.
+.  Download the `DemoDataV1.4.zip` (You can find it in the root directory of the repository link:{repoURL}[here].
+.  Unzip and save the 3 xml data files in a folder called 'data' in the same directory
+in which you saved the jar file on your computer.
+The 'data' file should contain the 3 files below. So it should be,
+... data/addressBook.xml
+... data/makerManagerAdmins.xml
+... data/makerManagerMachines.xml
+. Double-click on the jar file to start the app. The GUI should appear in a few seconds.
+
 
 === Configurations to do before writing code
 Before you start messing around with the source code, here are some tools you might want to set up in order to tactfully handle a medium-sized project such as this.
@@ -281,9 +293,12 @@ This section describes how undo/redo is implemented in MakerManager.
 [[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
 It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
+For added security, `VersionedAddressBook` also remembers the last time the user was logged in or logged out using `lastAdminLoginPointer` and `lastAdminLogoutPointer` .
 Additionally, it implements the following operations:
 
 * `VersionedAddressBook#commit()` -- Saves the current address book state in its history.
+* `VersionedAddressBook#adminLoginCommit()` -- Saves the current address book state in its history, updates lastAdminLoginPointer.
+* `VersionedAddressBook#adminLogoutCommit()` -- Saves the current address book state in its history, updates lastAdminLogoutPointer.
 * `VersionedAddressBook#undo()` -- Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` -- Restores a previously undone address book state from its history.
 
@@ -292,26 +307,32 @@ These operations are exposed in the `Model` interface as `Model#commitAddressBoo
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
 Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+`lastAdminLoginPointer` and `lastAdminLogoutPointer` are initialised at -1, indicating that the MakerManager was never logged in or logged out.
 
 image::UndoRedoStartingStateListDiagram.png[width="800"]
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `addJob n/iDCP..` command to add a Job to the MakerManager.
+The `addJob` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `addJob n/iDCP..` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+[NOTE]
+If the command used was login or logout, the corresponding `Model#adminLoginCommitAddressBook()` or `Model#adminLogoutCommitAddressBook()` will be called. This command additionally updates the corresponding
+`lastAdminLoginPointer` or `lastAdminLogoutPointer` to the current address book state.
 
 image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
 
-Step 3. The user executes `add n/David ...` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `manageJob iDCP start` to start the job iDCP. The `manageJob iDCP start` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
 
 [NOTE]
 If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that starting the job was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 image::UndoRedoExecuteUndoStateListDiagram.png[width="800"]
 
 [NOTE]
 If the `currentStatePointer` is at index 0, pointing to the initial address book state, then there are no previous address book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the undo.
+The `undo` command also checks if the user is attempting to undo a logout command by calling `Model#isUndoLogout()` and will return an error if this is the case.
 
 The following sequence diagram shows how the undo operation works:
 
@@ -321,12 +342,18 @@ The `redo` command does the opposite -- it calls `Model#redoAddressBook()`, whic
 
 [NOTE]
 If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone address book states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+The `redo` command also checks if the user is attempting to redo a login command by calling `Model#isRedoLogin()` and will return an error if this is the case.
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+
+Step 5. The user then decides to execute the command `listJobs`. Commands that do not modify the address book, such as `listJobs`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
 image::UndoRedoNewCommand3StateListDiagram.png[width="800"]
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `add n/David ...` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`.
+Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`,
+all address book states after the `currentStatePointer` will be purged. We designed it this way because
+it no longer makes sense to redo the `manageJob iDCP start` command. This is the behavior that most modern
+desktop applications follow.
 
 image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
 
@@ -463,9 +490,106 @@ The implementation restricts itself to the `Logic` component of the architecture
 
 // tag::managejob[]
 === Managing Prints
-*> Explain syntax choice*
+This section describes how MakerManager manages the Jobs or Prints within the makerspace.
+More specifically, this section will detail the implementation of the manageJob command and
+its various sub-features.
 
-*> is there a design consideration? -> syntax
+
+The main command to manage and manipulate the Jobs in the makerManager
+is `manageJob` which has the following subcommands:
+
+* `start` - sets the status of a job to "ONGOING"
+* `restart` - sets the status of a job to "ONGOING", functionally the same as start, but used for restarting cancelled Jobs.
+* `cancel` - sets the status of a job to "CANCELLED"
+* `remove` - removes the Job from the Maker Manager
+* `swap` - Swaps the position of two Jobs
+* `move` - Moves a Job to another Machine
+* `shift` - Shift a Job's order within a machine
+
+The syntax for the commands are implemented in the following manner: +
+
+*manageJob <Jobname> subcommand <operand2>* +
+
+The subcommands `start`, `restart` and `cancel` do not make use of *<operand2>*, whereas the subcommands
+`swap` `move` and `shift` require
+require *<operand2>* to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
+
+We have nested these commands as subcommands of `manageJob` to centralise the management of Jobs for users, therefore making it
+easier for users to manipulate Jobs.
+
+==== Current Implementation
+
+Our MakerManager keeps a record of all Jobs or Prints in a makerspace distributed across many machines.
+Within each `Machine`, Jobs are stored within a `uniqueJobsList`. The `Machines` are in turn stored in a
+`UniqueMachineList` in the `VersionedAddressBook`. The manipulation of the order and the content of the is facilitated by the `ModelManager`, which exposes the methods
+implemented by the `VersionedAddressBook`.
+
+[red]#The diagram below shows the Jobs related section of the Model.#
+
+image::JobsClassDiagram.png[width:800]
+
+There are three main types of methods in `VersionedAddressBook` that concern
+the manipulation of Jobs:
+
+    * *Lookup Methods* that return a handle to a Job or Machine:
+    ** findJob()
+    ** findMachine()
+
+These Methods are used to obtain a handle a particular Job or Machine using each's classes name property. All Jobs
+must have a unique name, and all Machines must also have a unique name. findJob() returns both a Job and its parent
+Machine as a `JobMachineTuple`, a utility class container object that contains a Job and a Machine.
+
+* Methods that *mutate Jobs*:
+** startJob()
+** cancelJob()
+** restartJob()
+
+The sequence diagram for these methods are very similar, they follow a similar pathway and mutate the
+same property in Job. We will therefore only detail the sequence diagram of startJob().
+
+[red]#The following diagram shows the sequence diagram for startJob().#
+
+image::SDStartJob.png[width:800]
+
+* Methods that mutates the UniqueJobList within a Machine:
+** swapJobs()
+** moveJob()
+** shiftJob()
+
+
+Much like before, the sequence diagram for these methods are very similar, but will call
+methods from the UniqueJobsList as well.
+
+Therefore, we can use the manageJob command to manipulate the prints Jobs to
+achieve a representation of the actual prints in the makerspace. This can be illustrated
+in the simple activity Diagram below.
+
+[red]#The following diagram shows the generic activity diagram for a managing a Job.#
+
+image::ADManagePrints.PNG[width:800]
+
+The generic flow of a typical manageJob command is as follows:
+
+. User enters a manageJob command
+. The method associated with its subcommand will be called.
+. Lookup methods findJob() / findMachine() will be called to obtain a handle on the target Job or Machine.
+If the these methods do not find the Job / Machine with the correct unique identifier (name), an Exception will be raised.
+. If the handles are found, then the appropriate action will be taken.
+
+==== Design Considerations
+===== Aspect: Direct Mutation of Objects (Jobs and Machines)
+* **Alternative 1 (current choice):** mutate object's data fields directly.
+** Pros: No new objects have to be created, therefore saving unnecessary computations since only the required
+data fields are changed.
+** Cons: Objects are mutable. Additional care needs to be taken in ensuring that these objects are accessed defensively
+by methods that might cause unintended mutation. Additionally, mutation events must be flagged and raised, since they
+mutations within the Objects are not observed by its container.
+* **Alternative 2:** Create a new instance with edited fields
+** Pros: Defensive. Objects will never mutate, therefore there is no chance of unintended or illegal mutation. Changes
+observed by Observable Containers since a new object is created/added.
+** Cons: More computationally intensive, commands will take longer to execute. Also less room for extension since
+performance is now inversely proportional to object size.
+
 
 // end::managejob[]
 
@@ -1216,6 +1340,8 @@ Windows, Linux, Unix, OS-X
 
 Given below are instructions to test the app manually.
 
+Testers are encouraged to follow the testing codes sequentially.
+
 [NOTE]
 These instructions only provide a starting point for testers to work on; testers are expected to do more _exploratory_ testing.
 
@@ -1223,54 +1349,435 @@ These instructions only provide a starting point for testers to work on; testers
 
 . Initial launch
 
-.. Download the jar file and copy into an empty folder
-.. Download the data files by downloading the DemoDataV1.4.zip from the root.
-Unzip and save the data files in a folder called 'data' in the same directory
-in which you saved the jar file on your computer.
-The 'data' file should contain the 3 files below. So it should be,
-... data/addressBook.xml
-... data/makerManagerAdmins.xml
-... data/makerManagerMachines.xml
-.. Double-click the jar file +
-   Expected view:
-   ... Shows the GUI with a list of printers displayed horizontally where each column represents a printer
-   with print jobs assigned to it.
-   ... These printers are already pre-added to the maker manager local database.
-   ... The window size may not be optimum.
+    .. Download the jar file and copy into an empty folder
+    .. Download the data files by downloading the DemoDataV1.4.zip from the root.
+    .. Unzip and save the data files in a folder called 'data' in the same directoryin which you saved the jar file on your computer.
+
+ The 'data' file should contain the 3 files below.
+ data/addressBook.xml
+ data/makerManagerAdmins.xml
+ data/makerManagerMachines.xml
+
+    .. Double-click the jar file
+
+    Expected view:
+    Shows the GUI with a list of printers displayed horizontally where each column represents a printer with print jobs assigned to it.
+    These printers are already pre-added to the maker manager local database.
+    The window size may not be optimum.
 
 . Saving window preferences
 
-.. Resize the window to an optimum size. Move the window to a different location. Close the window.
-.. Re-launch the app by double-clicking the jar file. +
-   Expected: The most recent window size and location is retained.
+    .. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    .. Re-launch the app by double-clicking the jar file. +
+    Expected: The most recent window size and location is retained.
 
-_{ more test cases ... }_
+. Leaving the app:
 
-=== Adding a print Job to an _available_ machine
+    .. Enter the command:
 
-. Adding a print job when all machines are listed
-.. Prerequistes: List all machines using the 'listMachines' command to view all the machines that are
-currently _available_ and _enabled_ in the system
-...  Test case 1:
+    exit
+
+    .. The window shall close automatically.
+
+=== Ease of use
+. Test case: help window activation
+
+    help
+
+    Expected:
+    A pop-up window containing the user guide will be displayed.
+
+=== Managing the admin access
+. Test case: login to a default admin account
+
+    login admin admin
+
+    Expected:
+    The command box will turn to be blue. Message "login success!" will be shown. Label "[ADMIN_MODE]" will be displayed at the bottom of the app.
+
+. Test case: add a admin to the system (admin only)
+
+    addAdmin saif aaaAAA123$ aaaAAA123$
+
+    Expected:
+    Message "New admin added successfully!" will be shown.
+
+. Test case: add a admin which is already in the system (admin only)
+
+    addAdmin saif aaaAAA123 aaaAAA123
+
+    Expected:
+    The command will not work because there is existing a user call "saif". Message "This username already exists. Try a new one or login." will be shown.
+
+. Test case: password authentication fails when adding a admin (admin only)
+
+    addAdmin new aaaAAA123$ aaaAAA123
+
+    Expected:
+    The command will not work because the password entered the second time is not the same with the first time. Message "The two password fields don't match! Please try again." will be shown.
+
+. Test case: remove the currently logged in admin (logged in as "admin" only)
+
+    removeAdmin admin
+
+    Expected:
+    Message "Admin removed successfully!" will be shown, indicating the "admin" is already moved from the system.
+    The command box will turn back to black and the "[ADMIN_MODE]" label will disappear because "admin" is the currently logged in administrator. Removing the currently logged in administrator will log out that one automatically.
+
+. Test case: login to a admin account which is recently added
+
+    login saif aaaAAA123$
+
+    Expected:
+    The command box will turn to be blue. Message "login success!" will be shown. Label "[ADMIN_MODE]" will be displayed at the bottom of the app.
+
+. Test case: exit from the admin mode (admin only)
+
+    logout
+
+    Expected:
+    Message "Admin removed successfully!" will be shown, indicating the "saif" is already moved from the system.
+    The command box will turn back to black and the "[ADMIN_MODE]" label will disappear.
+
+=== Adding a print Job to a machine
+
+. Test case: add a job called "spectacleframe" to machine "ultimaker"
 
     addJob n/spectacleframe m/ultimaker on/Jimmy pr/NORMAL d/0.03 jn/For a Friend t/personal
 
-    Expected :
+    Expected:
     A print job named spectacleframe will be added to the column under ultimaker at the bottom of the queue.
 
-... Test case 2 :
+. Test case: add a job to the most free machine
 
     addJob n/phonecase m/AUTO on/George pr/NORMAL d/0.1 jn/New phonecase for new phone t/personal
 
-    Expected :
+    Expected:
     A print job named phonecase will be added to the 'Most Free Machine' in the maker manager system
     ** Most free machine represents the machine with the least time until released.
 
-... Test case 3 :
+. Test case: add a job to a machine which does not exist in the machine list
 
     addJob n/buildingmodel m/nosuchmachine on/Jerry pr/URGENT d/1 jn/for Final year project t/SchoolProject
 
-    Expected :
+    Expected:
     No job will be added to any machine. Error will be shown in result box as "Machine specified does not exist"
 
+. Test case: add a job to a disabled machine
 
+    addJob n/model m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Failed to add Job. Machine specified is Disabled"
+
+. Test case: add a job with invalid name
+
+    addJob n/!!!NAME!!! m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job names should only contain alphanumeric characters and spaces, and it should not be blank"
+
+. Test case: add a job with invalid priority
+
+    addJob n/model m/ender on/Rakuten pr/FAKEPRIORITY d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job priority can only be URGENT, HIGH and NORMAL"
+
+. Test case: add a job with invalid duration
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/NotATime jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
+. Test case: add a job with duration exceeding 9999 hours
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/9999.1 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
+=== Managing jobs which have been added to machines
+
+. Test case: find job(s) by its naming keywords
+
+    findJob cup
+
+    Expected:
+    Only the job "cup" will be displayed in the UI.
+
+    findJob c up
+
+    Expected:
+    No jobs will be shown.
+
+    findJob stool cup gears
+
+    Expected:
+    3 jobs: "stool", "cup", "gears" will be displayed in the UI.
+
+. Test case: list all the jobs
+
+    listJobs
+
+    Expected:
+    All the jobs will be displayed in the UI.
+
+. Test case: make a job which has been added into a machine start printing
+
+    manageJob laptopstand start
+
+    Expected:
+    The status label of the laptopstand job will be changed to ONGOING. The timer will start as well.
+
+. Test case: make a job which has been added into a machine cancel printing
+
+    manageJob laptopstand cancel
+
+    Expected:
+    The status label of the laptopstand job will be changed to CANCELLED. The job card will be moved to the end of the machine's job queue.
+
+. Test case: request a job to be deleted
+
+    requestDeletion n/laptopstand
+
+    Expected:
+    The status label of the laptopstand job will be changed to DELETING.
+
+. Test case: swap 2 jobs from 2 different machines (admin only)
+
+    logout
+    manageJob stool swap batterycontainer
+
+    Expected:
+    No swapping operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+. Test case: move a specified job to a specified machine (admin only)
+
+    logout
+    manageJob stool move ultimaker
+
+    Expected:
+    No moving operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to move Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool move ultimaker
+
+    Expected:
+    The "stool" job will be added to the machine "ultimaker".
+
+. Test case: move up the place of a job card in the GUI (admin only)
+
+    logout
+    manageJob stool shift up
+
+    Expected:
+    No shifting operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool shift up
+
+    Expected:
+    The "stool" job will interchange the place in the queue with the job card displayed above it.
+
+. Test case: delete a job from a machine's printing queue (admin only)
+
+    logout
+    manageJob laptopstand delete
+
+    Expected;
+    No deleting operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to delete Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob laptopstand delete
+
+    Expected:
+    The "laptopstand" job will be removed from the job queue and no longer be visible.
+
+=== Managing the configurations of machines
+
+. Test case: find machines by multiple name keywords
+
+    findMachine mbot ender
+
+    Expected:
+    Only the machine: "mbot" and "ender", along with their printing queue will be displayed in the UI.
+
+    findMachine m bot
+
+    Expected:
+    No machines will be displayed.
+
+. Test case: list all machines in the MakerManager system
+
+    listMachines
+
+    Expected:
+    All the machines with their printing queue will be displayed in the UI.
+
+. Test case: add a new machine to the MakerManager system (admin only)
+
+    logout
+    addMachine n/creality ms/ENABLED
+
+    Expected:
+    No cleaning operation is done. Error thrown in the result box, saying "Non admin user is not allowed to add a machine to maker manager".
+
+    login saif aaaAAA123$
+    addMachine n/creativity ms/ENABLED
+
+    Expected:
+    A new machine will be added to the MakerManager system. A new printing queue with no job added will be displayed in the UI.
+
+. Test case: change the status of a machine (admin only)
+
+    logout
+    editMachine ender ms/ENABLED
+
+    Expected:
+    The command will be rejected because machine cannot be added without logging in by admin. Message "Non-admin user is not allowed to edit a machine in maker manager" will be shown.
+
+    login saif aaaAAA123$ (if not in ADMIN MODE)
+    editMachine ender ms/ENABLED
+
+    Expected:
+    The status of machine "ender" will be changed to "ENABLED" and "Available".
+
+. Test case: remove finished and failed jobs in a machine (admin only)
+
+    logout
+    manageMachine oldupbox clean
+
+    Expected:
+    No cleaning operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox clean
+
+    Expected:
+    All the jobs will the "FINISHED" or "CANCELLED" status will be removed from the printing queue of the machine "oldupbox"
+
+. Test case: remove a machine with jobs in its printing queue (admin only)
+
+    logout
+    manageMachine oldupbox remove
+
+    Expected:
+    No removing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox remove
+
+    Expected:
+    Nothing will change in the UI and a message "Machine still have jobs" will be displayed in the result box. Machines with jobs not finished cannot be simply removed.
+
+. Test case: delete all the jobs in a machine, regardless of their status (admin only)
+
+    logout
+    manageMachine oldupbox flush
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox flush
+
+    Expected:
+    A pop-up window will be displayed, saying "Are you sure you want to flush oldupbox?"
+    If clicking ok, all jobs in the machine "oldupbox" will be removed.
+    If clicking cancel, nothing will happen and app will return to the main menu.
+
+. Test case: moving all the unprocessed jobs in a machine to other jobs (admin only)
+
+    logout
+    manageMachine oldupbox flush AUTO
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+
+    Expected:
+    Jobs will be shifted to other machines dependent on the total duration of the machine.
+    The first job will find the most free machine at that time and move to that machine.
+    The second job will find the most free machine after the first machine is moved and move itself to the most free machine.
+    ...
+
+. Test case: removed a machine with an empty printing queue (admin only)
+
+    logout
+    manageMachine oldupbox remove
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox remove
+
+    Expected:
+    The machine "oldupbox" is removed from the machine list and the printing queue is no longer visible.
+
+=== Operation traceability
+
+. Test case: undo the previous command (cannot undo the logout command)
+
+    addJob n/iDCP m/ultimaker on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    undo
+
+    Expected:
+    After the first command is executed, the "iDCP"job will be added to the print queue of "ultimaker".
+    After the "undo" command is executed, the job "iDCP" will be removed from the print queue.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+    undo
+
+    Expected:
+    The "batterycontainer" job in the ultimaker and the "stool" job in the mbot will be swapped after the "managaJob swap" is done and will be swapped back after "undo" is done.
+
+    login saif aaaAAA123$
+    logout
+    undo
+
+    Expected:
+    The admin "saif" will be logged in and logged out.
+    While "undoing", error will be thrown in the result box, saying "Access Denied. Unable to undo Logout."
+
+. Test case: redo the previous undone command (cannot redo the login command)
+
+    addJob n/iDCP m/ultimaker on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    undo
+
+    Expected:
+    After the first command is executed, the "iDCP"job will be added to the print queue of "ultimaker".
+    After the "undo" command is executed, the job "iDCP" will be removed from the print queue.
+    After the "redo" command is executed, the job "iDCP" will be added back to the print queue.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+    undo
+    redo
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+    login saif aaaAAA123$
+    undo
+    redo
+
+    Expected:
+    After the "undo" command, the MakerManger will be logged out from the admin mode.
+    While "redoing" the login command, errors will be thrown in the result box, saying "Access denied. Please Re-Login manually."

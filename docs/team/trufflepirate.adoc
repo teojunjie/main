@@ -1,47 +1,85 @@
-= PLACEHOLDER - Project Portfolio
+= Sean - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
+== PROJECT: MakerManager
 
 ---
 
 == Overview
-PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+MakerManager is an open-sourced, free desktop application created specifically for Users and Managers of MakerSpaces
+to manage 3-D printers and 3-D prints. It aims to help alleviate the hassle and stress related to sharing limited number of
+3-D printers by providing an convenient way of organizing Prints, and optimising the usage of Printers.
+The app is driven mostly by Command Line Interface (CLI), and therefore optimised for makers who are more
+comfortable with typing.
+
+MakerManager is based on AddressBook-Level 4, an application written by educators from the National Universtiy of Singapore
+to teach students the fundamentals of Software Engineering and Object Oriented Programming.
+
+
+In summary, the MakerManager provides:
+
+* an overview of 3-D printers and PrintJobs within a MakerSpace
+* functionality to manage and monitor the progress of Prints in real-time
+* separate administrative privileges for Managers and normal Users through an Administrator login system.
+* automatic optimised allocation of prints to Machines for efficient use of the MakerSpace
+
+To find out more about the Team behind MakerManager, please visit the <<AboutUs#, About Us>> section!
 
 == Summary of contributions
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+* *Major enhancement*: Reworked GUI display of the App
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/83[#83]
+** What it does: Displays a holistic view the current state of the MakerSpace, including highlighting the most recently modified Machines, dynamically displaying the
+progress of each print, as well as dynamically updating when there are changes to Jobs or Machines.
+** Justification: This feature is essential to the software, allowing MakerSpace users and managers to have a easily accessed overview of the MakerSpace that\
+changes dynamically to reflect the status of Prints.
 
-* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
+* *Major enhancement*: added the ability to edit a Machine https://github.com/CS2113-AY1819S1-T09-1/main/pull/47[#47]
+** What it does: Allows a user to edit the data fields of a Machine.
+** Justification: This feature is important because it allows Users to make changes to a Machine without affecting its Jobs, allowing the
+app to accommodate changes in the equipment in the makerspace.
 
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Major enhancement*: added commands for managing prints https://github.com/CS2113-AY1819S1-T09-1/main/pull/151[#151]
+** What it does: allows users to manage prints in general, including moving, swapping, and shifting prints.
+** Justification: This feature is essential to the software, allowing MakerSpace users and managers to dynamically re-arrange and re-prioritise Jobs.
+
+* *Minor enhancement*: Non-Trivial reworking Model from storing Jobs and Machines in separate lists to storing Jobs within a List in each Machine.
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/126[#126]
+
+* *Minor enhancement*: Encapsulation of the LoggedIn state into the AdminSession object.
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/82[#82]
+* *Minor enhancement*: Implementation of a Timestamp object to handle time related operations.
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/83[#83]
+* *Minor enhancement*: Implemented automatic sorting of Jobs based on Status
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/151[#151]
+
+* *Minor enhancement*: Bug reports and fixes
+
+
+* *Code contributed*: https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=trufflepirate[Code Dashboard by Reposense]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+*** Managed releases `v1.1` - `v1.2` and `v1.4`(3 releases) on GitHub
 ** Enhancements to existing features:
-*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+*** Integration of undo/redo with admin commands, to prevent non-admin users from modifying actions taken by the admin.
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/82[#82]
+*** Integration of clear command to clear Machines and Jobs, but keep adminList for security.
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/126[#126]
 ** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
-** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
-*** Contributed to forum discussions (examples:  https://github.com[1], https://github.com[2], https://github.com[3], https://github.com[4])
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
-*** Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
-** Tools:
-*** Integrated a third party library (Natty) to the project (https://github.com[#42])
-*** Integrated a new Github plugin (CircleCI) to the team repo
+*** Initialised Readme for MakerManager
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/3[#3]
+*** ScreenShots and visual Aids: https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153]
 
-_{you can add/remove categories in the list above}_
+** Tools:
+*** Integrated a new Github plugin (Coveralls) to the team repo to track coverage
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/3[#3]
+*** Included Intellij CodeStyle Descriptor XML for convenient and standardised adherence to CodeStyle.
+https://github.com/CS2113-AY1819S1-T09-1/main/pull/47[#47]
+
 
 == Contributions to the User Guide
 
@@ -50,9 +88,13 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
+=== Moving, Shifting and Swapping Jobs
+include::../UserGuide.adoc[lines=328..366]
+=== Finding and Listing Jobs
+include::../UserGuide.adoc[tag=findJob]
+=== Undo, Redo and History
 include::../UserGuide.adoc[tag=undoredo]
 
-include::../UserGuide.adoc[tag=dataencryption]
 
 == Contributions to the Developer Guide
 
@@ -60,13 +102,6 @@ include::../UserGuide.adoc[tag=dataencryption]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=undoredo]
-
-include::../DeveloperGuide.adoc[tag=dataencryption]
+include::../DeveloperGuide.adoc[tag=managejob]
 
 
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_
