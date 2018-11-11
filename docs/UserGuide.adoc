@@ -66,6 +66,7 @@ image::MarkedUi.png[width="790"]
 [NOTE]
 The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 The "Admin Mode" is giving special access to lab managers in real life to manage the makerspace facilities, such as adding, removing or changing the status.
+
 * Prints are always displayed in order with `ONGOING` prints at the top, followed by `QUEUED`, then `requestDelete` or `CANCELLED` or `FINISHED`.
 .  Some example commands you can warm up with:
 
