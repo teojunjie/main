@@ -236,7 +236,7 @@ image::AddMachineParserLogicModel.PNG[width="800"]
 === Model component
 
 .Structure of the Model Component
-image::ModelComponentClassDiagramV1.4.3.png[width="800"]
+image::ModelComponentClassDiagramv1.4.3.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
@@ -520,7 +520,7 @@ implemented by the `VersionedAddressBook`.
 
 [red]#The diagram below shows the Jobs related section of the Model.#
 
-image::JobsClassDiagram.png[width:800]
+image::JobsClassDiagram.PNG[width:800]
 
 There are three main types of methods in `VersionedAddressBook` that concern
 the manipulation of Jobs:
