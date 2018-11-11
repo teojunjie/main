@@ -389,6 +389,9 @@ This section describes how MakerManager builds a layer of security around critic
 information to respective administrators/managers of individual makerspaces.
 
 ==== Current Implementation
+The implementation of the administrator mode spans mainly the `Logic` and `Model` components, but also relies on the `Storage` component.
+For better User-Experience, we also make small changes to `Events` and `UI` components in the architecture.
+
 The following commands are directly related to admins:
 login, logout, addAdmin, removeAdmin and updatePassword
 
@@ -414,13 +417,13 @@ image::AdminModelClassDiagram.png[width:800]
 
 The following sequence diagram for login also applies to logout. We include this because it demonstrates how AdminSessions is used as well.
 
-[red]#The diagram below shows the sequence diagram for login.#
+[red]#The diagram below illustrates the sequence diagram for login.#
 
 image::SDforLogin.png[width:800]
 
 We can then use AdminSession to know whether an admin is logged in, before authorizing use of a command.
 
-[red]#The simple activity diagram below shows this.#
+[red]#The simple activity diagram below demonstrates a common use case.#
 
 image::ActivityDiagramForAdminCommand.png[width:800]
 
@@ -445,6 +448,7 @@ passwords to stored hashes. The only two static methods used from the API were:
 . Bcrypt.checkPW() - verifies given password with stored hash
 
 Other than this, we also enforce password validation to make sure a moderately strong password is chosen by the admin when signing up.
+The implementation restricts itself to the `Logic` component of the architecture.
 
 ==== Design Considerations
 ===== Aspect: Where to encrypt
