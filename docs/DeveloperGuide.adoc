@@ -1521,5 +1521,5 @@ These instructions only provide a starting point for testers to work on; testers
     Expected:
     After the "undo" command, the MakerManger will be logged out from the admin mode.
     While "redoing" the login command, errors will be thrown in the result box, saying "Access denied. Please Re-Login manually."
-    
+
 // end::testingCase[]
