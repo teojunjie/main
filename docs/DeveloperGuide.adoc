@@ -186,7 +186,7 @@ Note how the `Model` simply raises a `MachineListChangedEvent` when the maker ma
 The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
 .Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 2)
-image::SaveMachineListChangedEventStorage.png[width="800"]
+image::SaveMachineListChangedEventStorage.PNG[width="800"]
 
 [NOTE]
 Note how the event is propagated through the `EventsCenter` to the `Storage` and `UI` without `Model` having to be coupled to either of them. This is an example of how this Event Driven approach helps us reduce direct coupling between components.
@@ -229,7 +229,7 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("addMachine ms/ultimaker n/ENABLED")` API call.
 
 .Interactions Inside the Logic Component for the `addMachine n/ultimaker ms/ENABLED` Command
-image::AddMachineParserLogicModel.png[width="800"]
+image::AddMachineParserLogicModel.PNG[width="800"]
 
 // tag::modelComponent[]
 [[Design-Model]]
@@ -256,7 +256,7 @@ The `Model`,
 === Storage component
 
 .Structure of the Storage Component
-image::StorageComponentClassDiagramCompleted.png[width="800"]
+image::StorageComponentClassDiagramCompleted.PNG[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
 
@@ -386,7 +386,7 @@ in https://whatis.techtarget.com/fileformat/XML-eXtensible-markup-language[XML] 
 
 [red]#The diagram below gives an overview on how Maker Manager stores its data.#
 
-image::StorageComponentClassDiagramCompleted.png[width:800]
+image::StorageComponentClassDiagramCompleted.PNG[width:800]
 
 [red]#The diagram below shows how Maker Manager reads its data upon start up.#
 
@@ -543,7 +543,7 @@ same property in Job. We will therefore only detail the sequence diagram of star
 
 [red]#The following diagram shows the sequence diagram for startJob().#
 
-image::SDStartJob.png[width:800]
+image::SDStartJob.PNG[width:800]
 
 * Methods that mutates the UniqueJobList within a Machine:
 ** swapJobs()
@@ -1521,4 +1521,5 @@ These instructions only provide a starting point for testers to work on; testers
     Expected:
     After the "undo" command, the MakerManger will be logged out from the admin mode.
     While "redoing" the login command, errors will be thrown in the result box, saying "Access denied. Please Re-Login manually."
+    
 // end::testingCase[]
