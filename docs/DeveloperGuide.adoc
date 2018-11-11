@@ -395,15 +395,13 @@ image::StorageComponentLogicFlowDiagram.png[width:800]
 where UserPrefs contains the file paths for each separate xml data file :
 .. makerManagerMachines.xml
 .. makerManagerAdmins.xml
-. XmlAddressBookStorage will then attempt to read each file path sequentially through XmlFileStorage
-. XmlFileStorage will then call a utility function from a class called XmlUtil which will load
+. XmlAddressBookStorage will then attempt to read each file path sequentially through XmlFileStorage.
+XmlFileStorage will then call a utility function from a class called XmlUtil which will load
 the appropriate data and its corresponding file format. It will then marshall the data into a java object
 of the format in which it was called with
 . It will then send this java object back to address book storage which will call the toModelType() function
 from each XmlSerializableClass back to storage manager as a new address book containing the respective data from the xml files
-in their correct maker manager java objects.
-. Storage manager will then use this address book upon start up as the first instance in versionedAddressBook as stated above
-(See <<versionedaddressbook>>)
+in their correct maker manager java objects.(See <<versionedaddressbook>>)
 // end::fileStorageSystem[]
 
 // tag::administratormode[]
