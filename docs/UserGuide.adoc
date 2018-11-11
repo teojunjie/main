@@ -62,7 +62,7 @@ image::MarkedUi.png[align="left" width="790" ]
 
 [NOTE]
 ====
-image::loginblue.png[width="790"]
+image::loginblue.PNG[width="790"]
 The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 The "Admin Mode" is giving special access to lab managers in real life to manage the makerspace facilities, such as adding, removing or changing the status.
 
