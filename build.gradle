@@ -211,7 +211,7 @@ asciidoctor {
         idseparator: '-',
         'site-root': "${sourceDir}",  // must be the same as sourceDir, do not modify
         'site-name': 'MakerManager',
-        'site-githuburl': 'https://cs2113-ay1819s1-t09-1.github.io/main/',
+        'site-githuburl': 'https://github.com/CS2113-AY1819S1-T09-1/main',
     ]
 
     options['template_dirs'].each {
