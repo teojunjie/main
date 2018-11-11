@@ -47,19 +47,26 @@ image::Ui.png[width="790"]
 .  Type the command in the command box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
-. User Interface Pointers:
+=== User Interface Pointers
+
+image::MarkedUi.png[align="left" width="790" ]
 
 * The Command Box is at the top, with the prompt `Enter Command here`
 * The panel below the Command Box gives you useful text-based output after every input.
-* `1. abc`, `2. cdt` and such columns represent machines
-* The scrollable panel under each machine represents the machine's queue, with Prints divided by alternating shades of grey.
+* `1. oldupbox`, `2. ultimaker`, `3. mbot` and such columns represent machines
+* The scrollable panel under each machine represents the machine's queue, with Print Jobs divided by alternating shades of grey.
 * The tags are self-explanatory, but you can read the next section for getting a good understanding of what they represent.
++
 
-image::MarkedUi.png[width="790"]
++
+
 [NOTE]
+====
+image::loginblue.png[width="790"]
 The UI lets you know when you're logged in as an administrator by making the Command Box Blue with Yellow borders, and indicating "ADMIN_MODE" at the bottom.
 The "Admin Mode" is giving special access to lab managers in real life to manage the makerspace facilities, such as adding, removing or changing the status.
 
+====
 * Prints are always displayed in order with `ONGOING` prints at the top, followed by `QUEUED`, then `requestDelete` or `CANCELLED` or `FINISHED`.
 .  Some example commands you can warm up with:
 
