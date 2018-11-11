@@ -38,7 +38,7 @@ Still with us? Great! Jump to the Section 2, “Quick Start” to get started. E
 This section shows you how to fire up MakerManager and get a feel of how to use it.
 
 .  Ensure you have Java version `9` or later installed on your Computer. If you don't have JRE installed, you can use https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB[this link] as a reference.
-.  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
+.  Download the latest release from link:{repoURL}/releases[here].
 .  Copy the jar file to the folder you want to use as the home folder for your MakerManager.
 . Double-click on the jar file to start the app. The GUI should appear in a few seconds.
 +
