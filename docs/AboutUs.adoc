@@ -11,39 +11,42 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 At the time of writing, all 4 of us are Computer Engineering students in our Sophomore year.
 
 == Project Team
+Everyone in the team implemented a hand full of features that went together to create MakerManager. Everyone was involved in writing
+code for the full stack, documentation and testing. Other than that, each of us had special roles and responsibilities.
+These are outlined below.
 
 === Saif Uddin Mahmud
-image::psyf.png[width="150", align="left"]
+image::psyf.png[width="150", align="left", float="left"]
 {empty}[http://github.com/Psyf[github]] [<<psyf#, portfolio>>]
 
-Role: Product Manager +
-Responsibilities: Deliverables and Deadlines
+*Role*: Product Manager +
+*Responsibilities*: Deliverable and Deadlines
 
 '''
 
 === Sean Tan
-image::trufflepirate.png[width="150", align="left"]
+image::trufflepirate.png[width="150", align="left", float="left"]
 {empty}[http://github.com/trufflepirate[github]] [<<trufflepirate#, portfolio>>]
 
-Role: Developer +
-Responsibilities: Integration and Bug Fixer
+*Role*: Developer +
+*Responsibilities*: Integration and Bug Fixer
 
 '''
 
 === Teo Jun Jie
-image::teojunjie.png[width="150", align="left"]
+image::teojunjie.png[width="150", align="left", float="left"]
 {empty}[http://github.com/teojunjie[github]] [<<teojunjie#, portfolio>>]
 
-Role: Developer +
-Responsibilities: System Integration
+*Role*: Developer +
+*Responsibilities*: System Integration
 
 '''
 
 === Fu Tian yuan
-image::ftywan.png[width="150", align="left"]
+image::ftywan.png[width="150", align="left", float="left"]
 {empty}[http://github.com/ftywan[github]] [<<ftywan#, portfolio>>]
 
-Role: Developer +
-Responsibilities: Testing
+*Role*: Developer +
+*Responsibilities*: Testing
 
 '''

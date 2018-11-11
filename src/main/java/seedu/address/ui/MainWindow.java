@@ -19,8 +19,6 @@ import seedu.address.commons.events.ui.ExitAppRequestEvent;
 import seedu.address.commons.events.ui.ShowHelpRequestEvent;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
-//import seedu.address.model.machine.Machine;
-import seedu.address.ui.job.JobListPanel;
 import seedu.address.ui.machine.MachineListPanel;
 
 /**
@@ -37,9 +35,7 @@ public class MainWindow extends UiPart<Stage> {
     private Logic logic;
 
     // Independent Ui parts residing in this Ui container
-    private ViewInfoPanel viewInfoPanel;
     private MachineListPanel machineListPanel;
-    private JobListPanel jobListPanel;
     private Config config;
     private UserPrefs prefs;
     private HelpWindow helpWindow;
@@ -55,9 +51,6 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane machineListPanelPlaceholder;
-
-    @FXML
-    private StackPane jobsListPlaceHolder;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -126,15 +119,8 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        //TODO change browser panel to displayMachineDetails
-        //viewInfoPanel = new ViewInfoPanel();
-        //displayMachineDetailsPlaceholder.getChildren().add(viewInfoPanel.getRoot());
-
         machineListPanel = new MachineListPanel(logic.getFilteredMachineList());
         machineListPanelPlaceholder.getChildren().add(machineListPanel.getRoot());
-
-        //jobListPanel = new JobListPanel(logic.getFilteredJobList());
-        //jobsListPlaceHolder.getChildren().add(jobListPanel.getRoot());
 
         ResultDisplay resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());

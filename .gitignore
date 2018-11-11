@@ -13,8 +13,8 @@ src/test/data/sandbox/
 ./screenshot*.png
 classes/
 /bin/
-/data/
 src/main/resources/docs/
+/data/
 out/
 /config\.json
 preferences\.json

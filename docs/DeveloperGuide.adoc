@@ -12,28 +12,45 @@ ifdef::env-github[]
 :note-caption: :information_source:
 :warning-caption: :warning:
 endif::[]
-:repoURL: https://github.com/se-edu/addressbook-level4/tree/master
+:repoURL: https://github.com/CS2113-AY1819S1-T09-1/main
 
-By: CS2113-AY1819S1-T09-1      Since: `Aug 2018`      Licence: `MIT`
+By: `CS2113-AY1819S1-T09-1`      Since: `Sep 2018`      Licence: `MIT`
+
+Welcome to _MakerManager_ Developer Guide!
+MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
+MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
+MakerManager is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
+Check out the User Guide to quickly see what MakerManager is capable of.
+
+MakerManager is written in Java, under the Object-Oriented paradigm. There are lots of ways in which you can contribute to MakerManager: coding, testing, improving tools, or contributing to the documentation.
+This guide provides information that will help you get started in your intended direction, and we hope you'll find it useful regardless of whether you're a new software developer, or an experienced hand. Some preveious experience in software engineering in Java is assumed.
+
+Choose a topic from the Table of Contents below, to get an in-depth description of the inner workings of the application.
 
 == Setting up
+Follow the simple steps below to get up and running with the MakerManager application development process.
 
 === Prerequisites
+You need to have the following software installed in your system before you can start the development process. Both the software might require sign-up procedures before you can download their installation file.
 
-. *JDK `9`* or later
+. *JDK `9`* or later +
+You can use https://docs.oracle.com/javase/9/install/toc.htm[this link] to help you install JDK.
 +
 [WARNING]
 JDK `10` on Windows will fail to run tests in <<UsingGradle#Running-Tests, headless mode>> due to a https://github.com/javafxports/openjdk-jfx/issues/66[JavaFX bug].
 Windows developers are highly recommended to use JDK `9`.
 
-. *IntelliJ* IDE
+. *IntelliJ* IDE +
+You can use https://www.jetbrains.com/help/idea/install-and-set-up-product.html[this link] to help you install IntelliJ IDEA.
 +
 [NOTE]
 IntelliJ by default has Gradle and JavaFx plugins installed. +
 Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plugins` to re-enable them.
 
+You now have the tools to dive into MakerManager's source code.
 
 === Setting up the project in your computer
+To help you get the project into the development environment properly.
 
 . Fork this repo, and clone the fork to your computer
 . Open IntelliJ (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project dialog first)
@@ -47,12 +64,26 @@ Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plu
 . Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
 This will generate all resources required by the application and tests.
 
+The build should end with a `BUILD PASSED` message.
+
 === Verifying the setup
+If all is well, the following two steps should be trivial.
 
 . Run the `seedu.address.MainApp` and try a few commands
 . <<Testing,Run the tests>> to ensure they all pass.
 
+=== Loading sample data (Recommended for first-timers)
+
+. Download `DemoDataV1.4.zip` (You can find it in the root directory of the repository link:{repoURL}[here])
+. Unzip (using WinRar or 7Zip, for example) and move the 3 `xml` files in the folder named `data` in which you ran the jar file on your computer.
+. The 'data' file should contain the 3 files below:
+... data/addressBook.xml
+... data/makerManagerAdmins.xml
+... data/makerManagerMachines.xml
+. Restart MakerManager to see the sample data loaded.
+
 === Configurations to do before writing code
+Before you start messing around with the source code, here are some tools you might want to set up in order to tactfully handle a medium-sized project such as this.
 
 ==== Configuring the coding style
 
@@ -69,9 +100,9 @@ Optionally, you can follow the <<UsingCheckstyle#, UsingCheckstyle.adoc>> docume
 
 ==== Updating documentation to match your fork
 
-After forking the repo, the documentation will still have the SE-EDU branding and refer to the `se-edu/addressbook-level4` repo.
+After forking the repo, the documentation will still have the `MakerManager` branding and refer to our upstream repo.
 
-If you plan to develop this fork as a separate product (i.e. instead of contributing to `se-edu/addressbook-level4`), you should do the following:
+If you plan to develop this fork as a separate product (i.e. instead of contributing to `MakerManager`), you should do the following:
 
 . Configure the <<Docs-SiteWideDocSettings, site-wide documentation settings>> in link:{repoURL}/build.gradle[`build.gradle`], such as the `site-name`, to suit your own project.
 
@@ -99,14 +130,17 @@ When you are ready to start coding,
 2. Take a look at <<GetStartedProgramming>>.
 
 == Design
+This section gives you a brief overview of the design of the app, including a look at the architecture and various other components. After reading this section, you should be able to
+understand some of the design trade-offs made during the development of the application.
 
 [[Design-Architecture]]
 === Architecture
+This section is designed to illustrate and identify the abstracted view of the architecture used to implement MakerManager. This section also contains descriptions of the separate components and process view of the communication between said components.
 
 .Architecture Diagram
 image::Architecture.png[width="600"]
 
-The *_Architecture Diagram_* given above explains the high-level design of the App. Given below is a quick overview of each component.
+The *_Architecture Diagram_* given above explains the high-level design of the App. The Architecture system for the MakerManager is Event-driven Given below is a quick overview of each component.
 
 [TIP]
 The `.pptx` files used to create diagrams in this document can be found in the link:{repoURL}/docs/diagrams/[diagrams] folder. To update a diagram, modify the diagram in the pptx file, select the objects of the diagram, and choose `Save as picture`.
@@ -123,10 +157,10 @@ The `.pptx` files used to create diagrams in this document can be found in the l
 
 The rest of the App consists of four components.
 
-* <<Design-Ui,*`UI`*>>: The UI of the App.
-* <<Design-Logic,*`Logic`*>>: The command executor.
-* <<Design-Model,*`Model`*>>: Holds the data of the App in-memory.
-* <<Design-Storage,*`Storage`*>>: Reads data from, and writes data to, the hard disk.
+* <<Design-Ui,*`UI`*>>: The User Interface (UI) of the application is what the user sees and interacts with.
+* <<Design-Logic,*`Logic`*>>: The command executor is the main driver of the program. It handles user input and reacts to them as needed.
+* <<Design-Model,*`Model`*>>: The Model holds the data of the Application in-memory. This is the central repository for all data.
+* <<Design-Storage,*`Storage`*>>: The Storage component reads data from, and writes data to, the non-volatile memory. This ensures our data is saved between sessions.
 
 Each of the four components
 
@@ -141,18 +175,18 @@ image::LogicClassDiagram.png[width="800"]
 [discrete]
 ==== Events-Driven nature of the design
 
-The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact for the scenario where the user issues the command `addMachine n/ultimaker ms/ENABLED`.
 
-.Component interactions for `delete 1` command (part 1)
-image::SDforDeletePerson.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 1)
+image::AddMachineExecution.png[width="800"]
 
 [NOTE]
-Note how the `Model` simply raises a `AddressBookChangedEvent` when the Address Book data are changed, instead of asking the `Storage` to save the updates to the hard disk.
+Note how the `Model` simply raises a `MachineListChangedEvent` when the maker manager data is changed, instead of asking the `Storage` to save the updates to the hard disk.
 
 The diagram below shows how the `EventsCenter` reacts to that event, which eventually results in the updates being saved to the hard disk and the status bar of the UI being updated to reflect the 'Last Updated' time.
 
-.Component interactions for `delete 1` command (part 2)
-image::SDforDeletePersonEventHandling.png[width="800"]
+.Component interactions for `addMachine n/ultimaker ms/ENABLED` command (part 2)
+image::SaveMachineListChangedEventStorage.png[width="800"]
 
 [NOTE]
 Note how the event is propagated through the `EventsCenter` to the `Storage` and `UI` without `Model` having to be coupled to either of them. This is an example of how this Event Driven approach helps us reduce direct coupling between components.
@@ -163,11 +197,11 @@ The sections below give more details of each component.
 === UI component
 
 .Structure of the UI Component
-image::UiClassDiagram.png[width="800"]
+image::UiComponentClassDiagramV1.4.2.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `MachineListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
@@ -189,42 +223,40 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
 .  `Logic` uses the `AddressBookParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
-.  The command execution can affect the `Model` (e.g. adding a person) and/or raise events.
+.  The command execution can affect the `Model` (e.g. adding a machine) and/or raise events.
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
 
-Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
+Given below is the Sequence Diagram for interactions within the `Logic` component for the `execute("addMachine ms/ultimaker n/ENABLED")` API call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
-image::DeletePersonSdForLogic.png[width="800"]
+.Interactions Inside the Logic Component for the `addMachine n/ultimaker ms/ENABLED` Command
+image::AddMachineParserLogicModel.png[width="800"]
 
+// tag::modelComponent[]
 [[Design-Model]]
 === Model component
 
 .Structure of the Model Component
-image::ModelComponentClassDiagram.png[width="800"]
+image::ModelComponentClassDiagramV1.4.3.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
 The `Model`,
 
 * stores the Address Book data.
-* exposes an unmodifiable `ObservableList<Person>` that can be 'observed'
 * exposes an unmodifiable `ObservableList<Admin>` that can be 'observed'
-* exposes an unmodifiable `ObservableList<Job>` that can be 'observed'
+* exposes an unmodifiable `ObservableList<Job>` that can be 'observed' in machines
 * exposes an unmodifiable `ObservableList<Machine>` that can be 'observed'
-* eg. the UI can be bound to this 4 list so that the UI automatically updates when the data in any of the list changes.
+* eg. the UI can be bound to these 3 lists so that the UI automatically updates when the data in any of the list changes.
 * does not depend on any of the other three components.
 
-[NOTE]
-As a more OOP model, we can store a `Tag` list in `Address Book`, which `Person` can reference. This would allow `Address Book` to only require one `Tag` object per unique `Tag`, instead of each `Person` needing their own `Tag` object. An example of how such a model may look like is given below. +
- +
-image:ModelClassBetterOopDiagram.png[width="800"]
+// end::modelComponent[]
 
+// tag::storageComponent[]
 [[Design-Storage]]
 === Storage component
 
 .Structure of the Storage Component
-image::StorageComponentClassDiagram.png[width="800"]
+image::StorageComponentClassDiagramCompleted.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
 
@@ -233,11 +265,11 @@ The `Storage` component,
 * stores an initialized `UserPref` object that represents the user's preferences derived from
 JsonUserPrefsStorage
 * can save `UserPref` objects in json format and read it back.
-* can save the Address Book data in 4 separate xml format
-** XmlSerializableAddressBook
+* can save the Address Book data in 2 separate xml format
 ** XmlSerializableMakerManagerAdmins
 ** XmlSerializableMakerManagerMachines
-** XmlSerializableMakerManagerJobs
+// end::storageComponent[]
+
 
 
 [[Design-Commons]]
@@ -251,13 +283,18 @@ This section describes some noteworthy details on how certain features are imple
 
 // tag::undoredo[]
 === Undo/Redo feature
-==== Current Implementation
+This section describes how undo/redo is implemented in MakerManager.
 
+==== Current Implementation
+[[versionedaddressbook]]
 The undo/redo mechanism is facilitated by `VersionedAddressBook`.
 It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`.
+For added security, `VersionedAddressBook` also remembers the last time the user was logged in or logged out using `lastAdminLoginPointer` and `lastAdminLogoutPointer` .
 Additionally, it implements the following operations:
 
 * `VersionedAddressBook#commit()` -- Saves the current address book state in its history.
+* `VersionedAddressBook#adminLoginCommit()` -- Saves the current address book state in its history, updates lastAdminLoginPointer.
+* `VersionedAddressBook#adminLogoutCommit()` -- Saves the current address book state in its history, updates lastAdminLogoutPointer.
 * `VersionedAddressBook#undo()` -- Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` -- Restores a previously undone address book state from its history.
 
@@ -266,26 +303,32 @@ These operations are exposed in the `Model` interface as `Model#commitAddressBoo
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
 Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+`lastAdminLoginPointer` and `lastAdminLogoutPointer` are initialised at -1, indicating that the MakerManager was never logged in or logged out.
 
 image::UndoRedoStartingStateListDiagram.png[width="800"]
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `addJob n/iDCP..` command to add a Job to the MakerManager.
+The `addJob` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `addJob n/iDCP..` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+[NOTE]
+If the command used was login or logout, the corresponding `Model#adminLoginCommitAddressBook()` or `Model#adminLogoutCommitAddressBook()` will be called. This command additionally updates the corresponding
+`lastAdminLoginPointer` or `lastAdminLogoutPointer` to the current address book state.
 
 image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
 
-Step 3. The user executes `add n/David ...` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `manageJob iDCP start` to start the job iDCP. The `manageJob iDCP start` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
 
 [NOTE]
 If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that starting the job was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 image::UndoRedoExecuteUndoStateListDiagram.png[width="800"]
 
 [NOTE]
 If the `currentStatePointer` is at index 0, pointing to the initial address book state, then there are no previous address book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the undo.
+The `undo` command also checks if the user is attempting to undo a logout command by calling `Model#isUndoLogout()` and will return an error if this is the case.
 
 The following sequence diagram shows how the undo operation works:
 
@@ -295,12 +338,18 @@ The `redo` command does the opposite -- it calls `Model#redoAddressBook()`, whic
 
 [NOTE]
 If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone address book states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+The `redo` command also checks if the user is attempting to redo a login command by calling `Model#isRedoLogin()` and will return an error if this is the case.
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+
+Step 5. The user then decides to execute the command `listJobs`. Commands that do not modify the address book, such as `listJobs`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
 image::UndoRedoNewCommand3StateListDiagram.png[width="800"]
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `add n/David ...` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`.
+Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`,
+all address book states after the `currentStatePointer` will be purged. We designed it this way because
+it no longer makes sense to redo the `manageJob iDCP start` command. This is the behavior that most modern
+desktop applications follow.
 
 image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
 
@@ -329,12 +378,214 @@ image::UndoRedoActivityDiagram.png[width="650"]
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things.
 // end::undoredo[]
 
-// tag::dataencryption[]
-=== [Proposed] Data Encryption
+// tag::fileStorageSystem[]
+=== File Storage System for Maker Manager
 
-_{Explain here how the data encryption feature will be implemented}_
+This section will describe how Maker Manager reads and stores information in our local database
+in https://whatis.techtarget.com/fileformat/XML-eXtensible-markup-language[XML] format.
+
+[red]#The diagram below gives an overview on how Maker Manager stores its data.#
+
+image::StorageComponentClassDiagramCompleted.png[width:800]
+
+[red]#The diagram below shows how Maker Manager reads its data upon start up.#
+
+image::StorageComponentLogicFlowDiagram.png[width:800]
+. When Maker Manager is booted, storageManager will execute readAddressBook(UserPrefs)
+where UserPrefs contains the file paths for each separate xml data file :
+.. makerManagerMachines.xml
+.. makerManagerAdmins.xml
+. XmlAddressBookStorage will then attempt to read each file path sequentially through XmlFileStorage.
+XmlFileStorage will then call a utility function from a class called XmlUtil which will load
+the appropriate data and its corresponding file format. It will then marshall the data into a java object
+of the format in which it was called with
+. It will then send this java object back to address book storage which will call the toModelType() function
+from each XmlSerializableClass back to storage manager as a new address book containing the respective data from the xml files
+in their correct maker manager java objects.(See <<versionedaddressbook>>)
+// end::fileStorageSystem[]
+
+// tag::administratormode[]
+=== Administrator Mode
+This section describes how MakerManager builds a layer of security around critical data and restricts manipulation of such sensitive
+information to respective administrators/managers of individual makerspaces.
+
+==== Current Implementation
+The implementation of the administrator mode spans mainly the `Logic` and `Model` components, but also relies on the `Storage` component.
+For better User-Experience, we also make small changes to `Events` and `UI` components in the architecture.
+
+The following commands are directly related to admins:
+login, logout, addAdmin, removeAdmin and updatePassword
+
+Our admin mode accommodates multiple admins, and ensures that there is at least one admin present.
+The admins are stored in a `UniqueAdminList()` in `versionedAddressBook`, with their usernames and passwords being
+securely stored in-Memory and in-file (for persistence).
+
+[NOTE]
+See `File Storage` section for relevant storage part, `Model Component` for `Admin` class model and the `Password Encryption`
+section for the discussion pertaining to the encryption.
+
+The two different access types are implemented with the help of an AdminSession object inside versionedAddressBook.
+This Object keeps track of whether someone is logged in, and if so, who is. The AdminSession object has the following methods for us to use:
+
+* setLogin() - gives admin privileges to the current user
+* clearLogin() - strips admin privileges of the current user
+* isAdminLoggedIn() - returns a boolean saying whether we are in admin mode
+* getLoggedInAdmin() - returns reference to the admin currently logged in
+
+[red]#The diagram below shows the admin-related section of the Model.#
+
+image::AdminModelClassDiagram.png[width:800]
+
+The following sequence diagram for login also applies to logout. We include this because it demonstrates how AdminSessions is used as well.
+
+[red]#The diagram below illustrates the sequence diagram for login.#
+
+image::SDforLogin.png[width:800]
+
+We can then use AdminSession to know whether an admin is logged in, before authorizing use of a command.
+
+[red]#The simple activity diagram below demonstrates a common use case.#
+
+image::ActivityDiagramForAdminCommand.png[width:800]
+
+==== Design Consideration
+The team debated on whether we should use a Singleton or not. We later decided not to use a Singleton since:
+. Singletons increase coupling
+. The system and the tests were already implemented without a singleton, and changing did not give any major pros.
+
+// end::administratormode[]
+
+// tag::dataencryption[]
+
+=== Password Encryption
+This section describes how MakerManager makes sure the administrator passwords are kept secure.
+
+==== Current Implementation
+The password is encrypted using salting and hashing. The low-level implementation of this is handled by the popular open
+source library jBcrypt. The library was chosen for having a fairly simple API for generating hashes and comparing
+passwords to stored hashes. The only two static methods used from the API were:
+
+. Bcrypt.hashPW() - generates an encrypted string from the raw text password
+. Bcrypt.checkPW() - verifies given password with stored hash
+
+Other than this, we also enforce password validation to make sure a moderately strong password is chosen by the admin when signing up.
+The implementation restricts itself to the `Logic` component of the architecture.
+
+==== Design Considerations
+===== Aspect: Where to encrypt
+* **Alternative 1 (current choice):** Encrypt it as it is being added to in-Memory address book.
+** Pros: Hashing needs to be done only once, after going through ModelManager. Storage Manager does not change. Able to do password validation and prevent unnecessary computations.
+** Cons: The password information is unprotected as it passes through UI and Logic.
+* **Alternative 2:** Encrypt it in UI
+** Pros: More secure transfer of passwords through the pipeline.
+** Cons: UI is heavy, and may become slower if hashing is too taxing on the system.
 
 // end::dataencryption[]
+
+// tag::managejob[]
+=== Managing Prints
+This section describes how MakerManager manages the Jobs or Prints within the makerspace.
+More specifically, this section will detail the implementation of the manageJob command and
+its various sub-features.
+
+
+The main command to manage and manipulate the Jobs in the makerManager
+is `manageJob` which has the following subcommands:
+
+* `start` - sets the status of a job to "ONGOING"
+* `restart` - sets the status of a job to "ONGOING", functionally the same as start, but used for restarting cancelled Jobs.
+* `cancel` - sets the status of a job to "CANCELLED"
+* `remove` - removes the Job from the Maker Manager
+* `swap` - Swaps the position of two Jobs
+* `move` - Moves a Job to another Machine
+* `shift` - Shift a Job's order within a machine
+
+The syntax for the commands are implemented in the following manner: +
+
+*manageJob <Jobname> subcommand <operand2>* +
+
+The subcommands `start`, `restart` and `cancel` do not make use of *<operand2>*, whereas the subcommands
+`swap` `move` and `shift` require
+require *<operand2>* to specify target Job for `swap`, Machine for `move`, and up/down for `shift`.
+
+We have nested these commands as subcommands of `manageJob` to centralise the management of Jobs for users, therefore making it
+easier for users to manipulate Jobs.
+
+==== Current Implementation
+
+Our MakerManager keeps a record of all Jobs or Prints in a makerspace distributed across many machines.
+Within each `Machine`, Jobs are stored within a `uniqueJobsList`. The `Machines` are in turn stored in a
+`UniqueMachineList` in the `VersionedAddressBook`. The manipulation of the order and the content of the is facilitated by the `ModelManager`, which exposes the methods
+implemented by the `VersionedAddressBook`.
+
+[red]#The diagram below shows the Jobs related section of the Model.#
+
+image::JobsClassDiagram.png[width:800]
+
+There are three main types of methods in `VersionedAddressBook` that concern
+the manipulation of Jobs:
+
+    * *Lookup Methods* that return a handle to a Job or Machine:
+    ** findJob()
+    ** findMachine()
+
+These Methods are used to obtain a handle a particular Job or Machine using each's classes name property. All Jobs
+must have a unique name, and all Machines must also have a unique name. findJob() returns both a Job and its parent
+Machine as a `JobMachineTuple`, a utility class container object that contains a Job and a Machine.
+
+* Methods that *mutate Jobs*:
+** startJob()
+** cancelJob()
+** restartJob()
+
+The sequence diagram for these methods are very similar, they follow a similar pathway and mutate the
+same property in Job. We will therefore only detail the sequence diagram of startJob().
+
+[red]#The following diagram shows the sequence diagram for startJob().#
+
+image::SDStartJob.png[width:800]
+
+* Methods that mutates the UniqueJobList within a Machine:
+** swapJobs()
+** moveJob()
+** shiftJob()
+
+
+Much like before, the sequence diagram for these methods are very similar, but will call
+methods from the UniqueJobsList as well.
+
+Therefore, we can use the manageJob command to manipulate the prints Jobs to
+achieve a representation of the actual prints in the makerspace. This can be illustrated
+in the simple activity Diagram below.
+
+[red]#The following diagram shows the generic activity diagram for a managing a Job.#
+
+image::ADManagePrints.PNG[width:800]
+
+The generic flow of a typical manageJob command is as follows:
+
+. User enters a manageJob command
+. The method associated with its subcommand will be called.
+. Lookup methods findJob() / findMachine() will be called to obtain a handle on the target Job or Machine.
+If the these methods do not find the Job / Machine with the correct unique identifier (name), an Exception will be raised.
+. If the handles are found, then the appropriate action will be taken.
+
+==== Design Considerations
+===== Aspect: Direct Mutation of Objects (Jobs and Machines)
+* **Alternative 1 (current choice):** mutate object's data fields directly.
+** Pros: No new objects have to be created, therefore saving unnecessary computations since only the required
+data fields are changed.
+** Cons: Objects are mutable. Additional care needs to be taken in ensuring that these objects are accessed defensively
+by methods that might cause unintended mutation. Additionally, mutation events must be flagged and raised, since they
+mutations within the Objects are not observed by its container.
+* **Alternative 2:** Create a new instance with edited fields
+** Pros: Defensive. Objects will never mutate, therefore there is no chance of unintended or illegal mutation. Changes
+observed by Observable Containers since a new object is created/added.
+** Cons: More computationally intensive, commands will take longer to execute. Also less room for extension since
+performance is now inversely proportional to object size.
+
+
+// end::managejob[]
 
 === Logging
 
@@ -357,6 +608,10 @@ We are using `java.util.logging` package for logging. The `LogsCenter` class is 
 Certain properties of the application can be controlled (e.g App name, logging level) through the configuration file (default: `config.json`).
 
 == Documentation
+For any software, documentation is a must. In this project we maintain a developer guide and a user guide. The developer guide is mainly focused on letting people like you ease into
+development and maintenance of the software. The user guide is for clients trying to use the functionality we enable.
+
+As you can see, documentation is non-trivial and of utmost importance. We write this section for encouraging good documentation practices, even in agile teams like ours.
 
 We use asciidoc for writing documentation.
 
@@ -409,11 +664,6 @@ If set, the name will be displayed near the top of the page.
 Setting this will add a "View on GitHub" link in the navigation bar.
 |_not set_
 
-|`site-seedu`
-|Define this attribute if the project is an official SE-EDU project.
-This will render the SE-EDU navigation bar at the top of the page, and add some SE-EDU-specific navigation items.
-|_not set_
-
 |===
 
 [[Docs-PerFileDocSettings]]
@@ -434,9 +684,8 @@ Attributes left unset in `.adoc` files will use their *default value*, if any.
 |`site-section`
 |Site section that the document belongs to.
 This will cause the associated item in the navigation bar to be highlighted.
-One of: `UserGuide`, `DeveloperGuide`, ``LearningOutcomes``{asterisk}, `AboutUs`, `ContactUs`
+One of: `UserGuide`, `DeveloperGuide`, `AboutUs`, `ContactUs`
 
-_{asterisk} Official SE-EDU projects only_
 |_not set_
 
 |`no-site-header`
@@ -457,11 +706,15 @@ These template files are written in a mixture of https://www.ruby-lang.org[Ruby]
 ====
 Modifying the template files in link:{repoURL}/docs/templates[`docs/templates`] requires some knowledge and experience with Ruby and Asciidoctor's API.
 You should only modify them if you need greater control over the site's layout than what stylesheets can provide.
-The SE-EDU team does not provide support for modified template files.
+
 ====
 
 [[Testing]]
 == Testing
+Testing your program is an essential part of the development cycle. Testing ensures the correctness, functionality and usability of the app at every step of the way.
+This will help you catch regression bugs immediately and fix them with considerably much less hassle.
+
+This section helps you discover, run and write tests for effective development.
 
 === Running Tests
 
@@ -511,25 +764,31 @@ e.g. `seedu.address.logic.LogicManagerTest`
 * Solution: Execute Gradle task `processResources`.
 
 == Dev Ops
+This section will lay out the tools we used to make the development process easier and more fun. These tools were designed for efficient building, automated testing and deployment of releases
+in an agile team.
 
 === Build Automation
-
-See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build automation.
+Build automation refers to the process of compiling, packaging and testing a piece of software automatically.
+We use `Gradle` for this purpose. See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build automation.
 
 === Continuous Integration
+Continuous Integration (CI) is the process of automating the build and testing of code every time someone commits to the repository.
+This is a best-practice in the industry, as it helps isolated team members coordinate development efforts without a big hassle.
 
 We use https://travis-ci.org/[Travis CI] and https://www.appveyor.com/[AppVeyor] to perform _Continuous Integration_ on our projects. See <<UsingTravis#, UsingTravis.adoc>> and <<UsingAppVeyor#, UsingAppVeyor.adoc>> for more details.
 
 === Coverage Reporting
-
+Test coverage is a measure used to describe the degree to which the source code is executed when the test suite is executed.
 We use https://coveralls.io/[Coveralls] to track the code coverage of our projects. See <<UsingCoveralls#, UsingCoveralls.adoc>> for more details.
 
 === Documentation Previews
 When a pull request has changes to asciidoc files, you can use https://www.netlify.com/[Netlify] to see a preview of how the HTML version of those asciidoc files will look like when the pull request is merged. See <<UsingNetlify#, UsingNetlify.adoc>> for more details.
 
 === Making a Release
+You would want to make an official release of your application when there is a usable product, which is significantly more capable/better than the previous release, if any.
+Regular releases are also an essential component of any agile team. This section teaches you how to create a new release.
 
-Here are the steps to create a new release.
+Here are the steps:
 
 .  Update the version number in link:{repoURL}/src/main/java/seedu/address/MainApp.java[`MainApp.java`].
 .  Generate a JAR file <<UsingGradle#creating-the-jar-file, using Gradle>>.
@@ -538,287 +797,10 @@ Here are the steps to create a new release.
 
 === Managing Dependencies
 
-A project often depends on third-party libraries. For example, Address Book depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives. +
+A project often depends on third-party libraries. For example, MakerManager depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives: +
+
 a. Include those libraries in the repo (this bloats the repo size) +
 b. Require developers to download those libraries manually (this creates extra work for developers)
-
-[[GetStartedProgramming]]
-[appendix]
-== Suggested Programming Tasks to Get Started
-
-Suggested path for new programmers:
-
-1. First, add small local-impact (i.e. the impact of the change does not go beyond the component) enhancements to one component at a time. Some suggestions are given in <<GetStartedProgramming-EachComponent>>.
-
-2. Next, add a feature that touches multiple components to learn how to implement an end-to-end feature across all components. <<GetStartedProgramming-RemarkCommand>> explains how to go about adding such a feature.
-
-[[GetStartedProgramming-EachComponent]]
-=== Improving each component
-
-Each individual exercise in this section is component-based (i.e. you would not need to modify the other components to get it to work).
-
-[discrete]
-==== `Logic` component
-
-*Scenario:* You are in charge of `logic`. During dog-fooding, your team realize that it is troublesome for the user to type the whole command in order to execute a command. Your team devise some strategies to help cut down the amount of typing necessary, and one of the suggestions was to implement aliases for the command words. Your job is to implement such aliases.
-
-[TIP]
-Do take a look at <<Design-Logic>> before attempting to modify the `Logic` component.
-
-. Add a shorthand equivalent alias for each of the individual commands. For example, besides typing `clear`, the user can also type `c` to remove all persons in the list.
-+
-****
-* Hints
-** Just like we store each individual command word constant `COMMAND_WORD` inside `*Command.java` (e.g.  link:{repoURL}/src/main/java/seedu/address/logic/commands/FindCommand.java[`FindCommand#COMMAND_WORD`], link:{repoURL}/src/main/java/seedu/address/logic/commands/DeleteCommand.java[`DeleteCommand#COMMAND_WORD`]), you need a new constant for aliases as well (e.g. `FindCommand#COMMAND_ALIAS`).
-** link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] is responsible for analyzing command words.
-* Solution
-** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
-** Add new tests for each of the aliases that you have added.
-** Update the user guide to document the new aliases.
-** See this https://github.com/se-edu/addressbook-level4/pull/785[PR] for the full solution.
-****
-
-[discrete]
-==== `Model` component
-
-*Scenario:* You are in charge of `model`. One day, the `logic`-in-charge approaches you for help. He wants to implement a command such that the user is able to remove a particular tag from everyone in the address book, but the model API does not support such a functionality at the moment. Your job is to implement an API method, so that your teammate can use your API to implement his command.
-
-[TIP]
-Do take a look at <<Design-Model>> before attempting to modify the `Model` component.
-
-. Add a `removeTag(Tag)` method. The specified tag will be removed from everyone in the address book.
-+
-****
-* Hints
-** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] API need to be updated.
-** Think about how you can use SLAP to design the method. Where should we place the main logic of deleting tags?
-**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a person, and link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] allows you to update the tags.
-* Solution
-** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. Loop through each person, and remove the `tag` from each person.
-** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `AddressBook#removeTag(Tag)`.
-** Add new tests for each of the new public methods that you have added.
-** See this https://github.com/se-edu/addressbook-level4/pull/790[PR] for the full solution.
-****
-
-[discrete]
-==== `Ui` component
-
-*Scenario:* You are in charge of `ui`. During a beta testing session, your team is observing how the users use your address book application. You realize that one of the users occasionally tries to delete non-existent tags from a contact, because the tags all look the same visually, and the user got confused. Another user made a typing mistake in his command, but did not realize he had done so because the error message wasn't prominent enough. A third user keeps scrolling down the list, because he keeps forgetting the index of the last person in the list. Your job is to implement improvements to the UI to solve all these problems.
-
-[TIP]
-Do take a look at <<Design-Ui>> before attempting to modify the `UI` component.
-
-. Use different colors for different tags inside person cards. For example, `friends` tags can be all in brown, and `colleagues` tags can be all in yellow.
-+
-**Before**
-+
-image::getting-started-ui-tag-before.png[width="300"]
-+
-**After**
-+
-image::getting-started-ui-tag-after.png[width="300"]
-+
-****
-* Hints
-** The tag labels are created inside link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[the `PersonCard` constructor] (`new Label(tag.tagName)`). https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Label.html[JavaFX's `Label` class] allows you to modify the style of each Label, such as changing its color.
-** Use the .css attribute `-fx-background-color` to add a color.
-** You may wish to modify link:{repoURL}/src/main/resources/view/DarkTheme.css[`DarkTheme.css`] to include some pre-defined colors using css, especially if you have experience with web-based css.
-* Solution
-** You can modify the existing test methods for `PersonCard` 's to include testing the tag's color as well.
-** See this https://github.com/se-edu/addressbook-level4/pull/798[PR] for the full solution.
-*** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storage, so that tags retain their colors even if the hash code algorithm changes.
-****
-
-. Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] such that link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] can show a different style on error (currently it shows the same regardless of errors).
-+
-**Before**
-+
-image::getting-started-ui-result-before.png[width="200"]
-+
-**After**
-+
-image::getting-started-ui-result-after.png[width="200"]
-+
-****
-* Hints
-** link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] is raised by link:{repoURL}/src/main/java/seedu/address/ui/CommandBox.java[`CommandBox`] which also knows whether the result is a success or failure, and is caught by link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay`] which is where we want to change the style to.
-** Refer to link:{repoURL}/src/main/java/seedu/address/ui/CommandBox.java[`CommandBox`] for an example on how to display an error.
-* Solution
-** Modify link:{repoURL}/src/main/java/seedu/address/commons/events/ui/NewResultAvailableEvent.java[`NewResultAvailableEvent`] 's constructor so that users of the event can indicate whether an error has occurred.
-** Modify link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay#handleNewResultAvailableEvent(NewResultAvailableEvent)`] to react to this event appropriately.
-** You can write two different kinds of tests to ensure that the functionality works:
-*** The unit tests for `ResultDisplay` can be modified to include verification of the color.
-*** The system tests link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest#assertCommandBoxShowsDefaultStyle() and AddressBookSystemTest#assertCommandBoxShowsErrorStyle()`] to include verification for `ResultDisplay` as well.
-** See this https://github.com/se-edu/addressbook-level4/pull/799[PR] for the full solution.
-*** Do read the commits one at a time if you feel overwhelmed.
-****
-
-. Modify the link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to show the total number of people in the address book.
-+
-**Before**
-+
-image::getting-started-ui-status-before.png[width="500"]
-+
-**After**
-+
-image::getting-started-ui-status-after.png[width="500"]
-+
-****
-* Hints
-** link:{repoURL}/src/main/resources/view/StatusBarFooter.fxml[`StatusBarFooter.fxml`] will need a new `StatusBar`. Be sure to set the `GridPane.columnIndex` properly for each `StatusBar` to avoid misalignment!
-** link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] needs to initialize the status bar on application start, and to update it accordingly whenever the address book is updated.
-* Solution
-** Modify the constructor of link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to take in the number of persons when the application just started.
-** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handleAddressBookChangedEvent(AddressBookChangedEvent)`] to update the number of persons whenever there are new changes to the addressbook.
-** For tests, modify link:{repoURL}/src/test/java/guitests/guihandles/StatusBarFooterHandle.java[`StatusBarFooterHandle`] by adding a state-saving functionality for the total number of people status, just like what we did for save location and sync status.
-** For system tests, modify link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest`] to also verify the new total number of persons status bar.
-** See this https://github.com/se-edu/addressbook-level4/pull/803[PR] for the full solution.
-****
-
-[discrete]
-==== `Storage` component
-
-*Scenario:* You are in charge of `storage`. For your next project milestone, your team plans to implement a new feature of saving the address book to the cloud. However, the current implementation of the application constantly saves the address book after the execution of each command, which is not ideal if the user is working on limited internet connection. Your team decided that the application should instead save the changes to a temporary local backup file first, and only upload to the cloud after the user closes the application. Your job is to implement a backup API for the address book storage.
-
-[TIP]
-Do take a look at <<Design-Storage>> before attempting to modify the `Storage` component.
-
-. Add a new method `backupAddressBook(ReadOnlyAddressBook)`, so that the address book can be saved in a fixed temporary location.
-+
-****
-* Hint
-** Add the API method in link:{repoURL}/src/main/java/seedu/address/storage/AddressBookStorage.java[`AddressBookStorage`] interface.
-** Implement the logic in link:{repoURL}/src/main/java/seedu/address/storage/StorageManager.java[`StorageManager`] and link:{repoURL}/src/main/java/seedu/address/storage/XmlAddressBookStorage.java[`XmlAddressBookStorage`] class.
-* Solution
-** See this https://github.com/se-edu/addressbook-level4/pull/594[PR] for the full solution.
-****
-
-[[GetStartedProgramming-RemarkCommand]]
-=== Creating a new command: `remark`
-
-By creating this command, you will get a chance to learn how to implement a feature end-to-end, touching all major components of the app.
-
-*Scenario:* You are a software maintainer for `addressbook`, as the former developer team has moved on to new projects. The current users of your application have a list of new feature requests that they hope the software will eventually have. The most popular request is to allow adding additional comments/notes about a particular contact, by providing a flexible `remark` field for each contact, rather than relying on tags alone. After designing the specification for the `remark` command, you are convinced that this feature is worth implementing. Your job is to implement the `remark` command.
-
-==== Description
-Edits the remark for a person specified in the `INDEX`. +
-Format: `remark INDEX r/[REMARK]`
-
-Examples:
-
-* `remark 1 r/Likes to drink coffee.` +
-Edits the remark for the first person to `Likes to drink coffee.`
-* `remark 1 r/` +
-Removes the remark for the first person.
-
-==== Step-by-step Instructions
-
-===== [Step 1] Logic: Teach the app to accept 'remark' which does nothing
-Let's start by teaching the application how to parse a `remark` command. We will add the logic of `remark` later.
-
-**Main:**
-
-. Add a `RemarkCommand` that extends link:{repoURL}/src/main/java/seedu/address/logic/commands/Command.java[`Command`]. Upon execution, it should just throw an `Exception`.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to accept a `RemarkCommand`.
-
-**Tests:**
-
-. Add `RemarkCommandTest` that tests that `execute()` throws an Exception.
-. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
-
-===== [Step 2] Logic: Teach the app to accept 'remark' arguments
-Let's teach the application to parse arguments that our `remark` command will accept. E.g. `1 r/Likes to drink coffee.`
-
-**Main:**
-
-. Modify `RemarkCommand` to take in an `Index` and `String` and print those two parameters as the error message.
-. Add `RemarkCommandParser` that knows how to parse two arguments, one index and one with prefix 'r/'.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to use the newly implemented `RemarkCommandParser`.
-
-**Tests:**
-
-. Modify `RemarkCommandTest` to test the `RemarkCommand#equals()` method.
-. Add `RemarkCommandParserTest` that tests different boundary values
-for `RemarkCommandParser`.
-. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
-
-===== [Step 3] Ui: Add a placeholder for remark in `PersonCard`
-Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each person later.
-
-**Main:**
-
-. Add a `Label` with any random text inside link:{repoURL}/src/main/resources/view/PersonListCard.fxml[`PersonListCard.fxml`].
-. Add FXML annotation in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] to tie the variable to the actual label.
-
-**Tests:**
-
-. Modify link:{repoURL}/src/test/java/guitests/guihandles/PersonCardHandle.java[`PersonCardHandle`] so that future tests can read the contents of the remark label.
-
-===== [Step 4] Model: Add `Remark` class
-We have to properly encapsulate the remark in our link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`] class. Instead of just using a `String`, let's follow the conventional class structure that the codebase already uses by adding a `Remark` class.
-
-**Main:**
-
-. Add `Remark` to model component (you can copy from link:{repoURL}/src/main/java/seedu/address/model/person/Address.java[`Address`], remove the regex and change the names accordingly).
-. Modify `RemarkCommand` to now take in a `Remark` instead of a `String`.
-
-**Tests:**
-
-. Add test for `Remark`, to test the `Remark#equals()` method.
-
-===== [Step 5] Model: Modify `Person` to support a `Remark` field
-Now we have the `Remark` class, we need to actually use it inside link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
-
-**Main:**
-
-. Add `getRemark()` in link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
-. You may assume that the user will not be able to use the `add` and `edit` commands to modify the remarks field (i.e. the person will be created without a remark).
-. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample data (delete your `addressBook.xml` so that the application will load the sample data when you launch it.)
-
-===== [Step 6] Storage: Add `Remark` field to `XmlAdaptedPerson` class
-We now have `Remark` s for `Person` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/XmlAdaptedPerson.java[`XmlAdaptedPerson`] to include a `Remark` field so that it will be saved.
-
-**Main:**
-
-. Add a new Xml field for `Remark`.
-
-**Tests:**
-
-. Fix `invalidAndValidPersonAddressBook.xml`, `typicalPersonsAddressBook.xml`, `validAddressBook.xml` etc., such that the XML tests will not fail due to a missing `<remark>` element.
-
-===== [Step 6b] Test: Add withRemark() for `PersonBuilder`
-Since `Person` can now have a `Remark`, we should add a helper method to link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`], so that users are able to create remarks when building a link:{repoURL}/src/main/java/seedu/address/model/person/Person.java[`Person`].
-
-**Tests:**
-
-. Add a new method `withRemark()` for link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`]. This method will create a new `Remark` for the person that it is currently building.
-. Try and use the method on any sample `Person` in link:{repoURL}/src/test/java/seedu/address/testutil/TypicalPersons.java[`TypicalPersons`].
-
-===== [Step 7] Ui: Connect `Remark` field to `PersonCard`
-Our remark label in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] is still a placeholder. Let's bring it to life by binding it with the actual `remark` field.
-
-**Main:**
-
-. Modify link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`]'s constructor to bind the `Remark` field to the `Person` 's remark.
-
-**Tests:**
-
-. Modify link:{repoURL}/src/test/java/seedu/address/ui/testutil/GuiTestAssert.java[`GuiTestAssert#assertCardDisplaysPerson(...)`] so that it will compare the now-functioning remark label.
-
-===== [Step 8] Logic: Implement `RemarkCommand#execute()` logic
-We now have everything set up... but we still can't modify the remarks. Let's finish it up by adding in actual logic for our `remark` command.
-
-**Main:**
-
-. Replace the logic in `RemarkCommand#execute()` (that currently just throws an `Exception`), with the actual logic to modify the remarks of a person.
-
-**Tests:**
-
-. Update `RemarkCommandTest` to test that the `execute()` logic works.
-
-==== Full Solution
-
-See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-by-step solution.
 
 [appendix]
 == Product Scope
@@ -1068,27 +1050,13 @@ Use case ends.
 [[mainstream-os]] Mainstream OS::
 Windows, Linux, Unix, OS-X
 
-[appendix]
-== Product Survey
-
-*Product Name*
-
-Author: ...
-
-Pros:
-
-* ...
-* ...
-
-Cons:
-
-* ...
-* ...
-
+// tag::testingCase[]
 [appendix]
 == Instructions for Manual Testing
 
 Given below are instructions to test the app manually.
+
+Testers are encouraged to follow the testing codes sequentially.
 
 [NOTE]
 These instructions only provide a starting point for testers to work on; testers are expected to do more _exploratory_ testing.
@@ -1097,36 +1065,460 @@ These instructions only provide a starting point for testers to work on; testers
 
 . Initial launch
 
-.. Download the jar file and copy into an empty folder
-.. Double-click the jar file +
-   Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+    .. Download the jar file and copy into an empty folder
+    .. Download the data files by downloading the DemoDataV1.4.zip from the root.
+    .. Unzip and save the data files in a folder called 'data' in the same directoryin which you saved the jar file on your computer.
+
+ The 'data' file should contain the 3 files below.
+ data/addressBook.xml
+ data/makerManagerAdmins.xml
+ data/makerManagerMachines.xml
+
+    .. Double-click the jar file
+
+    Expected view:
+    Shows the GUI with a list of printers displayed horizontally where each column represents a printer with print jobs assigned to it.
+    These printers are already pre-added to the maker manager local database.
+    The window size may not be optimum.
 
 . Saving window preferences
 
-.. Resize the window to an optimum size. Move the window to a different location. Close the window.
-.. Re-launch the app by double-clicking the jar file. +
-   Expected: The most recent window size and location is retained.
+    .. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    .. Re-launch the app by double-clicking the jar file. +
+    Expected: The most recent window size and location is retained.
 
-_{ more test cases ... }_
+. Leaving the app:
 
-=== Deleting a person [ Legacy: will be changed when jobs/machines are functional ]
+    .. Enter the command:
 
-. Deleting a person while all persons are listed
+    exit
 
-.. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
-.. Test case: `delete 1` +
-   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-.. Test case: `delete 0` +
-   Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
-.. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size) _{give more}_ +
-   Expected: Similar to previous.
+    .. The window shall close automatically.
 
-_{ more test cases ... }_
+=== Ease of use
+. Test case: help window activation
 
-=== Saving data
+    help
 
-. Dealing with missing/corrupted data files
+    Expected:
+    A pop-up window containing the user guide will be displayed.
 
-.. _{explain how to simulate a missing/corrupted file and the expected behavior}_
+// end::testingCase[]
 
-_{ more test cases ... }_
+=== Managing the admin access
+. Test case: login to a default admin account
+
+    login admin admin
+
+    Expected:
+    The command box will turn to be blue. Message "login success!" will be shown. Label "[ADMIN_MODE]" will be displayed at the bottom of the app.
+
+    Failing Variations:
+        - Wrong password
+        - Wrong username
+
+. Test case: add an admin to the system (admin only)
+
+    addAdmin saif aaaAAA123$ aaaAAA123$
+
+    Expected:
+    Message "New admin added successfully!" will be shown.
+
+    Failing Variations:
+        - Password too simple, and does not meet requirements
+
+. Test case: add an admin which is already in the system, judged by username (admin only)
+
+    addAdmin saif aaaAAA123$ aaaAAA123$
+
+    Expected:
+    The command will not work because there is existing a user admin "saif". Message "This username already exists. Try a new one or login." will be shown.
+
+. Test case: Passwords don't match when adding an admin (admin only)
+
+    addAdmin newAdmin aaaAAA123$ aaaAAA123
+
+    Expected:
+    The command will not work because the verification password (entered the second time) does not match first entry. Message "The two password fields don't match! Please try again." will be shown.
+
+. Test case: update password of logged in admin
+
+    updatePassword admin admin betterPassword123$ betterPassword123$
+
+    Expected: Message "Your password has been changed successfully!" shown.
+
+    Failing Variations:
+        - trying to update password of "saif" when logged in as "admin". You can only update your own password
+        - Wrong old password
+        - Not adhering to password constraints given on top
+
+. Test case: remove the currently logged in admin (logged in as "admin" only)
+
+    removeAdmin admin
+
+    Expected:
+    Message "Admin removed successfully!" will be shown, indicating the "admin" is already moved from the system.
+    The command box will turn back to black and the "[ADMIN_MODE]" label will disappear because "admin" is the currently logged in administrator. Removing the currently logged in administrator will log out that one automatically.
+
+    Failing Variations:
+        - Admin to be removed not present in system
+        - Admin to be removed is the last admin in the system.
+
+. Test case: login to a admin account which is recently added
+
+    login saif aaaAAA123$
+
+    Expected:
+    The command box will turn to be blue. Message "login success!" will be shown. Label "[ADMIN_MODE]" will be displayed at the bottom of the app.
+
+. Test case: exit from the admin mode (admin only)
+
+    logout
+
+    Expected:
+    Message "Admin removed successfully!" will be shown, indicating the "saif" is already moved from the system.
+    The command box will turn back to black and the "[ADMIN_MODE]" label will disappear.
+
+=== Adding a print Job to a machine
+
+. Test case: add a job called "spectacleframe" to machine "ultimaker"
+
+    addJob n/spectacleframe m/ultimaker on/Jimmy pr/NORMAL d/0.03 jn/For a Friend t/personal
+
+    Expected:
+    A print job named spectacleframe will be added to the column under ultimaker at the bottom of the queue.
+
+. Test case: add a job to the most free machine
+
+    addJob n/phonecase m/AUTO on/George pr/NORMAL d/0.1 jn/New phonecase for new phone t/personal
+
+    Expected:
+    A print job named phonecase will be added to the 'Most Free Machine' in the maker manager system
+    ** Most free machine represents the machine with the least time until released.
+
+. Test case: add a job to a machine which does not exist in the machine list
+
+    addJob n/buildingmodel m/nosuchmachine on/Jerry pr/URGENT d/1 jn/for Final year project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Machine specified does not exist"
+
+. Test case: add a job to a disabled machine
+
+    addJob n/model m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Failed to add Job. Machine specified is Disabled"
+
+. Test case: add a job with invalid name
+
+    addJob n/!!!NAME!!! m/ender on/Rakuten pr/NORMAL d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job names should only contain alphanumeric characters and spaces, and it should not be blank"
+
+. Test case: add a job with invalid priority
+
+    addJob n/model m/ender on/Rakuten pr/FAKEPRIORITY d/1.5 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Job priority can only be URGENT, HIGH and NORMAL"
+
+. Test case: add a job with invalid duration
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/NotATime jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
+. Test case: add a job with duration exceeding 9999 hours
+
+    addJob n/model m/ender on/Rakuten pr/URGENT d/9999.1 jn/for school project t/SchoolProject
+
+    Expected:
+    No job will be added to any machine. Error will be shown in result box as "Duration must be a non-zero unsigned number with optional decimal point lesser than or equal to 9999 rounded to the nearest 3 decimal places"
+
+=== Managing jobs which have been added to machines
+
+. Test case: find job(s) by its naming keywords
+
+    findJob cup
+
+    Expected:
+    Only the job "cup" will be displayed in the UI.
+
+    findJob c up
+
+    Expected:
+    No jobs will be shown.
+
+    findJob stool cup gears
+
+    Expected:
+    3 jobs: "stool", "cup", "gears" will be displayed in the UI.
+
+. Test case: list all the jobs
+
+    listJobs
+
+    Expected:
+    All the jobs will be displayed in the UI.
+
+. Test case: make a job which has been added into a machine start printing
+
+    manageJob laptopstand start
+
+    Expected:
+    The status label of the laptopstand job will be changed to ONGOING. The timer will start as well.
+
+. Test case: make a job which has been added into a machine cancel printing
+
+    manageJob laptopstand cancel
+
+    Expected:
+    The status label of the laptopstand job will be changed to CANCELLED. The job card will be moved to the end of the machine's job queue.
+
+. Test case: request a job to be deleted
+
+    requestDeletion n/laptopstand
+
+    Expected:
+    The status label of the laptopstand job will be changed to DELETING.
+
+. Test case: swap 2 jobs from 2 different machines (admin only)
+
+    logout
+    manageJob stool swap batterycontainer
+
+    Expected:
+    No swapping operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+. Test case: move a specified job to a specified machine (admin only)
+
+    logout
+    manageJob stool move ultimaker
+
+    Expected:
+    No moving operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to move Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool move ultimaker
+
+    Expected:
+    The "stool" job will be added to the machine "ultimaker".
+
+. Test case: move up the place of a job card in the GUI (admin only)
+
+    logout
+    manageJob stool shift up
+
+    Expected:
+    No shifting operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to shift Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob stool shift up
+
+    Expected:
+    The "stool" job will interchange the place in the queue with the job card displayed above it.
+
+. Test case: delete a job from a machine's printing queue (admin only)
+
+    logout
+    manageJob laptopstand delete
+
+    Expected;
+    No deleting operation is done. Error shown in the result box, with the message saying "Non admin user is not allowed to delete Jobs in Maker Manager".
+
+    login saif aaaAAA123$
+    manageJob laptopstand delete
+
+    Expected:
+    The "laptopstand" job will be removed from the job queue and no longer be visible.
+
+=== Managing the configurations of machines
+
+. Test case: find machines by multiple name keywords
+
+    findMachine mbot ender
+
+    Expected:
+    Only the machine: "mbot" and "ender", along with their printing queue will be displayed in the UI.
+
+    findMachine m bot
+
+    Expected:
+    No machines will be displayed.
+
+. Test case: list all machines in the MakerManager system
+
+    listMachines
+
+    Expected:
+    All the machines with their printing queue will be displayed in the UI.
+
+. Test case: add a new machine to the MakerManager system (admin only)
+
+    logout
+    addMachine n/creality ms/ENABLED
+
+    Expected:
+    No cleaning operation is done. Error thrown in the result box, saying "Non admin user is not allowed to add a machine to maker manager".
+
+    login saif aaaAAA123$
+    addMachine n/creativity ms/ENABLED
+
+    Expected:
+    A new machine will be added to the MakerManager system. A new printing queue with no job added will be displayed in the UI.
+
+. Test case: change the status of a machine (admin only)
+
+    logout
+    editMachine ender ms/ENABLED
+
+    Expected:
+    The command will be rejected because machine cannot be added without logging in by admin. Message "Non-admin user is not allowed to edit a machine in maker manager" will be shown.
+
+    login saif aaaAAA123$ (if not in ADMIN MODE)
+    editMachine ender ms/ENABLED
+
+    Expected:
+    The status of machine "ender" will be changed to "ENABLED" and "Available".
+
+. Test case: remove finished and failed jobs in a machine (admin only)
+
+    logout
+    manageMachine oldupbox clean
+
+    Expected:
+    No cleaning operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox clean
+
+    Expected:
+    All the jobs will the "FINISHED" or "CANCELLED" status will be removed from the printing queue of the machine "oldupbox"
+
+. Test case: remove a machine with jobs in its printing queue (admin only)
+
+    logout
+    manageMachine oldupbox remove
+
+    Expected:
+    No removing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox remove
+
+    Expected:
+    Nothing will change in the UI and a message "Machine still have jobs" will be displayed in the result box. Machines with jobs not finished cannot be simply removed.
+
+. Test case: delete all the jobs in a machine, regardless of their status (admin only)
+
+    logout
+    manageMachine oldupbox flush
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox flush
+
+    Expected:
+    A pop-up window will be displayed, saying "Are you sure you want to flush oldupbox?"
+    If clicking ok, all jobs in the machine "oldupbox" will be removed.
+    If clicking cancel, nothing will happen and app will return to the main menu.
+
+. Test case: moving all the unprocessed jobs in a machine to other jobs (admin only)
+
+    logout
+    manageMachine oldupbox flush AUTO
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+
+    Expected:
+    Jobs will be shifted to other machines dependent on the total duration of the machine.
+    The first job will find the most free machine at that time and move to that machine.
+    The second job will find the most free machine after the first machine is moved and move itself to the most free machine.
+    ...
+
+. Test case: removed a machine with an empty printing queue (admin only)
+
+    logout
+    manageMachine oldupbox remove
+
+    Expected:
+    No flushing operation is done. Error thrown in the result box, saying "Non admin user is not allowed to manage a machine from maker manager".
+
+    login saif aaaAAA123$
+    manageMachine oldupbox remove
+
+    Expected:
+    The machine "oldupbox" is removed from the machine list and the printing queue is no longer visible.
+
+=== Operation traceability
+
+. Test case: undo the previous command (cannot undo the logout command)
+
+    addJob n/iDCP m/ultimaker on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    undo
+
+    Expected:
+    After the first command is executed, the "iDCP"job will be added to the print queue of "ultimaker".
+    After the "undo" command is executed, the job "iDCP" will be removed from the print queue.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+    undo
+
+    Expected:
+    The "batterycontainer" job in the ultimaker and the "stool" job in the mbot will be swapped after the "managaJob swap" is done and will be swapped back after "undo" is done.
+
+    login saif aaaAAA123$
+    logout
+    undo
+
+    Expected:
+    The admin "saif" will be logged in and logged out.
+    While "undoing", error will be thrown in the result box, saying "Access Denied. Unable to undo Logout."
+
+. Test case: redo the previous undone command (cannot redo the login command)
+
+    addJob n/iDCP m/ultimaker on/TIAN YUAN pr/HIGH d/1.5 jn/This is for the iDCP project t/iDCP
+    undo
+
+    Expected:
+    After the first command is executed, the "iDCP"job will be added to the print queue of "ultimaker".
+    After the "undo" command is executed, the job "iDCP" will be removed from the print queue.
+    After the "redo" command is executed, the job "iDCP" will be added back to the print queue.
+
+    login saif aaaAAA123$
+    manageJob stool swap batterycontainer
+    undo
+    redo
+
+    Expected:
+    The "batterycontainer" job in the ultimaker will be swapped with the "stool" job in the mbot.
+
+    login saif aaaAAA123$
+    undo
+    redo
+
+    Expected:
+    After the "undo" command, the MakerManger will be logged out from the admin mode.
+    While "redoing" the login command, errors will be thrown in the result box, saying "Access denied. Please Re-Login manually."
+// end::testingCase[]

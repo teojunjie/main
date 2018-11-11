@@ -1,72 +1,83 @@
-= PLACEHOLDER - Project Portfolio
+= Saif - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
+== Overview : MakerManager
+This project portfolio is written to document my contribution to MakerManager and role assumed during the project.
 
----
+MakerManager is a free, open-source, desktop application for managing time-shared equipment in makerspaces.
+MakerManager aims to bridge a gap to let makers and managers coordinate effectively and efficiently - so you can worry less about availability and spend more time hacking!
+The app is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
 
-== Overview
-PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS.
+The user interacts with MakerManager using a CLI, but can also choose to use the Graphical User Interface (GUI) built in JavaFX.
+The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
+
+In short, MakerManager can be used to:
+
+* effectively time-share 3D printers
+* see status and time-left for printers
+* add prints to a particular printer (or let the software automatically optimize it for you)
+* login to the system to gain administrative rights, if you are signed up by an existing administrator
+* add, remove and maintain printer queues and machines - if you have administrative rights
 
 == Summary of contributions
+This section includes some of my contributions towards developing MakerManager within a small span of a few weeks.
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+* *Major enhancement*: Added authentication system for administrators.
+** What it does: This feature allows lab managers to login to the system and gain extra privileges, which can be used to manage the makerspace effectively.
+** Justification: This feature is a must-have as we need to ensure only authorized personnel can edit critical information.
+** Highlights: This enhancement requires existing and future commands to integrate the level of authorization. It required an in-depth analysis of third party libraries. The implementation was challenging as we had to make sure the application had no security loopholes.
+** Credits: jBcrypt
 
-* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
+* *Major enhancement*: Added commands for managing prints.
+** What it does: This feature allows users to manage prints in general, including starting, restarting, cancelling and deleting prints.
+** Justification: This feature is the core of the software, as the crux of the software is to have a dynamic queue that users can leverage on to plan their own prints.
+* *Minor enhancement*: Memory-to-File transfer of data. The existing implementation had to be reworked to allow segregation of different types of data.
+* *Minor enhancement*: Bug Fixes
 
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Code contributed*: You can see my code contributions in this https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=psyf[Code Dashboard by Reposense]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
-** Enhancements to existing features:
-*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+*** Managed releases v1.2.1 - v1.4 on GitHub
+*** Reviewed most PRs (with non-trivial review comments). (https://github.com/CS2113-AY1819S1-T09-1/main/pulls?q=is%3Apr+reviewed-by%3APsyf+is%3Aclosed[examples])
+*** Managed https://github.com/CS2113-AY1819S1-T09-1/main/issues[issue-board] and https://github.com/CS2113-AY1819S1-T09-1/main/milestones[milestones]
+** Enhancements to features:
+*** Wrote tests for features added in makerManager (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/43[#43])
 ** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** Maintained User Guide and Developer Guide for features I worked on.
+*** Standardized the User Guide and Developer Guide formats (Pull Request https://github.com/CS2113-AY1819S1-T09-1/main/pull/153[#153])
 ** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
-*** Contributed to forum discussions (examples:  https://github.com[1], https://github.com[2], https://github.com[3], https://github.com[4])
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
-*** Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
+*** Contributed to forum discussions (Example: https://github.com/nusCS2113-AY1819S1/forum/issues/87[#87])
+*** Reported bugs and suggestions for another team in the class (https://github.com/CS2113-AY1819S1-F10-3/main/issues?q=is%3Aopen+mentions%3APsyf[examples])
 ** Tools:
-*** Integrated a third party library (Natty) to the project (https://github.com[#42])
-*** Integrated a new Github plugin (CircleCI) to the team repo
-
-_{you can add/remove categories in the list above}_
+*** Integrated a third party library (jBcrypt) to the project (https://github.com/CS2113-AY1819S1-T09-1/main/pull/12[#12])
 
 == Contributions to the User Guide
 
-
 |===
-|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|_Given below are some sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=undoredo]
+include::../UserGuide.adoc[tag=adminMode]
 
-include::../UserGuide.adoc[tag=dataencryption]
+include::../UserGuide.adoc[lines=302..338]
+
+include::../UserGuide.adoc[tag=faq]
+
+include::../UserGuide.adoc[tag=upcoming]
 
 == Contributions to the Developer Guide
 
 |===
-|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|_Given below are a few sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=undoredo]
+include::../DeveloperGuide.adoc[tag=administratormode]
 
 include::../DeveloperGuide.adoc[tag=dataencryption]
 
 
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_
