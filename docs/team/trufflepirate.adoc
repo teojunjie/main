@@ -88,9 +88,11 @@ https://github.com/CS2113-AY1819S1-T09-1/main/pull/47[#47]
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-
-include::../UserGuide.adoc[tag=manageJob]
+=== Moving, Shifting and Swapping Jobs
+include::../UserGuide.adoc[lines=328..366]
+=== Finding and Listing Jobs
 include::../UserGuide.adoc[tag=findJob]
+=== Undo, Redo and History
 include::../UserGuide.adoc[tag=undoredo]
 
 
