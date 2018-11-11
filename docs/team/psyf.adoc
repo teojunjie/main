@@ -11,7 +11,7 @@ MakerManager aims to bridge a gap to let makers and managers coordinate effectiv
 The app is meant for makers, and thus is optimized for people comfortable with a Command Line Interface (CLI).
 
 The app is based on AddressBook-Level 4, an application used for teaching Software Engineering principles in NUS.
-The user interacts with MakerManager using a Command Line Interface (CLI), but can also choose to use the Graphical User Interface (GUI) built in JavaFX.
+The user interacts with MakerManager using a CLI, but can also choose to use the Graphical User Interface (GUI) built in JavaFX.
 The software is mainly written in Java, and has about 20 thousand lines of code. The project was developed by a team of 4, and you can find out more about the developers in the About Us section.
 
 In short, MakerManager can be used to:
