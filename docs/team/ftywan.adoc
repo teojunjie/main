@@ -1,58 +1,73 @@
-= PLACEHOLDER - Project Portfolio
+= Fu Tianyuan - Project Portfolio
 :site-section: AboutUs
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: AddressBook - Level 4
-
----
-
+== PROJECT: MakerManager
 == Overview
-PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER
-AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+This document is meant for recording the contributions I have committed and the role played in the developing of this project.
+
+MakerManger is a free, open-sourced desktop application developed to improve the efficiency of existing facilities at makerspace at SoC. Currently, the facilities are mostly 3D printers.
+Without the traditional tedious and complicated method of managing the usage of the facilities, MakerManger provides a real-time list and appended job queue for each. Algorithms are also able to provide the tasking method which consumes least time.
+
+In abstract, MakerManager has these features: +
+* A 2-level access system, for the normal users and lab managers. +
+* Normal users can add jobs to specified machines or let the system help them allocate to the most free one. +
+* Admin users can register/deregister machines, manage job queues of machines. +
+* All users can monitor the status of machines and printing progress of all jobs.
 
 == Summary of contributions
+* *Major enhancement*: added *Job class and relevant classes in storage and UI component*
+** What it does: allows the developers to work on these components to add more features.
+** Justification: These classes are crucial to MakerManager, as all the features related to jobs are based on them.
+** Credits: The development of version 1.0 is done fully by me. Later on, Teo Jun Jie (one of our team member) fixed some bugs of the integration with the storage component and UI component. After that, I picked up and added some small changes.
+** View on: https://github.com/CS2113-AY1819S1-T09-1/main/pull/4[PR#4] and https://github.com/CS2113-AY1819S1-T09-1/main/pull/27[PR#27]
 
-* *Major enhancement*: added *the ability to undo/redo previous commands*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
+* *Major enhancement*: added *addJob command*
+** What it does: allows the user to add a job with specified name and priority to the job list.
+** Justification: This feature is one of the key features of MakerManger. Without this, users will not be able to add any jobs to any machine.
 ** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+** Credits: The development of version 1.0 is done fully by me. Later on, Teo Jun Jie (one of our team member) fixed some bugs of the integration with the storage component and UI component. After that, I picked up and added some small changes.
+** View on: https://github.com/CS2113-AY1819S1-T09-1/main/pull/34[PR#34] and https://github.com/CS2113-AY1819S1-T09-1/main/pull/50[PR#50]
 
-* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
+* *Minor enhancement*: added the findJob, listJobs command for users to locate a job by name. https://github.com/CS2113-AY1819S1-T09-1/main/pull/50[PR#50]
 
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Minor enhancement*: implemented the TimeStamp object for version 1.0. TimeStamp was refactored by Sean. https://github.com/CS2113-AY1819S1-T09-1/main/pull/77[PR#77]
+
+* *Minor enhancement*: refactored all the codes and removed all the irrelevant person class. https://github.com/CS2113-AY1819S1-T09-1/main/pull/154[PR#154]
+
+* *Code contributed*: You can see my code contributions in this https://nuscs2113-ay1819s1.github.io/dashboard/#=undefined&search=ftywan[Code Dashboard by Reposense]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+*** Managed releases `v1.3` - `v1.4` (2 releases) on GitHub
+*** Post issues in the https://github.com/CS2113-AY1819S1-T09-1/main/issues[Issue Tracker].
 ** Enhancements to existing features:
-*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+*** Updated the color scheme of JobCards in GUI based on https://material.io/design/color/the-color-system.html#tools-for-picking-colors[Google's Material Design Color Pattern].
+*** Wrote additional tests for existing features of jobs
 ** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** Format check of the developer Guide.
+*** Updated the User Guide and Developer Guide for my features.
+*** Add on the manual testing cases in the Developer Guide.
 ** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
-*** Contributed to forum discussions (examples:  https://github.com[1], https://github.com[2], https://github.com[3], https://github.com[4])
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
-*** Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
-** Tools:
-*** Integrated a third party library (Natty) to the project (https://github.com[#42])
-*** Integrated a new Github plugin (CircleCI) to the team repo
-
-_{you can add/remove categories in the list above}_
+*** PRs reviewed (with non-trivial review comments): https://github.com/CS2113-AY1819S1-T09-1/main/pull/33[PR#33], https://github.com/CS2113-AY1819S1-T09-1/main/pull/65[PR#65]
+*** Participated in the https://github.com/nusCS2113-AY1819S1/forum/issues/99[forum discussions].
 
 == Contributions to the User Guide
-
 
 |===
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=undoredo]
+=== Command Summary
+include::../UserGuide.adoc[tag=commandsummary]
 
-include::../UserGuide.adoc[tag=dataencryption]
+=== AddJob Version 1.0
+include::../UserGuide.adoc[tag=addJob]
+
+=== Find Job and List Jobs
+include::../UserGuide.adoc[tag=findJob]
 
 == Contributions to the Developer Guide
 
@@ -60,13 +75,12 @@ include::../UserGuide.adoc[tag=dataencryption]
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-include::../DeveloperGuide.adoc[tag=undoredo]
+=== Diagram in Model Component
+include::../DeveloperGuide.adoc[tag=modelComponent]
 
-include::../DeveloperGuide.adoc[tag=dataencryption]
+=== Diagram in Storage Component
+include::../DeveloperGuide.adoc[tag=storageComponent]
 
+=== Manual Testing Cases
 
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_
+include::../DeveloperGuide.adoc[tag=testingCase]
